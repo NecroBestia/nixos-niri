@@ -1,0 +1,115 @@
+{
+
+	"tray": {
+		"icon-size":20,
+		"spacing":5
+	},
+	"clock": {
+		"format": " {:%I:%M %p  -  %d/%b} ",
+		"tooltip-format": "<tt><small>{calendar}</small></tt>",
+        	"calendar": {
+                    	"mode"          : "year",
+                    	"mode-mon-col"  : 3,
+                    	"weeks-pos"     : "right",
+                    	"on-scroll"     : 1,
+                    	"format": {
+                       		"months":     "<span color='#ffead3'><b>{}</b></span>",
+                            	"days":       "<span color='#ecc6d9'><b>{}</b></span>",
+                              	"weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+                              	"weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+                              	"today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+			}
+                    },
+        	"actions": {
+                    	"on-click-right": "mode",
+                    	"on-scroll-up": "tz_up",
+                    	"on-scroll-down": "tz_down",
+                    	"on-scroll-up": "shift_up",
+                    	"on-scroll-down": "shift_down"
+                    }
+	
+	},
+
+	"niri/workspaces": {
+		"disable-scroll": true,
+		"show-special": false,
+		"all-outputs": true,
+		"format": "{icon}",
+    		"persistent-workspaces": {
+      			"*": 5
+		},
+		"format-icons": {
+			"1": "一",
+			"2": "二",
+			"3": "三",
+			"4": "四",
+			"5": "五",
+			"6": "六",
+			"7": "七",
+			"8": "八",
+			"9": "九",
+			"10": "十"
+		}	
+	},
+	"niri/window": {
+		"format": "{}",
+		"max-length": 25,
+		"separate-outputs": true,
+		"offscreen-css": true,
+		"offscreen-css-text": "(inactive)",
+		"rewrite": {
+			" (.*) — Mozilla Firefox": "  $1",
+			" (.*) - fish": "> [$1]",
+			" (.*) - zsh": "> [$1]",
+			" (.*) - $term": "> [$1]"
+		}
+	},
+	"custom/separator": {
+		"format": "  ",
+		"interval": "once",
+		"tooltip": false
+	
+	},
+	"wireplumber#sink": {
+	       	"format": "{icon}:{volume}% ",
+		"format-muted": " ",
+		"on-click": "pavucontrol",
+		"on-click-right":"wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+		"format-icons": [" ", " ", " "],
+		"max-volume":100,
+		"scroll-step": 5
+	},
+	"wireplumber#source":{
+		"node-type": "Audio/Source",
+		"format":" {icon}:{volume}%",
+		"format-muted":"   ",
+		"format-icons": ["", "", ""],
+    		"on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle", // Toggle mute con click izquierdo
+    		"on-click-right": "pavucontrol -t 4",   // Abre la pestaña de micrófono de pavucontrol
+    		"scroll-step": 1              
+	},
+	"custom/power": {
+		"format": " ⏻ ",
+		"on-click": "wlogout &",
+		////"on-click-right": "$HOME/.config/hypr/scripts/ChangeBlur.sh",
+		"tooltip": true,
+		"tooltip-format": "Left Click: Logout Menu"
+	},
+	
+	"cpu": {
+		"format": "{usage}% 󰍛",
+		"interval": 1,
+		"min-length": 5,
+		"on-click-right": "gnome-system-monitor"
+	},
+
+	"memory": {
+		"interval": 10	,
+		"format": "{used:0.1f}G 󰾆  ",
+		"format-alt": "{percentage}% 󰾆  ",
+		"format-alt-click": "click",
+		"tooltip": false,
+	//	"tooltip-format": "{used:0.1f}GB/{total:0.1f}G",
+	//	"on-click-right": "$HOME/.config/hypr/scripts/WaybarScripts.sh --btop"
+	}
+}
