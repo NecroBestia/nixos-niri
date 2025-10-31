@@ -8,8 +8,8 @@ input {
     }
 
     mouse {
-        accel-profile "flat"
-    }
+        	accel-profile "flat"
+	}
     tablet {
         map-to-output "DP-1"
     }
@@ -107,13 +107,15 @@ window-rule {
 }
 spawn-at-startup "swww-daemon"
 spawn-at-startup "~/.config/scripts/niri-wallpaper-deamon.sh"
+spawn-at-startup "~/.config/scripts/clipmanager.sh "
 
 binds {
     Alt+Shift+H { show-hotkey-overlay; }
     Mod+T { spawn "kitty"; }
     Mod+Space { spawn "fuzzel"; }
     Super+Alt+L { spawn "wlogout"; }
-    Mod+Shift+W { spawn "~/.config/scripts/niri-wallpaper-deamon.sh"; } 
+    Mod+Ctrl+Shift+W { spawn-sh "~/.config/scripts/niri-wallpaper-deamon.sh"; } 
+    Mod+Ctrl+V { spawn-sh "sh -c 'sel=$(cliphist list | fuzzel --dmenu --prompt Clipboard:) && [ -n \"$sel\" ] && echo \"$sel\" | cliphist decode | wl-copy'"; }
     
     XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+"; }
     XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }

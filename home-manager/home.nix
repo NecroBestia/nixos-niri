@@ -42,9 +42,10 @@
 		'';
 
     		shellAliases = {
-      		hm-switch = "home-manager switch --flake ~/nixFlake";
-      		sys-switch = "sudo nixos-rebuild switch --flake ~/nixFlake";
-    		};
+      			hm-switch = "home-manager switch --flake ~/nixFlake";
+      			sys-switch = "sudo nixos-rebuild switch --flake ~/nixFlake";
+    			cdev = "nix develop ~/nixFlake#c-dev";
+		};
   	};
 
 	nixpkgs.config.allowUnfree = true;
@@ -83,7 +84,8 @@
 		imagemagick
 		#Servicios 
 		playerctl
-		opentabletdriver
+		cliphist
+		wl-clipboard
 	];
 	# Configuracion tema nautilus 
 	gtk = {
@@ -91,6 +93,8 @@
 		theme.name = "Colloid-Dark";
 		iconTheme.name = "Colloid";
 	};
+
+
 	# Configuracion Archivos de configuracion 
 	# fuzzel 
 	home.file.".config/fuzzel/fuzzel.ini" = {
@@ -101,7 +105,9 @@
 		./modules/firefox.nix 
 		./modules/waybar.nix
 		./modules/wlogout.nix
+		./modules/spicetify.nix
 		#./modules/obsidian.nix	
+		
 	];
 	
 

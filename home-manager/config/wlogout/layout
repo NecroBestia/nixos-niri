@@ -32,7 +32,7 @@
   }
   {
     "label": "logout",
-    "action": "sleep 1; hyprctl dispatch exit",
+    "action": "sleep 1; niri msg action exit",
     "text": "Exit",
     "keybind": "e"
   }

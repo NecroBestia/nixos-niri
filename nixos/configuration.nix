@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config,lib, pkgs, ... }:
 
 {
   imports =
@@ -19,7 +19,18 @@
 ];
   #Security
   security.sudo.enable = true;
+  system = 
+	{
+		autoUpgrade.enable = true;
+		autoUpgrade.dates = "weekly";
+	};
+  nix = {
+		gc.automatic = true;
+		gc.dates = "daily";
+		gc.options = "--delete-older-than 10d";
+		settings.auto-optimise-store = true;
 
+	};
   nix.settings.experimental-features =["nix-command" "flakes"];
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -44,7 +55,7 @@
   users.users.necro = {
     isNormalUser = true;
     description = "necro";
-    extraGroups = [ "networkmanager" "wheel" "audio" "docker" ];
+    extraGroups = [ "networkmanager" "wheel" "audio" "docker" "input"];
     packages = with pkgs; [];
     shell = pkgs.bash;
   };
@@ -58,9 +69,6 @@
   #electron shie 
   #environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  
 environment.systemPackages = with pkgs; [
  	vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.xwayland-satellite
 	wget 
@@ -77,7 +85,7 @@ environment.systemPackages = with pkgs; [
   	xserver.displayManager.sddm.enable = true;
   	xserver.enable = true;
   };
-
+	hardware.opentabletdriver.enable = true;
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

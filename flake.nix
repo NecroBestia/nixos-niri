@@ -2,21 +2,20 @@
   description = "Flake NixOS + Home Manager minimal canvas";
 
   inputs = {
-	nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-	home-manager.url = "github:nix-community/home-manager/release-25.05";
-	home-manager.inputs.nixpkgs.follows = "nixpkgs"; 
+		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+		home-manager = {
+			url = "github:nix-community/home-manager/release-25.05";
+			inputs.nixpkgs.follows = "nixpkgs"; 
+		};
+		spicetify-nix.url = "github:Gerg-L/spicetify-nix"; 
+	}; 
 	
-  };
-
-  outputs = { self, nixpkgs, home-manager,... }: 
+  outputs = { self, nixpkgs, home-manager, spicetify-nix, ... }@inputs: 
       let
 	system = "x86_64-linux";
-        
+        pkgs = import nixpkgs {inherit system;};
       in {
-        # Paquetes simples de ejemplo
-        
-
-        # Configuración NixOS
+     	# Configuración NixOS
         nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
@@ -27,16 +26,36 @@
         # Home Manager
         homeConfigurations={
 	"necro" =  home-manager.lib.homeManagerConfiguration {
-          		pkgs = import nixpkgs {inherit system;};
+          		inherit pkgs;
+			extraSpecialArgs = {inherit inputs;}; 
 			modules  = [
-				./home-manager/home.nix
-
+					./home-manager/home.nix
+					spicetify-nix.homeManagerModules.default
 				        
 				];
 				
 			};
 		};
       
+	
+	devShells = {
+			${system}.c-dev = pkgs.mkShell {
+				pname = "c-dev-shell"; 
+				buildInputs = with pkgs; [
+					gcc		#compilador c 
+					gnumake		#make 
+					gdb		#cmake
+					valgrind	#debugger
+					binutils	#analisis de memoria 
+				];
+
+				shellHook = '' 
+					echo "Entorno C activo (c-dev)" 
+					export CFLAGS="-Wall -Wextra -02"	
+
+				'';
+			};	
+		};
 	};
 }
 
