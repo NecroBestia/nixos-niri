@@ -7,10 +7,10 @@
 			url = "github:nix-community/home-manager/release-25.05";
 			inputs.nixpkgs.follows = "nixpkgs"; 
 		};
-		spicetify-nix.url = "github:Gerg-L/spicetify-nix"; 
+		
 	}; 
 	
-  outputs = { self, nixpkgs, home-manager, spicetify-nix, ... }@inputs: 
+  outputs = { self, nixpkgs, home-manager, ... }@inputs: 
       let
 	system = "x86_64-linux";
         pkgs = import nixpkgs {inherit system;};
@@ -30,8 +30,7 @@
 			extraSpecialArgs = {inherit inputs;}; 
 			modules  = [
 					./home-manager/home.nix
-					spicetify-nix.homeManagerModules.default
-				        
+							        
 				];
 				
 			};

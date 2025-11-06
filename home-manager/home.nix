@@ -60,24 +60,16 @@
 		tree
 		zathura #Lector pdf
 		mupdf 
+		curl
 		#Aplicaciones Graficas
 		obsidian
 		pavucontrol
-		krita	
-		#Aplicacion es niri
-		xwayland-satellite
-		xwayland
+		krita
+		lorien	
+		qalculate-qt
 		#Temas GTK		
 		colloid-gtk-theme	#Tema GTK
 		colloid-icon-theme 	#Tema GTK
-		#Paquetes Necesarios WinApps
-		curl 
-		dialog
-		freerdp
-		freerdp
-		libnotify
-		iproute2
-		netcat-openbsd
 		#Background 
 		swww 
 		swaybg
@@ -86,6 +78,7 @@
 		playerctl
 		cliphist
 		wl-clipboard
+		hyprshot	
 	];
 	# Configuracion tema nautilus 
 	gtk = {
@@ -100,13 +93,13 @@
 	home.file.".config/fuzzel/fuzzel.ini" = {
 		source = lib.mkForce ./config/fuzzel/fuzzel.ini;
 	};
+	home.file.".config/kitty/kitty.conf".source = lib.mkForce ./config/kitty/kitty.conf;
+	home.file.".config/zathura/zathurarc".source = lib.mkForce ./config/zathura/zathurarc;
  	imports  = [
 		./modules/niri.nix
 		./modules/firefox.nix 
 		./modules/waybar.nix
-		./modules/wlogout.nix
-		./modules/spicetify.nix
-		#./modules/obsidian.nix	
+		./modules/wlogout.nix		#./modules/obsidian.nix	
 		
 	];
 	

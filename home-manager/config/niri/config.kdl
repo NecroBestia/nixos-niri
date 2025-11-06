@@ -62,9 +62,9 @@ layout {
     struts {
 	left -2
         right -2
-        top -2
+        top -9
         bottom -10
-    }
+}
     background-color "transparent"
     default-column-width { proportion 0.5; }
 
@@ -164,7 +164,7 @@ binds {
     Mod+Shift+J     { focus-monitor-down; }
     Mod+Shift+K     { focus-monitor-up; }
     Mod+Shift+L     { focus-monitor-right; }
-
+    Mod+Shift+S	    {spawn-sh "hyprshot -m region --clipboard-only";}
     Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
     Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
     Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }

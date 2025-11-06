@@ -34,6 +34,11 @@ in
         }
       });
     '';
+  environment.etc."udisks2/mount_options.conf".text = ''
+    [defaults]
+    mount_point = /mnt/%u
+  '';
+
 
     # Polkit agent para sesiones no GNOME
     systemd.user.services.polkit-gnome-authentication-agent-1 = {

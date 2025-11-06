@@ -74,8 +74,7 @@ environment.systemPackages = with pkgs; [
 	wget 
 	git 
 	home-manager
-	#Paquetes necesarios para niri
-	xwayland
+	#Paquete necesarios para niri
 	xwayland-satellite
 ];	
 	#Esta puta mierda hace que funcione niri con el display manager 
@@ -85,7 +84,16 @@ environment.systemPackages = with pkgs; [
   	xserver.displayManager.sddm.enable = true;
   	xserver.enable = true;
   };
+
 	hardware.opentabletdriver.enable = true;
+
+
+  fileSystems."/mnt/not-to-lose" = {
+    device = "/dev/disk/by-uuid/18324F22324F046A";
+    fsType = "ntfs";
+    options = [ "rw" "uid=1000" "gid=100" "umask=0022" "windows_names" "nofail" ];
+  };
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
