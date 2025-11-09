@@ -105,6 +105,10 @@ window-rule {
     	clip-to-geometry true
 	    	
 }
+window-rule {
+	match app-id="vlc"
+	open-fullscreen true
+}
 spawn-at-startup "swww-daemon"
 spawn-at-startup "~/.config/scripts/niri-wallpaper-deamon.sh"
 spawn-at-startup "~/.config/scripts/clipmanager.sh "

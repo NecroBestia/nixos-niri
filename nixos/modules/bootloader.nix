@@ -16,4 +16,6 @@
 	boot.kernelPackages = pkgs.linuxPackages_zen;
 	# Soporte NTFS
 	boot.supportedFilesystems = [ "ntfs" ];
+	# Endurecimiento del Kernel
+  
 }

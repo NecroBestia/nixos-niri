@@ -16,6 +16,13 @@ in
       gvfs
       polkit_gnome
       udisks2
+
+      # --- PAQUETES AÑADIDOS ---
+      gnome-autoar       # Para gestionar archivos .zip, .tar, etc.
+      gnome-desktop      # Para thumbnails de imágenes y metadata
+      ffmpegthumbnailer  # Para thumbnails de videos
+      poppler_utils      # Para thumbnails de PDFs
+      # ------------------------
     ];
 
     services = {
@@ -34,23 +41,15 @@ in
         }
       });
     '';
-  environment.etc."udisks2/mount_options.conf".text = ''
-    [defaults]
-    mount_point = /mnt/%u
-  '';
 
+    environment.etc."udisks2/mount_options.conf".text = ''
+      [defaults]
+      mount_point = /mnt/%u
+    '';
 
-    # Polkit agent para sesiones no GNOME
-    systemd.user.services.polkit-gnome-authentication-agent-1 = {
-      description = "Polkit GNOME Authentication Agent";
-      after = [ "graphical-session.target" ];
-      wantedBy = [ "default.target" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        Environment = "DISPLAY=:0 XDG_RUNTIME_DIR=/run/user/1000";
-      };
-    };
+    # --- BLOQUE ELIMINADO ---
+    # El 'polkit-gnome-authentication-agent-1' se eliminó 
+    # porque ya se gestiona en 'niri.nix' de Home Manager.
+    # ------------------------
   };
 }
-

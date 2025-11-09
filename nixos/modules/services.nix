@@ -16,24 +16,25 @@
 
 		flatpak.enable = true;	
 	};
-	xdg.portal = {
-      		enable = true;
-      		wlr.enable = true; # backend Wayland (usado por Niri)
-      		extraPortals = with pkgs; [
-				xdg-desktop-portal-gnome
-        		xdg-desktop-portal-wlr
-        		xdg-desktop-portal-gtk
-      		];
-      		config.common.default = "wlr"; # usa wlr como backend principal
-    	};
+# En nixos/modules/services.nix
 
+  	xdg.portal = {
+    		enable = true;
+    
+    		# Deshabilitamos la opción 'wlr.enable' para tener control total
+    		wlr.enable = false; 
+    
+    		# Habilitamos manualmente SOLO los portales que Niri necesita:
+    		# 1. 'wlr' para la selección de ventanas
+    		# 2. 'gtk' para los selectores de archivos (como "Abrir archivo...")
+    		extraPortals = with pkgs; [
+      			xdg-desktop-portal-wlr
+      			xdg-desktop-portal-gtk
+			xdg-desktop-portal-gnome
+    		];
 
-
-	
-  	environment.sessionVariables = {
-    		GTK_USE_PORTAL = "1";
+    		# Forzamos al sistema a preferir 'wlr' sobre cualquier otro
+    		config.common.default = [ "gtk" ];
   	};
-
-
 
 }

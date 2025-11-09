@@ -19,6 +19,9 @@
 ];
   #Security
   security.sudo.enable = true;
+  security.apparmor = {
+	enable = true;
+  };
   system = 
 	{
 		autoUpgrade.enable = true;
@@ -81,7 +84,7 @@ environment.systemPackages = with pkgs; [
 	programs.niri.enable = true; 
   services = 
   {
-  	xserver.displayManager.sddm.enable = true;
+  	displayManager.sddm.enable = true;
   	xserver.enable = true;
   };
 
@@ -91,7 +94,14 @@ environment.systemPackages = with pkgs; [
   fileSystems."/mnt/not-to-lose" = {
     device = "/dev/disk/by-uuid/18324F22324F046A";
     fsType = "ntfs";
-    options = [ "rw" "uid=1000" "gid=100" "umask=0022" "windows_names" "nofail" ];
+    options = [ 
+	"rw" 
+	"uid=1000" 	#${toString config.users.users.necro.uid}"
+	"gid=100"		#${toString config.users.groups.users.gid}"
+	"umask=0022"
+ 	"windows_names" 
+	"nofail" 
+	];
   };
 
   # Some programs need SUID wrappers, can be configured further or are

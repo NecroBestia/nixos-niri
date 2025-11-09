@@ -28,5 +28,4 @@
     		NVD_BACKEND = "direct";
   	};
 
-  	boot.kernelParams = [ "nvidia-drm.modeset=1" ];
-}
+  	}
