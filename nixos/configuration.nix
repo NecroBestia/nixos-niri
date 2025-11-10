@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config,lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   imports =
@@ -58,7 +58,7 @@
     isNormalUser = true;
     description = "necro";
     extraGroups = [ "networkmanager" "wheel" "audio" "docker" "input"];
-    packages = with pkgs; [];
+   # packages = with pkgs; [];
     shell = pkgs.bash;
   };
 

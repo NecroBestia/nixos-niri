@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ...}: {
+{ pkgs, lib, ...}: {
 
   # --- 1. Configuración Central de Home Manager ---
   # Define el usuario, el directorio y la versión de estado.
@@ -63,7 +63,7 @@
     swww 
     swaybg
     imagemagick
-
+    swayidle
     # NOTA: Quité 'colloid-gtk-theme' y 'colloid-icon-theme' de aquí
     # porque los estás manejando correctamente en la sección 'gtk' más abajo.
     # Tenerlos en ambos lugares es redundante.

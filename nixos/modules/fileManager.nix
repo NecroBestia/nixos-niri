@@ -45,7 +45,7 @@ in
     environment.etc."udisks2/mount_options.conf".text = ''
       [defaults]
       mount_point = /mnt/%u
-    '';
+   '';
 
     # --- BLOQUE ELIMINADO ---
     # El 'polkit-gnome-authentication-agent-1' se eliminó 
