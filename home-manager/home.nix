@@ -42,7 +42,7 @@
     htop
     tree
     curl
-
+    nil
     # Aplicaciones de Consola
     zathura # Lector pdf
     mupdf 
@@ -54,7 +54,7 @@
     lorien	
     qalculate-qt
     vlc
-    
+    vscode    
     # Utilidades de Escritorio y Wayland
     playerctl
     cliphist
@@ -77,7 +77,6 @@
     initExtra = ''
       eval "$(starship init bash)"
     ''; 
-    # shellAliases = {}; # Ya no es necesario
   };
   
   # (Recomendación) Puedes reemplazar 'eval' en bash.initExtra
@@ -88,19 +87,19 @@
   # };
 
   # --- 4. Configuración de GUI (Temas, Iconos, MIME) ---
-  # Define tu tema GTK y de iconos.
+  # Define tu tema GTK y de iconos./* 
   gtk = { 
     enable = true; 
     theme = {
       name = "Colloid-Dark"; 
-      package = pkgs.colloid-gtk-theme; # Define el paquete aquí
+      package = pkgs.colloid-gtk-theme;  #Define el paquete aquí
     };
     iconTheme = {
       name = "Colloid"; 
-      package = pkgs.colloid-icon-theme; # Define el paquete aquí
+      package = pkgs.colloid-icon-theme;  #Define el paquete aquí
     };
   };
-
+ 
   # Configuración de aplicaciones por defecto (MIME types)
   xdg.mimeApps = { 
     enable = true; 
@@ -120,7 +119,7 @@
     	
     };
     
-    # niri.enable = true; # (Comentado en tu original)
+   #niri.enable = true; # (Comentado en tu original)
 
     obs-studio = { 
       enable = true;
@@ -131,7 +130,6 @@
       ]; 
     };
   };
-
   # --- 6. Gestión de Archivos de Configuración (Dotfiles) ---
   # Agrupa todos los 'home.file' para mayor claridad
   home.file = {

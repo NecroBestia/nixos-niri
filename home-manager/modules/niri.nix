@@ -25,7 +25,6 @@ in
       #alacritty.enable = true;
       fuzzel.enable   = true;
       swaylock.enable = true;
-
     };
 
     # Servicios de usuario relacionados
@@ -33,10 +32,7 @@ in
       mako.enable      = true;  # Notificaciones
       swayidle.enable  = true;  # Gestión de inactividad
       polkit-gnome.enable = true; # Polkit para apps gráficas
-      gnome-keyring.enable = true; # Almacenamiento de credenciales
-
+      gnome-keyring.enable = true; # Almacenamiento de redenciales
     };
-
   };
 }
-

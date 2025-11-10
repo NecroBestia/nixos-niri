@@ -1,4 +1,3 @@
-
 input {
     keyboard {
         xkb {
@@ -102,12 +101,17 @@ window-rule {
 	match app-id="zathura"
 	match app-id="firefox"
 	geometry-corner-radius 0 
-    	clip-to-geometry true
+  clip-to-geometry true
 	    	
 }
 window-rule {
 	match app-id="vlc"
-	open-fullscreen true
+	open-maximized true
+}
+window-rule {
+  match app-id="Spotify"
+  open-on-output "HDMI-A-1" 
+  open-maximized true
 }
 spawn-at-startup "swww-daemon"
 spawn-at-startup "~/.config/scripts/niri-wallpaper-deamon.sh"

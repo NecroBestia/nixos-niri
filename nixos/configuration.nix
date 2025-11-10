@@ -11,7 +11,6 @@
       	./modules/bootloader.nix	#Configuracion Grub  
       	./modules/audio.nix	 	#Configuracion de audio 
       	./modules/nvidia.nix	 	#Configuracion de drivers graficos. 
-      	#./modules/displayManager.nix	#Gestor de inicion de sesion
 	      ./modules/fileManager.nix  	#Configuracion Gestor archivos 
 	      ./modules/locale.nix		#Configuracion de hora,moneda, etc
 	      ./modules/docker.nix 		#Configuracion de virtualizacion
@@ -20,7 +19,7 @@
   #Security
   security.sudo.enable = true;
   security.apparmor = {
-	enable = true;
+  	enable = true;
   };
   system = 
 	{
@@ -85,9 +84,9 @@ environment.systemPackages = with pkgs; [
   services = 
   {
   	displayManager.sddm.enable = true;
-  	xserver.enable = true;
+  	xserver.enable = true;    
   };
-
+  programs.dconf.enable = true;
 	hardware.opentabletdriver.enable = true;
 
 
@@ -95,14 +94,14 @@ environment.systemPackages = with pkgs; [
     device = "/dev/disk/by-uuid/18324F22324F046A";
     fsType = "ntfs";
     options = [ 
-	"rw" 
-	"uid=1000" 	#${toString config.users.users.necro.uid}"
-	"gid=100"		#${toString config.users.groups.users.gid}"
-	"umask=0022"
- 	"windows_names" 
-	"nofail" 
-	];
-  };
+    	"rw" 
+	    "uid=1000" 	#${toString config.users.users.necro.uid}"
+	    "gid=100"		#${toString config.users.groups.users.gid}"
+	    "umask=0022"
+ 	    "windows_names" 
+	    "nofail" 
+	    ];
+    };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
