@@ -29,6 +29,8 @@
     nodejs
     unzip
     cargo
+    gcc
+    rustc
   ];
   extraLuaConfig = ''
     -- Opciones básicas de Neovim
