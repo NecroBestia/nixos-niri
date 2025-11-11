@@ -31,6 +31,9 @@
     cargo
     gcc
     rustc
+    fd 
+    ripgrep
+
   ];
   extraLuaConfig = ''
     -- Opciones básicas de Neovim
@@ -43,7 +46,6 @@
     vim.opt.incsearch = true
     vim.g.mapleader = ' '         -- Establecer la tecla líder
     vim.opt.clipboard = 'unnamedplus' -- Usa el portapapeles del sistema
-    
     -- Cargar el tema
     vim.cmd.colorscheme "tokyonight"
 
@@ -120,8 +122,10 @@
 
     -- Atajos para ABRIR telescope
     vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-    vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
-    
+    vim.keymap.set('n', '<leader>fg', builtin.live_grep, {}) 
+    vim.keymap.set('n', '<leader>fn', function () 
+      builtin.find_files({cwd = '/mnt/not-to-lose/SyncThing/Universidad/' })
+    end, {desc = 'Buscar en Universidad'})
     -- Configuración INTERNA de telescope (para Ctrl+t)
     telescope.setup({
       defaults = {
@@ -133,14 +137,13 @@
         }
       }
     })
-
     -- ---  LSP, MASON Y AUTOCOMPLETADO ---
 
     -- Cmp (Autocompletado)
     local cmp = require('cmp')
     local lspconfig = require('lspconfig')
     local capabilities = require('cmp_nvim_lsp').default_capabilities()
-    
+        
     cmp.setup({
       sources = cmp.config.sources({
         { name = 'nvim_lsp' },
