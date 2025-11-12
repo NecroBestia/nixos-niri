@@ -13,18 +13,19 @@
       hm-switch = "home-manager switch --flake ~/nixFlake"; 
       sys-switch = "sudo nixos-rebuild switch --flake ~/nixFlake";
       cdev = "nix develop ~/nixFlake#c-dev"; 
-    };
+  };
 
     # Variables de sesión (¡muy bien organizadas!)
     sessionVariables = { 
       GTK_THEME = "Colloid-Dark"; 
-      WAYLAND_DISPLAY ="wayland-0"; 
+#      WAYLAND_DISPLAY ="wayland-0"; 
       XDG_SESSION_TYPE = "wayland"; 
       XDG_CURRENT_DESKTOP = "niri"; 
-      GDK_BACKEND ="wayland,x11"; 
+      XDG_SESSION_DESKTOP = "niri";
+#      GDK_BACKEND ="wayland,x11"; 
       QT_QPA_PLATFORM = "wayland;xcb"; 
-      SDL_VIDEODRIVER = "wayland"; 
-      CLUTTER_BACKEND = "wayland"; 
+#      SDL_VIDEODRIVER = "wayland"; 
+#      CLUTTER_BACKEND = "wayland"; 
       MOZ_ENABLE_WAYLAND = "1"; 
     };
   };

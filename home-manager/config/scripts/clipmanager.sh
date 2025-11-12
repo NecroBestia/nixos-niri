@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-sleep 2
+sleep 1
 exec wl-paste --watch cliphist store
 

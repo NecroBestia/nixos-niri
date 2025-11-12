@@ -26,9 +26,16 @@
       wlr.enable = true;
       extraPortals = with pkgs; [
         xdg-desktop-portal-gtk
-				xdg-desktop-portal-gnome 
+        xdg-desktop-portal-gnome
       ];
-      config.common.default = [ "wlr" "gtk" ];
+      config = {
+        common.default = [ "gtk" "gnome" ];
+        niri = {
+          default = ["gtk" "gnome"];
+          "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
+          "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
+        };
+      };
     };
   };
 }
