@@ -13,9 +13,10 @@
       hm-switch = "home-manager switch --flake ~/nixFlake"; 
       sys-switch = "sudo nixos-rebuild switch --flake ~/nixFlake";
       cdev = "nix develop ~/nixFlake#c-dev"; 
+#     mvuni  = "cd /mnt/not-to-lose/SyncThing/Universidad/";
   };
-
-    # Variables de sesión (¡muy bien organizadas!)
+    
+    # Variables de sesión
     sessionVariables = { 
       GTK_THEME = "Colloid-Dark"; 
 #      WAYLAND_DISPLAY ="wayland-0"; 
@@ -26,7 +27,7 @@
       QT_QPA_PLATFORM = "wayland;xcb"; 
 #      SDL_VIDEODRIVER = "wayland"; 
 #      CLUTTER_BACKEND = "wayland"; 
-      MOZ_ENABLE_WAYLAND = "1"; 
+#      MOZ_ENABLE_WAYLAND = "1"; 
     };
   };
 
@@ -47,7 +48,7 @@
     # Aplicaciones de Consola
     zathura # Lector pdf
     mupdf 
-    
+    vscodium    
     # Aplicaciones Gráficas
     obsidian
     pavucontrol
@@ -55,10 +56,9 @@
     lorien	
     qalculate-qt
     vlc
-    vscode    
     # Utilidades de Escritorio y Wayland
     playerctl
-    cliphist
+    #cliphist
     wl-clipboard
     hyprshot
     swww 
@@ -75,17 +75,17 @@
     enable = true; 
     enableCompletion = true; 
     # 'initExtra' se mantiene, pero los alias se movieron a 'home.aliases'
-    initExtra = ''
-      eval "$(starship init bash)"
-    ''; 
+  # initExtra = ''
+  #    eval "$(starship init bash)"
+  #  ''; 
   };
   
   # (Recomendación) Puedes reemplazar 'eval' en bash.initExtra
   # simplemente activando el módulo de starship:
-  # programs.starship = {
-  #   enable = true;
-  #   enableBashIntegration = true;
-  # };
+   programs.starship = {
+     enable = true;
+     enableBashIntegration = true;
+   };
 
   # --- 4. Configuración de GUI (Temas, Iconos, MIME) ---
   # Define tu tema GTK y de iconos./* 
@@ -100,12 +100,17 @@
       package = pkgs.colloid-icon-theme;  #Define el paquete aquí
     };
   };
- 
+  # Configuracion cliphist 
+  services.cliphist = {
+    enable = true;
+    package = pkgs.cliphist;
+  };
   # Configuración de aplicaciones por defecto (MIME types)
   xdg.mimeApps = { 
     enable = true; 
     defaultApplications = {
       "inode/directory" = "org.gnome.Nautilus.desktop"; 
+      "application/pdf" = ["org.pwmt.zathura.desktop"  "firefox.desktop"];
     };
   };
 
@@ -122,14 +127,14 @@
     
    #niri.enable = true; # (Comentado en tu original)
 
-    obs-studio = { 
-      enable = true;
-      plugins = with pkgs.obs-studio-plugins; [ 
-        wlrobs
-        obs-backgroundremoval
-        obs-pipewire-audio-capture
-      ]; 
-    };
+    # obs-studio = { 
+      # enable = true;
+      # plugins = with pkgs.obs-studio-plugins; [ 
+      #  wlrobs
+      #  obs-backgroundremoval
+      #  obs-pipewire-audio-capture
+      #]; 
+      #};
   };
   # --- 6. Gestión de Archivos de Configuración (Dotfiles) ---
   # Agrupa todos los 'home.file' para mayor claridad
@@ -147,6 +152,9 @@
       source = lib.mkForce ./config/scripts; 
       recursive = true; 
     };
+#    ".config/mako/config" = {
+#      source = lib.mkForce ./config/mako/config;
+#    };
   };
 
   # --- 7. Módulos Externos ---

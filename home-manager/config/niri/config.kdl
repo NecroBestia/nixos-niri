@@ -1,4 +1,5 @@
 input {
+  //focus-follows-mouse 
     keyboard {
         xkb {
             layout "latam"     
@@ -7,15 +8,16 @@ input {
     }
 
     mouse {
-        	accel-profile "flat"
-	}
+      accel-profile "flat"
+       
+	  }
     tablet {
         map-to-output "DP-1"
     }
 }
 
 output "DP-1" {
-    mode "1920x1080@120.030"
+    mode "1920x1080@165.001"
     scale 1
     transform "normal"
     position x=0 y=0
@@ -59,17 +61,17 @@ layout {
         color "#0007"
     }
     struts {
-	left -2
+      	left -2
         right -2
-        top -9
-        bottom -10
+        top -8
+        bottom -6 
 }
     background-color "transparent"
     default-column-width { proportion 0.5; }
 
 }
 
-//spawn-at-startup "waybar"
+spawn-at-startup "waybar"
 
 hotkey-overlay {
 }
@@ -120,30 +122,29 @@ window-rule {
 }
 spawn-at-startup "swww-daemon"
 spawn-at-startup "~/.config/scripts/niri-wallpaper-deamon.sh"
-spawn-at-startup "~/.config/scripts/clipmanager.sh"
-
-
+spawn-at-startup "opensnitch-ui"
+spawn-at-startup "Spotify" 
 binds {
     Alt+Shift+H { show-hotkey-overlay; }
     Mod+T { spawn "kitty"; }
     Mod+Space { spawn "fuzzel"; }
     Super+Alt+L { spawn "wlogout"; }
     Mod+Ctrl+Shift+W { spawn-sh "~/.config/scripts/niri-wallpaper-deamon.sh"; } 
-    Mod+Ctrl+V { spawn-sh "sh -c 'sel=$(cliphist list | fuzzel --dmenu --prompt Clipboard:) && [ -n \"$sel\" ] && echo \"$sel\" | cliphist decode | wl-copy'"; }
-    
+Mod+Ctrl+V { spawn-sh "sh -c 'sel=$( (echo wipe; cliphist list) | fuzzel --dmenu --prompt Clipboard:) && if [ \"$sel\" = wipe ]; then cliphist wipe; elif [ -n \"$sel\" ]; then echo \"$sel\" | cliphist decode | wl-copy; fi'"; }
+  Mod+Alt+H {spawn-sh "pkill -SIGUSR1 waybar";}   
     XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+"; }
     XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
     XF86AudioMute        { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
     XF86AudioMicMute     { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
-
+    // -- Configuraciones de audio
     XF86AudioPlay { spawn-sh "playerctl play-pause"; }
     XF86AudioStop { spawn-sh "playerctl top"; }
     XF86AudioPrev { spawn-sh "playerctl previous"; }
     XF86AudioNext { spawn-sh "playerctl next"; }
-
+    
     XF86MonBrightnessUp { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
-
+    // -- Configuraciones de audio
     Mod+O { toggle-overview; }
     Mod+Q { close-window; }
 

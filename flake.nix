@@ -2,9 +2,9 @@
   description = "Flake NixOS + Home Manager minimal canvas";
 
   inputs = {
-		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 		home-manager = {
-			url = "github:nix-community/home-manager/release-25.05";
+			url = "github:nix-community/home-manager/release-25.11";
 			inputs.nixpkgs.follows = "nixpkgs"; 
 		};
 		
@@ -19,39 +19,44 @@
         nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
-		./nixos/configuration.nix
+		        ./nixos/configuration.nix
           ];
         };
 
         # Home Manager
         homeConfigurations={
-	"necro" =  home-manager.lib.homeManagerConfiguration {
-          		inherit pkgs;
-			extraSpecialArgs = {inherit inputs;}; 
-			modules  = [
-					./home-manager/home.nix
-							        
-				];
-				
-			};
-		};
+          "necro" =  home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+			      extraSpecialArgs = {inherit inputs;}; 
+			      modules  = [
+					    ./home-manager/home.nix 
+          ];
+        };
+      };
       
 	
 	devShells = {
 			${system}.c-dev = pkgs.mkShell {
 				pname = "c-dev-shell"; 
-				buildInputs = with pkgs; [
-					gcc		#compilador c 
-					gnumake		#make 
-					gdb		#cmake
-					valgrind	#debugger
-					binutils	#analisis de memoria 
+				nativeBuildInputs = with pkgs; [
+					gcc13	    	# compilador c 
+					gnumake		# Make
+          cmake     # CMake 
+          pkg-config# Para que nix encuentre librerias.
+					gdb	      # Debugger
+					valgrind	# Analisis de memoria
+					binutils	# Linker y herramientas binarias
 				];
-
+      buildInputs = with pkgs; [
+        glfw      #Crea ventanas y maneja el input  
+        libglvnd  #Provee <GL/gl.h> y -lGL
+        glew      #Provee <GL/glew.h> Funciones modernas de OpenGl
+        glm       #Matematica para vectores. 
+      ];
 				shellHook = '' 
 					echo "Entorno C activo (c-dev)" 
 					export CFLAGS="-Wall -Wextra -02"	
-
+          export CXXFLAGS="-Wall -Wextra -02" 
 				'';
 			};	
 		};

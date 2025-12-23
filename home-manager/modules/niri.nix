@@ -30,7 +30,17 @@ in
     # Servicios de usuario relacionados
     services = {
       mako.enable      = true;  # Notificaciones
-      swayidle.enable  = true;  # Gestión de inactividad
+      swayidle  = {
+        enable = true;
+        extraArgs = [ 
+          "-w"
+          "timeout 600 'swaylock -f'"
+          "timeout 1200 'loginctl suspend'"
+          "before-sleep 'swaylock -f'"
+          "lock 'swaylock -f'"
+        ];
+        
+        };  # Gestión de inactividad
       polkit-gnome.enable = true; # Polkit para apps gráficas
       gnome-keyring.enable = true; # Almacenamiento de redenciales
     };

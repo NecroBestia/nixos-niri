@@ -21,7 +21,7 @@ in
       gnome-autoar       # Para gestionar archivos .zip, .tar, etc.
       gnome-desktop      # Para thumbnails de imágenes y metadata
       ffmpegthumbnailer  # Para thumbnails de videos
-      poppler_utils      # Para thumbnails de PDFs
+      poppler-utils      #Para thumbnails de PDFs
       # ------------------------
     ];
 
@@ -47,9 +47,5 @@ in
       mount_point = /mnt/%u
    '';
 
-    # --- BLOQUE ELIMINADO ---
-    # El 'polkit-gnome-authentication-agent-1' se eliminó 
-    # porque ya se gestiona en 'niri.nix' de Home Manager.
-    # ------------------------
   };
 }

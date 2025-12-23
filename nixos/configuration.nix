@@ -9,12 +9,13 @@
     [ # Include the results of the hardware scan.
       	./hardware-configuration.nix
       	./modules/bootloader.nix	#Configuracion Grub  
-      	./modules/audio.nix	 	#Configuracion de audio 
-      	./modules/nvidia.nix	 	#Configuracion de drivers graficos. 
-	      ./modules/fileManager.nix  	#Configuracion Gestor archivos 
-	      ./modules/locale.nix		#Configuracion de hora,moneda, etc
-	      ./modules/docker.nix 		#Configuracion de virtualizacion
+      	./modules/audio.nix	 	    #Configuracion de audio 
+      	./modules/nvidia.nix	 	  #Configuracion de drivers graficos. 
+	      ./modules/fileManager.nix #Configuracion Gestor archivos 
+	      ./modules/locale.nix		  #Configuracion de hora,moneda, etc
+	      ./modules/docker.nix 		  #Configuracion de virtualizacion
 	      ./modules/services.nix		#Servicios de ssh, etc. 
+        ./modules/firewall.nix    #Configuracion de firewal y opensnitch 
 ];
   #Security
   security.sudo.enable = true;
@@ -38,7 +39,7 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking5proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
@@ -63,7 +64,7 @@
   };
 
   #instala todas las fonts de nerdfonts
-  fonts.packages = with pkgs; [ ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts) ; 
+  fonts.packages = [ ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts) ; 
  
  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -73,11 +74,11 @@
 
 environment.systemPackages = with pkgs; [
  	vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.xwayland-satellite
-	wget 
-	git 
-	home-manager
-	#Paquete necesarios para niri
-	xwayland-satellite
+	  wget 
+	  git 
+	  home-manager
+	  #Paquete necesarios para niri
+	  xwayland-satellite
 ];	
 	#Esta puta mierda hace que funcione niri con el display manager 
 	programs.niri.enable = true; 
@@ -95,14 +96,22 @@ environment.systemPackages = with pkgs; [
     fsType = "ntfs";
     options = [ 
     	"rw" 
-	    "uid=1000" 	#${toString config.users.users.necro.uid}"
-	    "gid=100"		#${toString config.users.groups.users.gid}"
-	    "umask=0022"
+      "uid=1000" 	#${toString config.users.users.necro.uid}"
+      "gid=100"		#${toString config.users.groups.users.gid}"
+      "umask=0022"
  	    "windows_names" 
-	    "nofail" 
-	    ];
+      "nofail" 
+     ];
     };
+  systemd.settings.Manager = {
+    DefaultTimeoutStopSec = "10s";
+  };
 
+  # 2. Regla específica para OpenSnitch (Asegúrate de poner las comillas "5s")
+  # Nota: Verifica el nombre exacto del servicio. Suele ser 'opensnitchd' o 'opensnitch'.
+  # Si el comando anterior falló, systemd no sabe qué es 'opensnitchd' si el servicio no se llama así.
+  # Para estar seguros, usa el nombre que NixOS le da:
+  systemd.services.opensnitchd.serviceConfig.TimeoutStopSec = lib.mkForce "5s";
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

@@ -1,12 +1,8 @@
 # Oculta la barra de estado inferior
 set adjust-open "best-fit"
-set guioptions none
-set window-title-home-tilde false
-set window-title-page false
-
-# Quita padding visual (opcional)
-set statusbar-h-padding 0
-set statusbar-v-padding 0
+set guioptions none 
+set window-title-home-tilde true 
+set window-title-page true
 
 set selection-clipboard clipboard
 set recolor true
@@ -14,9 +10,9 @@ set recolor-keephue true
 set recolor-lightcolor "#282828"
 set recolor-darkcolor "#ebdbb2"
 
-set window-title-basename false
 
 map h scroll left 0.05
 map l scroll right 0.05
 map i recolor
-map <C-p> info
+map F toggle_fullscreen
+map [fullscreen] F toggle_fullscreen
