@@ -65,9 +65,7 @@
     swaybg
     imagemagick
     swayidle
-    # NOTA: Quité 'colloid-gtk-theme' y 'colloid-icon-theme' de aquí
-    # porque los estás manejando correctamente en la sección 'gtk' más abajo.
-    # Tenerlos en ambos lugares es redundante.
+    libreoffice-qt-fresh
   ];
 
   # --- 3. Configuración de Shell y Terminal ---
@@ -88,7 +86,7 @@
    };
 
   # --- 4. Configuración de GUI (Temas, Iconos, MIME) ---
-  # Define tu tema GTK y de iconos./* 
+  # Define tema GTK y de iconos./* 
   gtk = { 
     enable = true; 
     theme = {
@@ -121,7 +119,6 @@
     
     waybar = { 
       enable = true;
-      # (La configuración se maneja en ./modules/waybar.nix)
     	
     };
     

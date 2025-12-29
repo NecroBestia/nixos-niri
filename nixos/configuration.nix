@@ -104,14 +104,14 @@ environment.systemPackages = with pkgs; [
      ];
     };
   systemd.settings.Manager = {
-    DefaultTimeoutStopSec = "10s";
+    DefaultTimeoutStopSec = " 5s";
   };
 
   # 2. Regla específica para OpenSnitch (Asegúrate de poner las comillas "5s")
   # Nota: Verifica el nombre exacto del servicio. Suele ser 'opensnitchd' o 'opensnitch'.
   # Si el comando anterior falló, systemd no sabe qué es 'opensnitchd' si el servicio no se llama así.
   # Para estar seguros, usa el nombre que NixOS le da:
-  systemd.services.opensnitchd.serviceConfig.TimeoutStopSec = lib.mkForce "5s";
+  systemd.services.opensnitchd.serviceConfig.TimeoutStopSec = lib.mkForce "2s";
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
