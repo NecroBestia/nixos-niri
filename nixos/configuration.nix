@@ -93,7 +93,7 @@ environment.systemPackages = with pkgs; [
 
   fileSystems."/mnt/not-to-lose" = {
     device = "/dev/disk/by-uuid/18324F22324F046A";
-    fsType = "ntfs";
+    fsType = "ntfs3";
     options = [ 
     	"rw" 
       "uid=1000" 	#${toString config.users.users.necro.uid}"
@@ -101,6 +101,7 @@ environment.systemPackages = with pkgs; [
       "umask=0022"
  	    "windows_names" 
       "nofail" 
+      "x-systemd.device-timeout=1s"
      ];
     };
   systemd.settings.Manager = {
