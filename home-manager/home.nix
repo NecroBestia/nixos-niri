@@ -15,19 +15,27 @@
       cdev = "nix develop ~/nixFlake#c-dev"; 
 #     mvuni  = "cd /mnt/not-to-lose/SyncThing/Universidad/";
   };
+    pointerCursor = {
+      name = "Bibata-Modern-Ice"; # El nombre exacto del tema (dentro de la carpeta del paquete)
+      package = pkgs.bibata-cursors; # El paquete de Nix
+      size = 24;
+      gtk.enable = true; # Aplica esto a aplicaciones GTK
+      x11.enable = true; # Aplica esto a XWayland
+    };
     
     # Variables de sesión
     sessionVariables = { 
       GTK_THEME = "Colloid-Dark"; 
-#      WAYLAND_DISPLAY ="wayland-0"; 
       XDG_SESSION_TYPE = "wayland"; 
       XDG_CURRENT_DESKTOP = "niri"; 
       XDG_SESSION_DESKTOP = "niri";
-#      GDK_BACKEND ="wayland,x11"; 
       QT_QPA_PLATFORM = "wayland;xcb"; 
-#      SDL_VIDEODRIVER = "wayland"; 
-#      CLUTTER_BACKEND = "wayland"; 
-#      MOZ_ENABLE_WAYLAND = "1"; 
+      XCURSOR_THEME = "Bibata-Modern-Ice";
+      XCURSOR_SIZE = "24";
+#     SDL_VIDEODRIVER = "wayland"; 
+#     CLUTTER_BACKEND = "wayland"; 
+#      WAYLAND_DISPLAY ="wayland-0"; 
+#     GDK_BACKEND ="wayland,x11"; 
     };
   };
 
@@ -53,9 +61,9 @@
     obsidian
     pavucontrol
     krita
-    lorien	
     qalculate-qt
     vlc
+    xournalpp 
     # Utilidades de Escritorio y Wayland
     playerctl
     #cliphist

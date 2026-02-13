@@ -18,17 +18,18 @@
     syncthing = {
         enable = true; 
         user = "necro"; 
-        dataDir = "/mnt/not-to-lose/SyncThing/"; 
+        dataDir = "/mnt/not_to_lose/SyncThing"; 
         openDefaultPorts = true;
         systemService = true;
     };
 		flatpak.enable = true;	
 	};
-  systemd.services.syncthing.unitConfig.RequiresMountsFor = "/mnt/not-to-lose";
-# /etc/nixos/configuration.nix
-
-# --- 1. Tu configuración de portal (SIN CAMBIOS) ---
-  
+  systemd.services.syncthing = {
+    bindsTo = ["mnt-not_to_lose.mount"];
+    after = ["mnt-not_to_lose.mount"];
+  };
+  #   systemd.services.syncthing.unitConfig.RequiresMountsFor = "/mnt/not_to_lose";
+  #Configuracion xdg
   xdg = {
     autostart.enable = true;
     portal = {

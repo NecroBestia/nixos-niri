@@ -5,34 +5,35 @@
 { lib, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      	./hardware-configuration.nix
-      	./modules/bootloader.nix	#Configuracion Grub  
-      	./modules/audio.nix	 	    #Configuracion de audio 
-      	./modules/nvidia.nix	 	  #Configuracion de drivers graficos. 
-	      ./modules/fileManager.nix #Configuracion Gestor archivos 
-	      ./modules/locale.nix		  #Configuracion de hora,moneda, etc
-	      ./modules/docker.nix 		  #Configuracion de virtualizacion
-	      ./modules/services.nix		#Servicios de ssh, etc. 
-        ./modules/firewall.nix    #Configuracion de firewal y opensnitch 
-];
+  #
+imports =
+  [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ./modules/bootloader.nix	#Configuracion Grub  
+    ./modules/audio.nix	 	    #Configuracion de audio 
+    ./modules/nvidia.nix	 	  #Configuracion de drivers graficos. 
+	  ./modules/fileManager.nix #Configuracion Gestor archivos 
+	  ./modules/locale.nix		  #Configuracion de hora,moneda, etc
+	  ./modules/docker.nix 		  #Configuracion de virtualizacion
+	  ./modules/services.nix		#Servicios de ssh, etc. 
+    ./modules/firewall.nix    #Configuracion de firewal y opensnitch. 
+    ./modules/bluetooth.nix   #Configuracion de Bluetooth. 
+  ];
   #Security
   security.sudo.enable = true;
   security.apparmor = {
-  	enable = true;
+  	  enable = true;
   };
   system = 
 	{
-		autoUpgrade.enable = true;
-		autoUpgrade.dates = "weekly";
+      autoUpgrade.enable = true;
+      autoUpgrade.dates = "weekly";
 	};
   nix = {
-		gc.automatic = true;
-		gc.dates = "daily";
-		gc.options = "--delete-older-than 10d";
-		settings.auto-optimise-store = true;
-
+		  gc.automatic = true;
+		  gc.dates = "daily";
+		  gc.options = "--delete-older-than 10d";
+		  settings.auto-optimise-store = true;
 	};
   nix.settings.experimental-features =["nix-command" "flakes"];
   networking.hostName = "nixos"; # Define your hostname.
@@ -89,23 +90,25 @@ environment.systemPackages = with pkgs; [
   };
   programs.dconf.enable = true;
 	hardware.opentabletdriver.enable = true;
+  
+  fileSystems."/mnt/not_to_lose" = {
+      device = "/dev/disk/by-uuid/18324F22324F046A";
+      fsType = "ntfs3";
+      options = [ 
+    	  "rw" 
+        "uid=1000" 	#${toString config.users.users.necro.uid}"
+        "gid=100"		#${toString config.users.groups.users.gid}"
+        "umask=0022"
+        "windows_names" 
+        "nofail" 
+        "x-systemd.device-timeout=10s"
+        "force" 
+        ];
+     };
 
 
-  fileSystems."/mnt/not-to-lose" = {
-    device = "/dev/disk/by-uuid/18324F22324F046A";
-    fsType = "ntfs3";
-    options = [ 
-    	"rw" 
-      "uid=1000" 	#${toString config.users.users.necro.uid}"
-      "gid=100"		#${toString config.users.groups.users.gid}"
-      "umask=0022"
- 	    "windows_names" 
-      "nofail" 
-      "x-systemd.device-timeout=1s"
-     ];
-    };
   systemd.settings.Manager = {
-    DefaultTimeoutStopSec = " 5s";
+  DefaultTimeoutStopSec = " 10s";
   };
 
   # 2. Regla específica para OpenSnitch (Asegúrate de poner las comillas "5s")

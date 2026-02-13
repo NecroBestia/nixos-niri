@@ -17,7 +17,7 @@ input {
 }
 
 output "DP-1" {
-    mode "1920x1080@165.001"
+    mode "1920x1080@143.999"
     scale 1
     transform "normal"
     position x=0 y=0

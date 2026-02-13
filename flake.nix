@@ -39,7 +39,7 @@
 			${system}.c-dev = pkgs.mkShell {
 				pname = "c-dev-shell"; 
 				nativeBuildInputs = with pkgs; [
-					gcc13	    	# compilador c 
+					gcc       # compilador c 
 					gnumake		# Make
           cmake     # CMake 
           pkg-config# Para que nix encuentre librerias.

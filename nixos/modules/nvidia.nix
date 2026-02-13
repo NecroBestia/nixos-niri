@@ -11,14 +11,14 @@
 
 	hardware.nvidia = {
 		modesetting.enable = true; 
-		powerManagement.enable = false; 
+		powerManagement.enable = true; 
 		powerManagement.finegrained = false;
 	# Kernel de nvidia open source. 
 	open = false;
 	#Configuraciones de nvdia; acceso "nvidia-settings" 
 	nvidiaSettings = true; 
 	# Version del driver
-	package = config.boot.kernelPackages.nvidiaPackages.stable;
+	package = config.boot.kernelPackages.nvidiaPackages.production;
 	};
   	environment.sessionVariables = {
     	GBM_BACKEND = "nvidia-drm";
