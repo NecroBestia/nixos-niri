@@ -12,7 +12,7 @@
     shellAliases = { 
       hm-switch = "home-manager switch --flake ~/nixFlake"; 
       sys-switch = "sudo nixos-rebuild switch --flake ~/nixFlake";
-      cdev = "nix develop ~/nixFlake#c-dev"; 
+      cdev = "nix develop ~/nixFlake#c-dev --profile ./nix-gc-root"; 
 #     mvuni  = "cd /mnt/not-to-lose/SyncThing/Universidad/";
   };
     pointerCursor = {

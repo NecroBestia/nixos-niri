@@ -55,8 +55,8 @@
       ];
 				shellHook = '' 
 					echo "Entorno C activo (c-dev)" 
-					export CFLAGS="-Wall -Wextra -02"	
-          export CXXFLAGS="-Wall -Wextra -02" 
+					export CFLAGS="-Wall -Wextra -O2"	
+          export CXXFLAGS="-Wall -Wextra -O2" 
 				'';
 			};	
 		};
