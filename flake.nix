@@ -47,12 +47,12 @@
 					valgrind	# Analisis de memoria
 					binutils	# Linker y herramientas binarias
 				];
-      buildInputs = with pkgs; [
-        glfw      #Crea ventanas y maneja el input  
-        libglvnd  #Provee <GL/gl.h> y -lGL
-        glew      #Provee <GL/glew.h> Funciones modernas de OpenGl
-        glm       #Matematica para vectores. 
-      ];
+      	buildInputs = with pkgs; [
+        	glfw      #Crea ventanas y maneja el input  
+        	libglvnd  #Provee <GL/gl.h> y -lGL
+        	glew      #Provee <GL/glew.h> Funciones modernas de OpenGl
+        	glm       #Matematica para vectores. 
+      	];
 				shellHook = '' 
 					echo "Entorno C activo (c-dev)" 
 					export CFLAGS="-Wall -Wextra -O2"	

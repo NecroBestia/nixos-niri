@@ -4,12 +4,10 @@ input {
         xkb {
             layout "latam"     
         }
-        
     }
 
     mouse {
       accel-profile "flat"
-       
 	  }
     tablet {
         map-to-output "DP-1"
