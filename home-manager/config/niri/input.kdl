@@ -1,0 +1,14 @@
+input {
+  //focus-follows-mouse 
+    keyboard {
+        xkb {
+            layout "latam"
+        }
+    }
+    mouse {
+      accel-profile "flat"
+	  }
+    tablet {
+        map-to-output "DP-1"
+    }
+}

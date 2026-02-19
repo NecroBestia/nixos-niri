@@ -129,17 +129,6 @@
       enable = true;
     	
     };
-    
-   #niri.enable = true; # (Comentado en tu original)
-
-    # obs-studio = { 
-      # enable = true;
-      # plugins = with pkgs.obs-studio-plugins; [ 
-      #  wlrobs
-      #  obs-backgroundremoval
-      #  obs-pipewire-audio-capture
-      #]; 
-      #};
   };
   # --- 6. Gestión de Archivos de Configuración (Dotfiles) ---
   # Agrupa todos los 'home.file' para mayor claridad
@@ -157,13 +146,9 @@
       source = lib.mkForce ./config/scripts; 
       recursive = true; 
     };
-#    ".config/mako/config" = {
-#      source = lib.mkForce ./config/mako/config;
-#    };
   };
 
   # --- 7. Módulos Externos ---
-  # Los 'imports' suelen ir al final o al principio.
   imports  = [
     ./modules/niri.nix
     ./modules/firefox.nix 

@@ -1,0 +1,30 @@
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+window-rule {
+	match app-id="org.pwmt.zathura"
+	match app-id="firefox"
+	geometry-corner-radius 0 
+    clip-to-geometry true	    	
+}
+// Aplicaciones que se abriran maximizadas 
+window-rule {
+    match app-id="vlc"
+    match app-id="firefox"
+    open-maximized true 
+ 
+}
+// Aplicaciones que se abriran en el segundo monitor por defecto 
+window-rule {
+    match app-id="Spotify"
+    match app-id="discord" 
+    open-on-output "HDMI-A-1" 
+    open-maximized true
+}
+
+layer-rule {
+    match namespace="^wallpaper$"
+	place-within-backdrop true
+}
