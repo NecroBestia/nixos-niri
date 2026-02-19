@@ -16,7 +16,7 @@ in
   # Configuración condicional
   config = lib.mkIf cfg.enable {
     # Copiar archivos de configuración de Niri
-    xdg.configFile."niri/config.kdl".source = lib.mkForce ../config/niri/config.kdl; 
+    xdg.configFile."niri/".source = lib.mkForce ../config/niri; 
     # Paquetes esenciales para Niri y Wayland
     home.packages = [ pkgs.gcr ];
 
