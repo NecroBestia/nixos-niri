@@ -56,7 +56,6 @@
     # Aplicaciones de Consola
     zathura # Lector pdf
     mupdf 
-    vscodium    
     # Aplicaciones Gráficas
     obsidian
     pavucontrol
@@ -64,6 +63,9 @@
     qalculate-qt
     vlc
     xournalpp 
+    nomacs 
+    vscodium
+    libreoffice-qt-fresh    
     # Utilidades de Escritorio y Wayland
     playerctl
     #cliphist
@@ -73,7 +75,6 @@
     swaybg
     imagemagick
     swayidle
-    libreoffice-qt-fresh
   ];
 
   # --- 3. Configuración de Shell y Terminal ---
