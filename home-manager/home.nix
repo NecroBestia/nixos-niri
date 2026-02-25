@@ -62,7 +62,6 @@
     libreoffice-qt-fresh    
     # Utilidades de Escritorio y Wayland
     playerctl
-    #cliphist
     wl-clipboard
     swww 
     swayidle
@@ -125,9 +124,9 @@
       "inode/directory" = ["org.gnome.Nautilus.desktop"]; 
       "application/pdf" = ["org.pwmt.zathura.desktop"  "firefox.desktop"];
       "image/png"  = ["org.nomacs.ImageLounge.desktop"];
-      "image/jpeg" = ["org.nomacs.ImageLounge.desktop"]; 
-      "image/webp" = ["org.nomacs.ImageLounge.desktop"]; 
-      "image/gif"  = ["org.nomacs.ImageLounge.desktop"];
+      "image/jpeg"    = ["org.nomacs.ImageLounge.desktop"]; 
+      "image/webp"    = ["org.nomacs.ImageLounge.desktop"]; 
+      "image/gif"     = ["org.nomacs.ImageLounge.desktop"];
       "image/svg+xml" = ["org.nomacs.ImageLounge.desktop"]; 
     };
   };

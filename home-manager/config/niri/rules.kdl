@@ -1,5 +1,7 @@
 workspace "web" 
-workspace "music" 
+workspace "music"{
+  open-on-output "HDMI-A-1"
+}
 workspace "notes"
 // Configuracion para bordes rectangulares
 window-rule {
@@ -19,7 +21,6 @@ window-rule {
 }
 // Aplicaciones que se abriran en el segundo monitor por defecto 
 window-rule {
-    match app-id="Spotify"
     match app-id="discord" 
     open-on-output "HDMI-A-1" 
     open-maximized true
@@ -35,8 +36,9 @@ window-rule{
   open-on-workspace "web" 
 }
 window-rule{
-  match app-id="Spotify"
+  match app-id="spotify"
   open-on-workspace "music"
+  open-maximized true
 }
 window-rule {
   match app-id="obsidian" 

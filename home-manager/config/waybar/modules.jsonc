@@ -34,8 +34,8 @@
 
 	"niri/workspaces": {
 		"disable-scroll": true,
-		"show-special": false,
-		"all-outputs": true,
+		"show-special": true,
+		"all-outputs": false,
 		"format": "{icon}",
     		"persistent-workspaces": {
       			"*": 5
@@ -60,7 +60,7 @@
 		"offscreen-css": true,
 		"offscreen-css-text": "(inactive)",
 		"rewrite": {
-			" (.*) — Mozilla Firefox": "  $1",
+			" (.*) — firefox": "  $1",
 			" (.*) - fish": "> [$1]",
 			" (.*) - zsh": "> [$1]",
 			" (.*) - $term": "> [$1]"
