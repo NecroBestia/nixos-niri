@@ -1,6 +1,4 @@
-{ pkgs, lib, ...}: {
-
-  # --- 1. Configuración Central de Home Manager ---
+{ pkgs, lib, ...}: { # --- 1. Configuración Central de Home Manager ---
   # Define el usuario, el directorio y la versión de estado.
   home = {
     username = "necro"; 
@@ -32,10 +30,6 @@
       QT_QPA_PLATFORM = "wayland;xcb"; 
       XCURSOR_THEME = "Bibata-Modern-Ice";
       XCURSOR_SIZE = "24";
-#     SDL_VIDEODRIVER = "wayland"; 
-#     CLUTTER_BACKEND = "wayland"; 
-#      WAYLAND_DISPLAY ="wayland-0"; 
-#     GDK_BACKEND ="wayland,x11"; 
     };
   };
 
@@ -70,21 +64,19 @@
     playerctl
     #cliphist
     wl-clipboard
-    hyprshot
     swww 
     swaybg
     imagemagick
     swayidle
+    #scripts 
+    (import ./modules/scripts.nix).clipboard
+    (import ./modules/scripts.nix).niri-wallpapery
   ];
 
   # --- 3. Configuración de Shell y Terminal ---
   programs.bash = {
     enable = true; 
     enableCompletion = true; 
-    # 'initExtra' se mantiene, pero los alias se movieron a 'home.aliases'
-  # initExtra = ''
-  #    eval "$(starship init bash)"
-  #  ''; 
   };
   
   # (Recomendación) Puedes reemplazar 'eval' en bash.initExtra
@@ -106,6 +98,22 @@
       name = "Colloid"; 
       package = pkgs.colloid-icon-theme;  #Define el paquete aquí
     };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+  };
+  qt = {
+    enable = true; 
+    platformTheme.name = "gtk";
+    style.name = "Colloid-Dark"; 
+  };
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme  = "prefer-dark";
+    };
   };
   # Configuracion cliphist 
   services.cliphist = {
@@ -116,8 +124,13 @@
   xdg.mimeApps = { 
     enable = true; 
     defaultApplications = {
-      "inode/directory" = "org.gnome.Nautilus.desktop"; 
+      "inode/directory" = ["org.gnome.Nautilus.desktop"]; 
       "application/pdf" = ["org.pwmt.zathura.desktop"  "firefox.desktop"];
+      "image/png"  = ["org.nomacs.ImageLounge.desktop"];
+      "image/jpeg" = ["org.nomacs.ImageLounge.desktop"]; 
+      "image/webp" = ["org.nomacs.ImageLounge.desktop"]; 
+      "image/gif"  = ["org.nomacs.ImageLounge.desktop"];
+      "image/svg+xml" = ["org.nomacs.ImageLounge.desktop"]; 
     };
   };
 
@@ -125,10 +138,8 @@
   # Agrupa todos los 'programs.*'
   programs = {
     home-manager.enable = true; 
-    
     waybar = { 
-      enable = true;
-    	
+      enable = true;    	
     };
   };
   # --- 6. Gestión de Archivos de Configuración (Dotfiles) ---

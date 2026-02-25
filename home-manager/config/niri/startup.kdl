@@ -2,6 +2,6 @@ spawn-at-startup "waybar"
 spawn-at-startup "swww-daemon"
 spawn-at-startup "~/.config/scripts/niri-wallpaper-deamon.sh"
 spawn-at-startup "opensnitch-ui"
-spawn-at-startup "Spotify" 
+spawn-at-startup "com.spotify.Client" 
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"

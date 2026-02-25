@@ -11,4 +11,5 @@ input {
     tablet {
         map-to-output "DP-1"
     }
+    workspace-auto-back-and-forth 
 }
