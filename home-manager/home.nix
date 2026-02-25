@@ -65,12 +65,10 @@
     #cliphist
     wl-clipboard
     swww 
-    swaybg
-    imagemagick
     swayidle
     #scripts 
-    (import ./modules/scripts.nix).clipboard
-    (import ./modules/scripts.nix).niri-wallpapery
+    (import ./modules/scripts.nix {inherit pkgs;}).clipboard
+    (import ./modules/scripts.nix {inherit pkgs;}).niri-wallpaper
   ];
 
   # --- 3. Configuración de Shell y Terminal ---
@@ -153,10 +151,6 @@
     };
     ".config/zathura/zathurarc" = { 
       source = lib.mkForce ./config/zathura/zathurarc; 
-    };
-    ".config/scripts/" = { 
-      source = lib.mkForce ./config/scripts; 
-      recursive = true; 
     };
   };
 

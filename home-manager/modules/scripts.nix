@@ -27,7 +27,7 @@
         echo "$selection" | $CLIPHIST decode | $WLCOPY
         ;;
     esac
-  ''
+  '';
   niri-wallpaper = pkgs.writeShellScriptBin "niri-wallpaper" '' 
     # Binarios declarativos
     SWWW="${pkgs.swww}/bin/swww"
@@ -71,5 +71,5 @@
     
     pkill swaybg || true
     $SWAYBG -i "$OVERVIEW_WALL_TMP" -m fill &
-''
+  '';
 }

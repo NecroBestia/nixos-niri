@@ -3,8 +3,8 @@ binds {
     Mod+T { spawn "kitty"; }
     Mod+Space { spawn "fuzzel"; }
     Super+Alt+L { spawn "wlogout"; }
-    Mod+Ctrl+Shift+W { spawn-sh "~/.config/scripts/niri-wallpaper-deamon.sh"; } 
-    Mod+Ctrl+V { spawn-sh "sh -c 'sel=$( (echo wipe; cliphist list) | fuzzel --dmenu --prompt Clipboard:) && if [ \"$sel\" = wipe ]; then cliphist wipe; elif [ -n \"$sel\" ]; then echo \"$sel\" | cliphist decode | wl-copy; fi'"; }
+    Mod+Ctrl+Shift+W { spawn "niri-wallpaper"; } 
+    Mod+Ctrl+V { spawn "niri-clipboard" ;}
     Mod+Alt+H {spawn-sh "pkill -SIGUSR1 waybar";}   
     XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+"; }
     XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
