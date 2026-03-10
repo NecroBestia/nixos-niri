@@ -67,7 +67,7 @@
     cp "$CACHED_PHOTO" "$OVERVIEW_WALL_TMP"
 
     # 5. Aplicar fondos
-    $SWWW img "$WALLPAPER" --transition-type fade --transition-duration 1.0
+    $SWWW img "$WALLPAPER" --transition-type fade
     
     pkill swaybg || true
     $SWAYBG -i "$OVERVIEW_WALL_TMP" -m fill &

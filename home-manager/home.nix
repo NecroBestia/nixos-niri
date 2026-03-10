@@ -65,6 +65,7 @@
     wl-clipboard
     swww 
     swayidle
+    swaybg
     #scripts 
     (import ./modules/scripts.nix {inherit pkgs;}).clipboard
     (import ./modules/scripts.nix {inherit pkgs;}).niri-wallpaper

@@ -1,8 +1,3 @@
-workspace "web" 
-workspace "music"{
-  open-on-output "HDMI-A-1"
-}
-workspace "notes"
 // Configuracion para bordes rectangulares
 window-rule {
   geometry-corner-radius 0
@@ -22,6 +17,7 @@ window-rule {
 // Aplicaciones que se abriran en el segundo monitor por defecto 
 window-rule {
     match app-id="discord" 
+    match app-id="spotify"
     open-on-output "HDMI-A-1" 
     open-maximized true
 }
@@ -30,17 +26,5 @@ layer-rule {
     match namespace="^wallpaper$"
 	  place-within-backdrop true
 }
-// Configuracion de los workspaces
-window-rule{
-  match app-id="firefox"
-  open-on-workspace "web" 
-}
-window-rule{
-  match app-id="spotify"
-  open-on-workspace "music"
-  open-maximized true
-}
-window-rule {
-  match app-id="obsidian" 
-  open-on-workspace "notes"
-}
+
+
