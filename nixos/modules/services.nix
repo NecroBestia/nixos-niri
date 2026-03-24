@@ -1,5 +1,4 @@
 {pkgs, ...}: {
-
 	services = 	
 	{
 	  # --- Configuracion de SSH ---
@@ -28,19 +27,18 @@
     bindsTo = ["mnt-not_to_lose.mount"];
     after = ["mnt-not_to_lose.mount"];
   };
-  #   systemd.services.syncthing.unitConfig.RequiresMountsFor = "/mnt/not_to_lose";
   #Configuracion xdg
   xdg = {
     autostart.enable = true;
     portal = {
       enable = true;      
-      wlr.enable = true;
+      #wlr.enable = true;
       extraPortals = with pkgs; [
         xdg-desktop-portal-gtk
         xdg-desktop-portal-gnome
       ];
       config = {
-        common.default = [ "wlr" "gtk" "gnome" ];
+        common.default = [ "gtk" "gnome" ];
         niri = {
           default = ["gtk" "gnome"];
           "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
