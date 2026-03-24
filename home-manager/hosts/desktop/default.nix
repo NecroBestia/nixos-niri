@@ -1,11 +1,11 @@
 {pkgs,...}:{
-  import = [
+  imports = [
     ../../shared/default.nix
   ];
   home = {
-    userame = "necro"; 
+    username = "necro"; 
     homeDirectory = "/home/necro"; 
-
+    stateVersion = "25.05";
   };
 
 }
