@@ -29,23 +29,12 @@ in
       dbus.enable = true;
       gvfs.enable = true;
       udisks2.enable = true;
-    };
-
-    security.polkit.enable = true;
-    security.polkit.extraConfig = ''
-      polkit.addRule(function(action, subject) {
-        if (subject.user == "${user}") {
-          if (action.id.startsWith("org.freedesktop.udisks2.")) {
-            return polkit.Result.YES;
-          }
-        }
-      });
-    '';
-
-    environment.etc."udisks2/mount_options.conf".text = ''
-      [defaults]
-      mount_point = /mnt/%u
-   '';
-
+      udiskie = {
+        enable=true; 
+        automount = true; 
+        notify= true; 
+        tray="auto";
+      };
+    };  
   };
 }

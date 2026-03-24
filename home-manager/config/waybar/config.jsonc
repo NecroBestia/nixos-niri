@@ -19,6 +19,8 @@
 		"wireplumber#sink",
 		"wireplumber#source",
 		"custom/separator",		
+    "custom/luz-azul",
+    "custom/separator", 
 		"memory",
 		"cpu",		
 		"custom/separator", 

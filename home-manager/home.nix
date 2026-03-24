@@ -12,7 +12,7 @@
       sys-switch = "sudo nixos-rebuild switch --flake ~/nixFlake";
       cdev = "nix develop ~/nixFlake#c-dev"; 
 #     mvuni  = "cd /mnt/not-to-lose/SyncThing/Universidad/";
-  };
+    };
     pointerCursor = {
       name = "Bibata-Modern-Ice"; # El nombre exacto del tema (dentro de la carpeta del paquete)
       package = pkgs.bibata-cursors; # El paquete de Nix
@@ -47,6 +47,9 @@
     tree
     curl
     nil
+    direnv
+    nix-direnv
+    wlsunset
     # Aplicaciones de Consola
     zathura # Lector pdf
     mupdf 
@@ -139,6 +142,7 @@
     waybar = { 
       enable = true;    	
     };
+    direnv.enable = true; 
   };
   # --- 6. Gestión de Archivos de Configuración (Dotfiles) ---
   # Agrupa todos los 'home.file' para mayor claridad

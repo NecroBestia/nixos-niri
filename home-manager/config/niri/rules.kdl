@@ -12,14 +12,20 @@ window-rule {
     match app-id="vlc"
     match app-id="firefox"
     open-maximized true 
- 
 }
 // Aplicaciones que se abriran en el segundo monitor por defecto 
 window-rule {
     match app-id="discord" 
-    match app-id="spotify"
+    match app-id="Spotify"
     open-on-output "HDMI-A-1" 
     open-maximized true
+}
+//Configuracion de xdg-apps
+window-rule {
+  match app-id="Xdg-desktop-portal-gtk"
+  focus-ring {
+    off
+  } 
 }
 //configuracion el wallpaper del overview
 layer-rule {

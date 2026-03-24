@@ -1,9 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { lib, pkgs, ... }:
-
 {
   #
 imports =
@@ -20,10 +18,12 @@ imports =
     ./modules/bluetooth.nix   #Configuracion de Bluetooth. 
   ];
   #Security
-  security.sudo.enable = true;
-  security.apparmor = {
-  	  enable = true;
-  };
+  security = {
+    sudo.enable = true; 
+    apparmor = true; 
+    polkit.enable = true; 
+
+  }; 
   system = 
 	{
       autoUpgrade.enable = true;
@@ -59,13 +59,16 @@ imports =
   users.users.necro = {
     isNormalUser = true;
     description = "necro";
-    extraGroups = [ "networkmanager" "wheel" "audio" "docker" "input"];
+    extraGroups = [ "networkmanager" "wheel" "audio" "docker" "input" "storage"];
    # packages = with pkgs; [];
     shell = pkgs.bash;
   };
 
   #instala todas las fonts de nerdfonts
-  fonts.packages = [ ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts) ; 
+  fonts.packages = with pkgs; [
+    nerd-fonts.fira-code
+    nerd-fonts. jetbrains-mono
+  ]; 
  
  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -74,18 +77,28 @@ imports =
 #  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
 environment.systemPackages = with pkgs; [
- 	vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.xwayland-satellite
+ 	  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.xwayland-satellite
 	  wget 
 	  git 
 	  home-manager
 	  #Paquete necesarios para niri
 	  xwayland-satellite
+    sddm-astronaut
 ];	
 	#Esta puta mierda hace que funcione niri con el display manager 
 	programs.niri.enable = true; 
   services = 
   {
-  	displayManager.sddm.enable = true;
+  	displayManager.sddm = {
+      enable = true;
+      theme = "sddm-astronaut-theme"; 
+      extraPackages = with pkgs; [
+        sddm-astronaut
+        kdePackages.qtmultimedia # Soluciona el error de "qtmultimedia not installed"
+        kdePackages.qtsvg        # Recomendado: soluciona errores de gráficos vectoriales
+        kdePackages.qt5compat
+      ];
+    };
   	xserver.enable = true;    
   };
   programs.dconf.enable = true;
