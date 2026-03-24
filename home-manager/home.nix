@@ -173,6 +173,7 @@
     ./modules/waybar.nix
     ./modules/nvim.nix
     ./modules/wlogout.nix			
+    ./modules/systemd.nix
   ];
   
 }

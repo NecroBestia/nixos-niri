@@ -1,4 +1,4 @@
-{}: {
+{pkgs, ...}: {
   systemd.user.services.wlsunset = {
     Unit = {
       Description = "Filtro luz azul (Manual)";
