@@ -88,9 +88,9 @@
 
   # enlazarlos config files
   home.file = {
-    ".config/fuzzel/fuzzel.ini".source = ../../config/fuzzel/fuzzel.ini; 
-    ".config/kitty/kitty.conf".source = ../../config/kitty/kitty.conf; 
-    ".config/zathura/zathurarc".source = ../../config/zathura/zathurarc; 
+    ".config/fuzzel/fuzzel.ini".source = ../config/fuzzel/fuzzel.ini; 
+    ".config/kitty/kitty.conf".source = ../config/kitty/kitty.conf; 
+    ".config/zathura/zathurarc".source = ../config/zathura/zathurarc; 
   };
 
   imports  = [

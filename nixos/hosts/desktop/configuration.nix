@@ -95,13 +95,11 @@
     fsType = "ntfs3";
     options = [ 
       "rw" 
-      "uid=${toString config.users.users.necro.uid}"
-      "gid=${toString config.users.groups.users.gid}"
+      "uid=1000"
+      "gid= 100"
       "umask=0022"
-      "windows_names" 
       "nofail" 
       "x-systemd.device-timeout=10s"
-      "force" 
     ];
   };
 
