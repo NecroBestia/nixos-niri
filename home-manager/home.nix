@@ -121,6 +121,14 @@
     enable = true;
     package = pkgs.cliphist;
   };
+  services = {
+        udiskie = {
+        enable=true; 
+        automount = true; 
+        notify= true; 
+        tray="auto";
+      };
+  };
   # Configuración de aplicaciones por defecto (MIME types)
   xdg.mimeApps = { 
     enable = true; 

@@ -20,7 +20,7 @@ imports =
   #Security
   security = {
     sudo.enable = true; 
-    apparmor = true; 
+    apparmor.enable = true; 
     polkit.enable = true; 
 
   }; 

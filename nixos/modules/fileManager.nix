@@ -16,25 +16,16 @@ in
       gvfs
       polkit_gnome
       udisks2
-
-      # --- PAQUETES AÑADIDOS ---
       gnome-autoar       # Para gestionar archivos .zip, .tar, etc.
       gnome-desktop      # Para thumbnails de imágenes y metadata
       ffmpegthumbnailer  # Para thumbnails de videos
       poppler-utils      #Para thumbnails de PDFs
-      # ------------------------
     ];
 
     services = {
       dbus.enable = true;
       gvfs.enable = true;
       udisks2.enable = true;
-      udiskie = {
-        enable=true; 
-        automount = true; 
-        notify= true; 
-        tray="auto";
-      };
     };  
   };
 }

@@ -13,7 +13,7 @@ binds {
     
     // -- Configuraciones de audio
     XF86AudioPlay { spawn-sh "playerctl play-pause"; }
-    XF86AudioStop { spawn-sh "playerctl top"; }
+    XF86AudioStop { spawn-sh "playerctl stop"; }
     XF86AudioPrev { spawn-sh "playerctl previous"; }
     XF86AudioNext { spawn-sh "playerctl next"; }
     
