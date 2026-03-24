@@ -15,7 +15,7 @@
 		};
     # -- Configuracion Syncthing --- 
     syncthing = {
-        enable = true; 
+        enable = false; 
         user = "necro"; 
         dataDir = "/mnt/not_to_lose/SyncThing"; 
         openDefaultPorts = true;

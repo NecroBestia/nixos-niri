@@ -16,7 +16,7 @@
   boot.kernelPackages = pkgs.linuxPackages_zen;
   
   # Usamos ntfs3 que es nativo y más rápido que ntfs tradicional
-  boot.supportedFilesystems = [ "ntfs3" ]; 
+  boot.supportedFilesystems = [ "ntfs" "ntfs3" ]; 
   boot.plymouth.enable = false; 
 
   boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
