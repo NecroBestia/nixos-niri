@@ -2,8 +2,8 @@
   home = {
     stateVersion = "25.05"; 
     shellAliases = { 
-      hm-switch = "home-manager switch --flake ~/nixFlake"; 
-      sys-switch = "sudo nixos-rebuild switch --flake ~/nixFlake";
+      hm-switch = "home-manager switch --flake ~/nixFlake#\"necro@$HOSTNAME\""; 
+      sys-switch = "sudo nixos-rebuild switch --flake ~/nixFlake#$HOSTNAME";
     };
     pointerCursor = {
       name = "Bibata-Modern-Ice";
