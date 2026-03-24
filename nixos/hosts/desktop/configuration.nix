@@ -2,15 +2,15 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./modules/bootloader.nix  
-    ./modules/audio.nix       
-    ./modules/nvidia.nix      
-    ./modules/fileManager.nix 
-    ./modules/locale.nix      
-    ./modules/docker.nix      
-    ./modules/services.nix    
-    ./modules/firewall.nix    
-    ./modules/bluetooth.nix   
+    ../../modules/bootloader.nix  
+    ../../modules/nvidia.nix      
+    ../../modules/audio.nix       
+    ../../modules/fileManager.nix 
+    ../../modules/locale.nix      
+    ../../modules/docker.nix      
+    ../../modules/services.nix    
+    ../../modules/firewall.nix    
+    ../../modules/bluetooth.nix   
   ];
 
   # Identificación de la máquina
@@ -30,7 +30,7 @@
       options = "--delete-older-than 10d";
     };
   };
-
+  nixpkgs.config.allowUnfree = true; 
   # Seguridad básica
   security = {
     sudo.enable = true; 

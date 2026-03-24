@@ -1,13 +1,9 @@
 {
-  description = "Flake NixOS + Home Manager minimal canvas";
+  description = "Flake NixOS + Home Manager (Desktop & Notebook)";
 
   inputs = {
-    # 1. Canal estable para el core del sistema y máxima estabilidad
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-    
-    # 2. Canal inestable para los paquetes que quieras tener en su última versión
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -18,44 +14,58 @@
     let
       system = "x86_64-linux";
       
-      # 3. Paquetes estables con soporte para software privativo (ej. drivers, fuentes)
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true; 
       };
 
-      # 4. Paquetes inestables inicializados de la misma forma
       pkgs-unstable = import nixpkgs-unstable {
         inherit system;
         config.allowUnfree = true; 
       };
     in {
-      # Configuración NixOS
+      # --- CONFIGURACIONES DEL SISTEMA (NixOS) ---
       nixosConfigurations = {
-        # 5. Renombramos el host de "nixos" a "desktop" (Preparando la Parte 2)
+        
+        # 1. PC de Sobremesa
         desktop = nixpkgs.lib.nixosSystem {
           inherit system;
-          # 6. Pasamos pkgs-unstable para que esté disponible en todo NixOS
           specialArgs = { inherit inputs pkgs-unstable; }; 
           modules = [
-            ./nixos/configuration.nix
+            ./nixos/hosts/desktop/configuration.nix 
+          ];
+        };
+
+        # 2. ThinkPad
+        notebook = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit inputs pkgs-unstable; }; 
+          modules = [
+            ./nixos/hosts/notebook/configuration.nix 
           ];
         };
       };
 
-      # Home Manager
+      # --- CONFIGURACIONES DE USUARIO (Home Manager) ---
       homeConfigurations = {
-        "necro" = home-manager.lib.homeManagerConfiguration {
+        
+        # 1. Usuario para el Sobremesa
+        "necro@desktop" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          # 7. Pasamos pkgs-unstable para que esté disponible en tu usuario
           extraSpecialArgs = { inherit inputs pkgs-unstable; };
           modules = [
-            ./home-manager/home.nix
+            ./home-manager/hosts/desktop/default.nix
+          ];
+        };
+
+        # 2. Usuario para el ThinkPad
+        "necro@notebook" = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = { inherit inputs pkgs-unstable; };
+          modules = [
+            ./home-manager/hosts/notebook/default.nix
           ];
         };
       };
-
-      # 8. Los devShells globales de C y Python fueron eliminados.
-      # Pasarán a ser Flakes individuales en las carpetas de tus proyectos.
     };
 }
