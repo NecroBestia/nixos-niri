@@ -25,14 +25,14 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfreePredicate =(_:true);
 
   # Paquetes comunes para AMBOS equipos
   home.packages = with pkgs; [ 
     kitty starship neofetch htop tree curl nil direnv nix-direnv wlsunset
     zathura mupdf 
     obsidian pavucontrol krita qalculate-qt vlc xournalpp nomacs vscodium libreoffice-qt-fresh    
-    playerctl wl-clipboard swww swayidle swaybg
-    
+    playerctl wl-clipboard swww swayidle swaybg 
     # Importación correcta de tus scripts como módulos de Home Manager
     (import ../modules/scripts.nix {inherit pkgs;}).clipboard
     (import ../modules/scripts.nix {inherit pkgs;}).niri-wallpaper

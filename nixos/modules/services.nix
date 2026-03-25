@@ -15,7 +15,7 @@
 		};
     # -- Configuracion Syncthing --- 
     syncthing = {
-        enable = false; 
+        enable = true; 
         user = "necro"; 
         dataDir = "/mnt/not_to_lose/SyncThing"; 
         openDefaultPorts = true;
@@ -32,7 +32,7 @@
     autostart.enable = true;
     portal = {
       enable = true;      
-      #wlr.enable = true;
+      wlr.enable = true;
       extraPortals = with pkgs; [
         xdg-desktop-portal-gtk
         xdg-desktop-portal-gnome

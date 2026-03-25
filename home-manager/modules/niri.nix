@@ -32,6 +32,7 @@ in
       mako.enable      = true;  # Notificaciones
       swayidle  = {
         enable = true;
+        systemdTarget ="graphical-session.target"; 
         extraArgs = [ 
           "-w"
           "timeout 600 'swaylock -f'"

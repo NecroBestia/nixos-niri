@@ -95,20 +95,20 @@
   hardware.opentabletdriver.enable = true;
   console.keyMap = "la-latin1";
   
-  # Montaje de disco secundario con variables dinámicas
-  #fileSystems."/mnt/not_to_lose" = {
-  #  device = "/dev/disk/by-uuid/18324F22324F046A";
-  #  fsType = "ntfs3";
-  #  options = [ 
-  #    "rw" 
-  #    "uid=1000"
-  #    "gid=100"
-  #    "umask=0022"
-  #    "nofail"
-  #    "force"
-  #    "x-system.automount"
-  #  ];
-  #};
+  #Montaje de disco secundario con variables dinámicas
+  fileSystems."/mnt/not_to_lose" = {
+    device = "/dev/disk/by-uuid/18324F22324F046A";
+    fsType = "ntfs3";
+    options = [ 
+      "rw" 
+      "uid=1000"
+      "gid=100"
+      "umask=0022"
+      "nofail"
+      "force"
+      "x-system.automount"
+    ];
+  };
 
   # Optimizaciones de apagado
   systemd = {
