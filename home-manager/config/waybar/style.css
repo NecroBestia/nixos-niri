@@ -1,0 +1,87 @@
+/*----------------------
+   Fuente y tamaño
+----------------------*/
+* {
+    font-family: "JetBrainsMono Nerd Font";
+    font-weight: bold;
+    font-size: 97%;
+    font-feature-settings: '"zero","ss01","ss02","ss03","ss04","ss05","cv31"';
+    min-height: 0;
+}
+
+/*----------------------
+   Ventana principal
+----------------------*/
+window#waybar,
+window#waybar.empty,
+window#waybar.empty #window {
+    background-color: transparent;
+    padding: 0;
+    border: 0;
+}
+
+/*----------------------
+   Tooltips
+----------------------*/
+tooltip {
+    color: white;
+    background: #1e1e2e;
+    opacity: 0.8;
+    border-radius: 10px;
+    border: 2px solid white;
+}
+
+tooltip label {
+    color: #cdd6f4;
+}
+
+/*----------------------
+   Grupos de módulos
+----------------------*/
+.modules-left,
+.modules-center,
+.modules-right {
+    background-color: black;
+    color: white;
+    border-bottom: 1px solid white;
+    border-radius: 10px;
+    padding: 6px 20px 0px 4px;
+}
+
+/*----------------------
+   Botones de módulos
+----------------------*/
+#taskbar button,
+#workspaces button {
+    color: dimgrey;
+    border-radius: 9px;
+    padding: 0 4px;
+    box-shadow: none;
+    text-shadow: none;
+    transition: all 0.5s cubic-bezier(.55,-0.68,.48,1.682);
+}
+
+#taskbar button:hover,
+#workspaces button:hover {
+    color: white;
+    background-color: #7f849c;
+    transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
+}
+
+#taskbar button.active,
+#workspaces button.active {
+    color: white;
+    padding: 2px 8px;
+}
+
+#workspaces button.persistent {
+    border-radius: 10px;
+}
+
+/*----------------------
+   Indicadores específicos
+----------------------*/
+@keyframes blink {
+    to { color: #000000; }
+}
+

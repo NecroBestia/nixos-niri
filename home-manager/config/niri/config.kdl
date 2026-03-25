@@ -1,0 +1,11 @@
+include "input.kdl" 
+include "outputs.kdl"
+include "layout.kdl"
+include "startup.kdl" 
+include "rules.kdl"
+include "binds.kdl" 
+hotkey-overlay {
+}
+animations {
+
+}

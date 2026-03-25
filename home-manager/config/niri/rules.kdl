@@ -1,0 +1,36 @@
+// Configuracion para bordes rectangulares
+window-rule {
+  geometry-corner-radius 0
+  clip-to-geometry true 
+}
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+// Aplicaciones que se abriran maximizadas 
+window-rule {
+    match app-id="vlc"
+    match app-id="firefox"
+    open-maximized true 
+}
+// Aplicaciones que se abriran en el segundo monitor por defecto 
+window-rule {
+    match app-id="discord" 
+    match app-id="Spotify"
+    open-on-output "HDMI-A-1" 
+    open-maximized true
+}
+//Configuracion de xdg-apps
+window-rule {
+  match app-id="Xdg-desktop-portal-gtk"
+  focus-ring {
+    off
+  } 
+}
+//configuracion el wallpaper del overview
+layer-rule {
+    match namespace="^wallpaper$"
+	  place-within-backdrop true
+}
+
+

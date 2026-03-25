@@ -1,0 +1,31 @@
+{
+	"layer": "top", 
+	"position": "top",
+	"height": 15,
+	"margin-left": 10,
+	"margin-right": 10,
+	"margin-top": 2,
+	"modules-left": [
+		"niri/workspaces",
+		"tray"
+	],
+	"modules-center": [
+		"clock"
+	],
+	
+	"modules-right" : [
+		"niri/window",
+		"custom/separator",	
+		"wireplumber#sink",
+		"wireplumber#source",
+		"custom/separator",		
+    "custom/luz-azul",
+    "custom/separator", 
+		"memory",
+		"cpu",		
+		"custom/separator", 
+		"custom/power"
+	],
+
+	"include": "./modules.jsonc"
+}
