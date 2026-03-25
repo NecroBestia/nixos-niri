@@ -1,7 +1,7 @@
 {
 
   	# Set your time zone.
-  	time.timeZone = "America/Santiago";
+  time.timeZone = "America/Santiago";
   	# Select internationalisation properties.
 	i18n.defaultLocale = "es_MX.UTF-8";
 

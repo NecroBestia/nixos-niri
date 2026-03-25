@@ -9,8 +9,7 @@
       ../../modules/locale.nix
       ../../modules/bluetooth.nix
       ../../modules/services.nix 
-      # Opcional pero recomendado: importa el perfil del T480 de nixos-hardware
-      # <nixos-hardware/lenovo/thinkpad/t480> 
+
     ];
 
   # --- Redes ---
