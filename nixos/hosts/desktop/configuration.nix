@@ -53,7 +53,7 @@
   ]; 
 
   # Entorno y Paquetes
-  environment.sessionVariables.NIXOS_OZONE_WL = "1"; # Obliga a Electron a usar Wayland
+ # environment.sessionVariables.NIXOS_OZONE_WL = "1"; # Obliga a Electron a usar Wayland
   environment.systemPackages = with pkgs; [
     vim 
     wget 
