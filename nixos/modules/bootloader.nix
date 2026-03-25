@@ -19,7 +19,7 @@
   boot.supportedFilesystems = [ "ntfs" "ntfs3" ]; 
   boot.plymouth.enable = false; 
 
-  boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+ # boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
 
   boot.kernelParams = [ 
     "quiet"
@@ -28,8 +28,8 @@
     "rd.systemd.show_status=false" 
     "rd.udev.log_level=3" 
     "udev.log_priority=3" 
-    "nvidia_drm.fbdev=1"
-    "nvidia_drm.modeset=1"
+   #"nvidia_drm.fbdev=1"
+   # "nvidia_drm.modeset=1"
   ];
 
   boot.initrd.systemd.enable = true;
