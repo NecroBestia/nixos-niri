@@ -8,6 +8,11 @@
 	
 	#indicamos el driver para xserver; ni idea de que tan necesario es usando xwayland-
 	services.xserver.videoDrivers = ["nvidia"];
+ 	boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  	boot.kernelParams = [   
+   		"nvidia_drm.fbdev=1"
+   		"nvidia_drm.modeset=1"
+  	];
 
 	hardware.nvidia = {
 		modesetting.enable = true; 
