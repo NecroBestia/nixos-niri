@@ -53,42 +53,16 @@
   ]; 
 
   # Entorno y Paquetes
- # environment.sessionVariables.NIXOS_OZONE_WL = "1"; # Obliga a Electron a usar Wayland
+  # environment.sessionVariables.NIXOS_OZONE_WL = "1"; # Obliga a Electron a usar Wayland
   environment.systemPackages = with pkgs; [
     vim 
     wget 
     git 
     home-manager
-    xwayland-satellite
     sddm-astronaut
   ];  
 
-  # Gestor de Ventanas y Display Manager
-  programs.niri.enable = true; 
-  services = {
-    xserver = {
-      enable = true;
-      xkb = {
-        layout = "latam";
-        variant = "";
-      };
-    };
-    displayManager.sddm = {
-      enable = true;
-      theme = "sddm-astronaut-theme"; 
-      settings = {
-        General = {
-          InputMethod = "";
-        };
-      };
-      extraPackages = with pkgs; [
-        sddm-astronaut
-        kdePackages.qtmultimedia 
-        kdePackages.qtsvg        
-        kdePackages.qt5compat
-      ];
-    };
-  };
+  # Display Manager
 
   # Otros programas y hardware
   programs.dconf.enable = true;
