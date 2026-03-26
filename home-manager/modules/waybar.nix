@@ -8,7 +8,6 @@ in
 
 
     # Archivos externos
-    xdg.configFile."waybar/config.jsonc".source = lib.mkForce ../config/waybar/config.jsonc;
     xdg.configFile."waybar/style.css".source = lib.mkForce ../config/waybar/style.css;
     xdg.configFile."waybar/modules.jsonc".source = lib.mkForce ../config/waybar/modules.jsonc;
   };

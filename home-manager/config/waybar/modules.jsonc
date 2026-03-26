@@ -2,36 +2,33 @@
 
 	"tray": {
 		"icon-size":20,
-		"spacing":5
+		"spacing":10
 	},
 	"clock": {
-		"format": " {:%I:%M %p  -  %d/%b} ",
-	  	"format-alt": " {:%I:%M:%S %p  - %d/%b }" ,
-    "interval": 1, 
-    "tooltip-format": "<tt><small>{calendar}</small></tt>",
-        	"calendar": {
-                    	"mode"          : "year",
-                    	"mode-mon-col"  : 3,
-                    	"weeks-pos"     : "right",
-                    	"on-scroll"     : 1,
-                    	"format": {
-                       		"months":     "<span color='#ffead3'><b>{}</b></span>",
-                            	"days":       "<span color='#ecc6d9'><b>{}</b></span>",
-                              	"weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
-                              	"weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
-                              	"today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
-			}
-                    },
-        	"actions": {
-                    	"on-click-right": "mode",
-                    	"on-scroll-up": "tz_up",
-                    	"on-scroll-down": "tz_down",
-                    	"on-scroll-up": "shift_up",
-                    	"on-scroll-down": "shift_down"
-                    }
-	
-	},
-
+        "format": " {:%I:%M %p  -  %d/%b} ",
+        "format-alt": " {:%I:%M:%S %p  - %d/%b} ",
+        "interval": 1, 
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode"          : "month",
+            "mode-mon-col"  : 3,
+            "weeks-pos"     : "right",
+            "on-scroll"     : 1,
+            "format": {
+                "months":     "<span color='#ffead3'><b>{}</b></span>",
+                "days":       "<span color='#ecc6d9'><b>{}</b></span>",
+                "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+                "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+                "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+            }
+        },
+        "actions": {
+            "on-click": "mode",
+            "on-click-right": "shift_reset",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        }
+    },
 	"niri/workspaces": {
 		"disable-scroll": true,
 		"show-special": false, 
@@ -45,12 +42,7 @@
 			"2": "二",
 			"3": "三",
 			"4": "四",
-			"5": "五",
-			"6": "六",
-			"7": "七",
-			"8": "八",
-			"9": "九",
-			"10": "十"
+			"5": "五"
 		}	
 	},
 	"niri/window": {
@@ -110,6 +102,51 @@
     "exec": "if systemctl --user is-active --quiet wlsunset; then echo '{\"text\": \"\", \"class\": \"on\", \"tooltip\": \"Filtro Activo\"}'; else echo '{\"text\": \"\", \"class\": \"off\", \"tooltip\": \"Filtro Desactivado\"}'; fi",
     "on-click": "systemctl --user is-active --quiet wlsunset && systemctl --user stop wlsunset || systemctl --user start wlsunset"
   },
+  "network": {
+        "format-wifi": "  {essid} ({signalStrength}%)",
+        "format-ethernet": " {ipaddr}/{cidr}",
+        "tooltip-format": " {ifname} via {gwaddr}",
+        "format-linked": " {ifname} (No IP)",
+        "format-disconnected": "⚠ Desconectado",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    },
+	"power-profiles-daemon": {
+      "format": "{icon}",
+      "tooltip-format": "Perfil actual: {profile}\nDriver: {driver}",
+      "tooltip": true,
+      "format-icons": {
+        "default": "",
+        "performance": "",
+        "balanced": "",
+        "power-saver": ""
+      }
+    },
+	"backlight": {
+        "format": "{percent}% {icon}",
+        "format-icons": ["", ""]
+    },
+	"battery": {
+        "bat": "BAT0",
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "Int: {capacity}% {icon}",
+        "format-charging": "Int: {capacity}% ",
+        "format-plugged": "Int: {capacity}% ",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "battery#bat1": {
+        "bat": "BAT1",
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "Ext: {capacity}% {icon}",
+        "format-charging": "Ext: {capacity}% ",
+        "format-plugged": "Ext: {capacity}% ",
+        "format-icons": ["", "", "", "", ""]
+    },
 	"memory": {
 		"interval": 10	,
 		"format": "{used:0.1f}G 󰾆  ",

@@ -10,4 +10,5 @@
   home.packages = with pkgs; [
     
   ];
+  xdg.configFile."waybar/config.jsonc".source= ../../config/waybar/configNotebook.jsonc;
 }
