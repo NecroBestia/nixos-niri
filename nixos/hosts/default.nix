@@ -45,6 +45,7 @@
     git 
     home-manager
     sddm-astronaut
+    htop
   ];  
 
 

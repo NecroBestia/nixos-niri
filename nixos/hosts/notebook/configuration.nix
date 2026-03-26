@@ -4,11 +4,7 @@
   imports =
     [ # Incluye los resultados del escaneo de hardware generado automáticamente.
       ./hardware-configuration.nix
-      ../../modules/bootloader.nix
-      ../../modules/audio.nix
-      ../../modules/locale.nix
-      ../../modules/bluetooth.nix
-      ../../modules/services.nix 
+      ../default.nix
 
     ];
 
@@ -46,22 +42,7 @@
   users.users.necro = {
     isNormalUser = true;
     description = "necro";
-    extraGroups = [ "networkmanager" "wheel" "video" ];
-    packages = with pkgs; [
-      # Herramientas de desarrollo
-      gcc
-      gnumake
-      python3
-      python3Packages.pip
-      git
-      
-      # Utilidades básicas y editores
-      firefox
-      vim
-      wget
-      htop
-      home-manager
-    ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "docker" "input" "storage"];
   };
 
   # Permitir paquetes privativos (necesario para algunos drivers de red o codecs)
