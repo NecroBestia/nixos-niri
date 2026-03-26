@@ -6,28 +6,18 @@
 	},
 	"clock": {
         "format": " {:%I:%M %p  -  %d/%b} ",
-        "format-alt": " {:%I:%M:%S %p  - %d/%b} ",
         "interval": 1, 
+        // 1. Mantenemos el tooltip nativo por si solo pasas el ratón (opcional)
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
         "calendar": {
-            "mode"          : "month",
-            "mode-mon-col"  : 3,
-            "weeks-pos"     : "right",
-            "on-scroll"     : 1,
+            "mode": "month",
             "format": {
                 "months":     "<span color='#ffead3'><b>{}</b></span>",
-                "days":       "<span color='#ecc6d9'><b>{}</b></span>",
-                "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
-                "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
                 "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
             }
         },
-        "actions": {
-            "on-click": "mode",
-            "on-click-right": "shift_reset",
-            "on-scroll-up": "shift_up",
-            "on-scroll-down": "shift_down"
-        }
+
+        "on-click": "gsimplecal"
     },
 	"niri/workspaces": {
 		"disable-scroll": true,
@@ -46,19 +36,64 @@
 		}	
 	},
 	"niri/window": {
-		"format": "{}",
-		"max-length": 25,
+		// 1. IMPORTANTE: Deja el formato vacío o solo con un espacio.
+		// No queremos que imprima "{}" (el título original) por defecto.
+		"format": "{}", 
+		
+		"max-length": 30, // Un poco más largo para que quepa el nombre completo
 		"separate-outputs": true,
-		"offscreen-css": true,
-		"offscreen-css-text": "(inactive)",
+		
 		"rewrite": {
-			" (.*) — firefox": "  $1",
-			" (.*) - fish": "> [$1]",
-			" (.*) - zsh": "> [$1]",
-			" (.*) - $term": "> [$1]"
+			// ============================================================
+			// LA REGLA DE ORO:
+			// ^(.*) significa "captura todo el texto desde el principio"
+			// Y lo reemplazamos SOLO por el nombre del programa.
+			// ============================================================
+
+			// --- Navegadores ---
+			// Si el título termina en "Mozilla Firefox", muestra solo "Firefox" (con icono)
+			"^(.*)Mozilla Firefox$": " Firefox",
+			"^(.*)Firefox$": " Firefox",
+			"^(.*)Chromium$": " Chromium",
+			"^(.*)Brave-browser$": " Brave",
+
+			// --- Terminales ---
+			// Para las terminales, Niri suele poner el nombre al final (ej: "kitty")
+			// o el shell activo (ej: "fish"). Tú eliges qué mostrar.
+			"^(.*)kitty$": " Terminal",
+			"^(.*)alacritty$": " Terminal",
+			"^(.*)foot$": " Terminal",
+			// Reglas opcionales si quieres diferenciar el shell:
+			"^(.*) - fish$": " Fish",
+			"^(.*) - zsh$": " Zsh",
+			"^(.*)bash": " Terminal",
+
+			// --- Herramientas de Desarrollo ---
+			"^(.*)Visual Studio Code$": "󰨞 VS Code",
+			"^(.*)Code$": "󰨞 VS Code",
+			"^(.*)Neovim$": " Neovim",
+			"^(.*)Vim$": " Vim",
+
+			// --- Comunicación ---
+			"^(.*)Telegram$": " Telegram",
+			"^(.*)Discord$": "󰙯 Discord",
+			"^(.*)Slack$": "󰒱 Slack",
+
+			// --- Archivos y Sistema ---
+			"^(.*)Thunar$": "󰉋 Archivos",
+			"^(.*)Nemo$": "󰉋 Archivos",
+			"^(.*)Nautilus": "󰉋 Archivos",
+			"^(.*)btop$": "󰥔 Sistema",
+			"^(.*)htop$": "󰥔 Sistema",
+
+			// ============================================================
+			// REGLA DE RESPALDO (CATCH-ALL):
+			// Si ninguna regla anterior coincide, muestra este icono genérico.
+			// Esto evita que la barra se quede vacía para apps desconocidas.
+			// ============================================================
+			"^(.*)$": " 󱂬 Ventana"
 		}
-	},
-	"custom/separator": {
+	},"custom/separator": {
 		"format": "  ",
 		"interval": "once",
 		"tooltip": false
@@ -152,8 +187,6 @@
 		"format": "{used:0.1f}G 󰾆  ",
 		"format-alt": "{percentage}% 󰾆  ",
 		"format-alt-click": "click",
-		"tooltip": false,
-	//	"tooltip-format": "{used:0.1f}GB/{total:0.1f}G",
-	//	"on-click-right": "$HOME/.config/hypr/scripts/WaybarScripts.sh --btop"
+		"tooltip": false
 	}
 }

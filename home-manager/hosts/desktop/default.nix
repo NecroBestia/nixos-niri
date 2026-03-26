@@ -10,4 +10,6 @@
   home.packages = with pkgs; [
     
   ];
-}
+  #Configuracion dotfile waybar 
+  xdg.configFile."waybar/config.jsonc".source= ../../config/waybar/configDesktop.jsonc;
+  }

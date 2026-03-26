@@ -1,31 +1,50 @@
 {
-	"layer": "top", 
-	"position": "top",
-	"height": 15,
-	"margin-left": 10,
-	"margin-right": 10,
-	"margin-top": 2,
-	"modules-left": [
-		"niri/workspaces",
-		"tray"
-	],
-	"modules-center": [
-		"clock"
-	],
-	
-	"modules-right" : [
-		"niri/window",
-		"custom/separator",	
-		"wireplumber#sink",
-		"wireplumber#source",
-		"custom/separator",		
-    	"custom/luz-azul",
-    	"custom/separator", 
-		"memory",
-		"cpu",		
-		"custom/separator", 
-		"custom/power"
-	],
+    "layer": "top", 
+    "position": "top",
+    "height": 27,
+    "margin-left": 10,
+    "margin-right": 10,
+    "margin-top": 2,
+    
+    // IZQUIERDA: Navegación y Ventanas
+    "modules-left": [
+        "niri/workspaces",
+        "niri/window",
+        "tray"
+    ],
+    
+    // CENTRO: Tiempo
+    "modules-center": [
+        "clock"
+    ],
+    
+    // DERECHA: Hardware, Multimedia, Conectividad y Energía
+    "modules-right" : [
+        // 1. Rendimiento
+        "cpu",        
+        "memory",
+        "custom/separator",  
+        
+        // 2. Pantalla y Audio
+        "backlight",
+        "custom/luz-azul",
+        "wireplumber#sink",
+        "wireplumber#source",
+        "custom/separator",        
+        
+        // 3. Conectividad
+        "network",
+        "custom/separator", 
 
-	"include": "./modules.jsonc"
+        // 4. Energía (El corazón de tu ThinkPad)
+        "power-profiles-daemon",
+        "battery",
+        "battery#bat1",
+        "custom/separator", 
+        
+        // 5. Apagado
+        "custom/power"
+    ],
+
+    "include": "./modules.jsonc"
 }
