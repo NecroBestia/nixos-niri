@@ -188,5 +188,45 @@
 		"format-alt": "{percentage}% 󰾆  ",
 		"format-alt-click": "click",
 		"tooltip": false
+	},
+	// ==========================================
+    // GRUPOS COLAPSABLES (DRAWERS)
+    // ==========================================
+    "group/hardware": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 500, // Duración de la animación en ms
+            "transition-left-to-right": false // false = se despliega hacia la izquierda
+        },
+        "modules": [
+            "cpu",    // El primero SIEMPRE es visible (Actúa como botón)
+            "memory"  // Se oculta dentro del cajón
+        ]
+    },
+
+    "group/audio": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": false
+        },
+        "modules": [
+            "wireplumber#sink",   // Siempre visible (Altavoz)
+            "wireplumber#source"  // Se oculta (Micrófono)
+        ]
+    },
+
+    "group/power": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": false
+        },
+        "modules": [
+            "battery",               // Siempre visible (Batería Interna)
+            "battery#bat1",          // Se oculta (Batería Externa)
+            "power-profiles-daemon"  // Se oculta (Perfiles de energía)
+        ]
 	}
 }
+

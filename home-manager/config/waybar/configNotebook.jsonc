@@ -19,31 +19,25 @@
     ],
     
     // DERECHA: Hardware, Multimedia, Conectividad y Energía
+	// DERECHA: Grupos colapsables y controles rápidos
     "modules-right" : [
-        // 1. Rendimiento
-        "cpu",        
-        "memory",
+        "group/hardware",        // Agrupa CPU y RAM
         "custom/separator",  
         
-        // 2. Pantalla y Audio
         "backlight",
         "custom/luz-azul",
-        "wireplumber#sink",
-        "wireplumber#source",
+        "custom/separator", 
+        
+        "group/audio",           // Agrupa Altavoz y Micrófono
         "custom/separator",        
         
-        // 3. Conectividad
         "network",
         "custom/separator", 
 
-        // 4. Energía (El corazón de tu ThinkPad)
-        "power-profiles-daemon",
-        "battery",
-        "battery#bat1",
+        "group/power",           // Agrupa Batería 1, Batería 2 y Perfiles de Energía
         "custom/separator", 
         
-        // 5. Apagado
-        "custom/power"
+        "custom/power"           // Botón de apagado
     ],
 
     "include": "./modules.jsonc"
