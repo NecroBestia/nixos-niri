@@ -19,7 +19,7 @@
 
   # --- Optimización específica para ThinkPad ---
   boot.kernelModules = ["acpi_call"];
-  boot.extraModulePackages = with config.boot.kernelPacakges; [acpi_call];  
+  boot.extraModulePackages = with config.boot.kernelPackages; [acpi_call];  
   #Configuraciones de temperatura 
   services.thermald.enable=true; 
   services.throttled.enable=true; 

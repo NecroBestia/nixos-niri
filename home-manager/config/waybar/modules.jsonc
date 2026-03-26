@@ -66,7 +66,7 @@
 			// Reglas opcionales si quieres diferenciar el shell:
 			"^(.*) - fish$": " Fish",
 			"^(.*) - zsh$": " Zsh",
-			"^(.*)bash": " Terminal",
+			"^(.*)bash$": " Terminal",
 
 			// --- Herramientas de Desarrollo ---
 			"^(.*)Visual Studio Code$": "󰨞 VS Code",
@@ -146,30 +146,30 @@
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
 	"power-profiles-daemon": {
-      "format": "{icon}",
+      "format": " {icon} ",
       "tooltip-format": "Perfil actual: {profile}\nDriver: {driver}",
       "tooltip": true,
       "format-icons": {
-        "default": "",
-        "performance": "",
-        "balanced": "",
-        "power-saver": ""
+        "default": "  ",
+        "performance": "  ",
+        "balanced": "  ",
+        "power-saver": "  " 
       }
     },
 	"backlight": {
-        "format": "{percent}% {icon}",
-        "format-icons": ["", ""]
+        "format": "{percent}% {icon} ",
+        "format-icons": ["  ", "  "]
     },
 	"battery": {
-        "bat": "BAT0",
+        "bat": "BAT1",
         "states": {
             "warning": 30,
             "critical": 15
         },
-        "format": "Int: {capacity}% {icon}",
-        "format-charging": "Int: {capacity}% ",
-        "format-plugged": "Int: {capacity}% ",
-        "format-icons": ["", "", "", "", ""]
+        "format": "Int: {capacity}% {icon} ",
+        "format-charging": "Int: {capacity}%  ",
+        "format-plugged": "Int: {capacity}%  ",
+        "format-icons": [" ", " ", " ", " ", " "]
     },
     "battery#bat1": {
         "bat": "BAT1",
@@ -220,7 +220,7 @@
         "orientation": "inherit",
         "drawer": {
             "transition-duration": 500,
-            "transition-left-to-right": false
+            "transition-left-to-right": true
         },
         "modules": [
             "battery",               // Siempre visible (Batería Interna)
