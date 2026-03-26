@@ -1,14 +1,14 @@
 {config, lib, pkgs, ...}:{
   imports = [
-    ../../modules/bootloader.nix  
-     ../../modules/audio.nix       
-    ../../modules/fileManager.nix 
-    ../../modules/locale.nix      
-    ../../modules/bluetooth.nix
-    ../../modules/niri.nix 
-    ../../modules/displayManager.nix 
-   ../../modules/docker.nix      
-    ../../modules/services.nix    
+    ../modules/bootloader.nix  
+    ../modules/audio.nix       
+    ../modules/fileManager.nix 
+    ../modules/locale.nix      
+    ../modules/bluetooth.nix
+    ../modules/niri.nix 
+    ../modules/displayManager.nix 
+    ../modules/docker.nix      
+    ../modules/services.nix    
   ];
 
    console.keyMap = "la-latin1";
