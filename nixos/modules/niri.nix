@@ -1,6 +1,6 @@
-{config, pkgs, pkgs-unstable}:{
-  programs = {
-    niri.enable 
+{config, pkgs, pkgs-unstable, ...}:{
+  programs.niri = {
+    enable = true;  
     package = pkgs-unstable.niri; 
   };
   environment.systemPackages = with pkgs;[
