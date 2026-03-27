@@ -17,6 +17,7 @@
     syncthing = {
         enable = true; 
         user = "necro"; 
+        configDir="/home/necro/.dataSync"; 
         openDefaultPorts = true;
         systemService = true;
     };

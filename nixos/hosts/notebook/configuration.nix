@@ -42,6 +42,7 @@
     brightnessctl
     powertop
   ]; 
+  services.syncthing.dataDir = "/hom e/necro/Desktop/"; 
   programs.nm-applet.enable = true; 
   # Permitir paquetes privativos (necesario para algunos drivers de red o codecs)
   nixpkgs.config.allowUnfree = true;
