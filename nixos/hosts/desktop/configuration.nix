@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{lib, pkgs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -38,7 +38,14 @@
       "x-system.automount"
     ];
   };
-
+  # Montaje del disco para uso de syncthing 
+  syncthing = {
+    dataDir = "/mnt/not_to_lose/SyncThing";  
+  };
+  systemd.services.syncthing = {
+    bindsTo = ["mnt-not_to_lose.mount"];
+    after = ["mnt-not_to_lose.mount"];
+  };
   # Optimizaciones de apagado
   systemd = {
     settings.Manager.DefaultTimeoutStopSec = "10s";

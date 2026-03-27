@@ -1,4 +1,4 @@
-{config, lib, pkgs, ...}:{
+{pkgs, ...}:{
   imports = [
     ../modules/bootloader.nix  
     ../modules/audio.nix       

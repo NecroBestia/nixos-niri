@@ -1,4 +1,4 @@
-{ pkgs, lib, ...}: { 
+{ pkgs, ...}: { 
   home = {
     stateVersion = "25.05"; 
     shellAliases = { 
@@ -33,7 +33,7 @@
     zathura mupdf 
     obsidian pavucontrol krita qalculate-qt vlc xournalpp nomacs vscodium libreoffice-qt-fresh    
     playerctl wl-clipboard swww swayidle swaybg gsimplecal 
-    # Importación correcta de tus scripts como módulos de Home Manager
+    # Importación  scripts como módulos de Home Manager
     (import ../modules/scripts.nix {inherit pkgs;}).clipboard
     (import ../modules/scripts.nix {inherit pkgs;}).niri-wallpaper
   ];

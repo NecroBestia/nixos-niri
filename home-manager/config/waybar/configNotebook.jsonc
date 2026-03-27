@@ -9,7 +9,6 @@
     // IZQUIERDA: Navegación y Ventanas
     "modules-left": [
         "niri/workspaces",
-        "niri/window",
         "tray"
     ],
     
@@ -24,8 +23,7 @@
         "group/hardware",        // Agrupa CPU y RAM
         "custom/separator",  
         
-        "backlight",
-        "custom/luz-azul",
+        "group/screen", 
         "custom/separator", 
         
         "group/audio",           // Agrupa Altavoz y Micrófono

@@ -17,16 +17,12 @@
     syncthing = {
         enable = true; 
         user = "necro"; 
-        dataDir = "/mnt/not_to_lose/SyncThing"; 
         openDefaultPorts = true;
         systemService = true;
     };
 		flatpak.enable = true;	
 	};
-  systemd.services.syncthing = {
-    bindsTo = ["mnt-not_to_lose.mount"];
-    after = ["mnt-not_to_lose.mount"];
-  };
+
   #Configuracion xdg
   xdg = {
     autostart.enable = true;

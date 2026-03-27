@@ -5,7 +5,6 @@
     [ # Incluye los resultados del escaneo de hardware generado automáticamente.
       ./hardware-configuration.nix
       ../default.nix
-
     ];
 
   # --- Redes ---
@@ -43,7 +42,7 @@
     brightnessctl
     powertop
   ]; 
-
+  programs.nm-applet.enable = true; 
   # Permitir paquetes privativos (necesario para algunos drivers de red o codecs)
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
