@@ -66,6 +66,9 @@
     # 4. Copiar de la caché al archivo que usa swaybg (para mantener consistencia)
     cp "$CACHED_PHOTO" "$OVERVIEW_WALL_TMP"
 
+    until $SWWW query >/dev/null 2>&1; do
+        sleep 0.5
+    done
     # 5. Aplicar fondos
     $SWWW img "$WALLPAPER" --transition-type fade
     

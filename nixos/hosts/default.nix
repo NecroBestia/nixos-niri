@@ -17,6 +17,7 @@
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
     nerd-fonts.jetbrains-mono
+
   ]; 
   # Configuraciones del gestor de paquetes Nix agrupadas
   nix = {
@@ -46,7 +47,9 @@
     home-manager
     sddm-astronaut
     htop
+    papirus-icon-theme
   ];  
+  xdg.icons.enable =true;
 
 
 }

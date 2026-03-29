@@ -5,7 +5,7 @@
     };
 
     Service = {
-      ExecStart = "${pkgs.wlsunset}/bin/wlsunset -t 3500 -T 6500";
+      ExecStart = "${pkgs.wlsunset}/bin/wlsunset -t 3500 -T 3550";
       Restart = "always";
     };
 
