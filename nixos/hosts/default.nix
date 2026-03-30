@@ -7,8 +7,8 @@
     ../modules/bluetooth.nix
     ../modules/niri.nix 
     ../modules/displayManager.nix 
-    ../modules/docker.nix      
     ../modules/services.nix    
+    ../modules/podman.nix
   ];
 
    console.keyMap = "la-latin1";
