@@ -35,65 +35,44 @@
 			"5": "五"
 		}	
 	},
-	"niri/window": {
-		// 1. IMPORTANTE: Deja el formato vacío o solo con un espacio.
-		// No queremos que imprima "{}" (el título original) por defecto.
-		"format": "{}", 
+"niri/window": {
+		// IMPORTANTE: Cambiamos "{}" por "{app_id}". 
+		// Esto ya recorta el título largo por defecto.
+		"format": " {app_id} ", 
 		
-		"max-length": 30, // Un poco más largo para que quepa el nombre completo
+		"max-length": 30,
 		"separate-outputs": true,
 		
 		"rewrite": {
-			// ============================================================
-			// LA REGLA DE ORO:
-			// ^(.*) significa "captura todo el texto desde el principio"
-			// Y lo reemplazamos SOLO por el nombre del programa.
-			// ============================================================
-
 			// --- Navegadores ---
-			// Si el título termina en "Mozilla Firefox", muestra solo "Firefox" (con icono)
-			"^(.*)Mozilla Firefox$": " Firefox",
-			"^(.*)Firefox$": " Firefox",
-			"^(.*)Chromium$": " Chromium",
-			"^(.*)Brave-browser$": " Brave",
+			// [fF] atrapará "firefox" o "Firefox" o "org.mozilla.Firefox"
+			".*[fF]irefox.*": " Firefox",
+			".*[cC]hromium.*": " Chromium",
+			".*[bB]rave.*": " Brave",
 
 			// --- Terminales ---
-			// Para las terminales, Niri suele poner el nombre al final (ej: "kitty")
-			// o el shell activo (ej: "fish"). Tú eliges qué mostrar.
-			"^(.*)kitty$": " Terminal",
-			"^(.*)alacritty$": " Terminal",
-			"^(.*)foot$": " Terminal",
-			// Reglas opcionales si quieres diferenciar el shell:
-			"^(.*) - fish$": " Fish",
-			"^(.*) - zsh$": " Zsh",
-			"^(.*)bash$": " Terminal",
+			".*[kK]itty.*": " Terminal",
+			".*[aA]lacritty.*": " Terminal",
+			".*[fF]oot.*": " Terminal",
 
 			// --- Herramientas de Desarrollo ---
-			"^(.*)Visual Studio Code$": "󰨞 VS Code",
-			"^(.*)Code$": "󰨞 VS Code",
-			"^(.*)Neovim$": " Neovim",
-			"^(.*)Vim$": " Vim",
-
+			".*[cC]ode.*": "󰨞 VS Code",
+			".*[vV]SCodium*":"󰨞 VS Codium",
+			".*[nN]vim.*": " Neovim",
+			".*[vV]im.*": " Vim",
+			
 			// --- Comunicación ---
-			"^(.*)Telegram$": " Telegram",
-			"^(.*)Discord$": "󰙯 Discord",
-			"^(.*)Slack$": "󰒱 Slack",
+			".*[tT]elegram.*": " Telegram",
+			".*[dD]iscord.*": "󰙯 Discord",
+			".*[sS]lack.*": "󰒱 Slack",
 
 			// --- Archivos y Sistema ---
-			"^(.*)Thunar$": "󰉋 Archivos",
-			"^(.*)Nemo$": "󰉋 Archivos",
-			"^(.*)Nautilus": "󰉋 Archivos",
-			"^(.*)btop$": "󰥔 Sistema",
-			"^(.*)htop$": "󰥔 Sistema",
-
-			// ============================================================
-			// REGLA DE RESPALDO (CATCH-ALL):
-			// Si ninguna regla anterior coincide, muestra este icono genérico.
-			// Esto evita que la barra se quede vacía para apps desconocidas.
-			// ============================================================
-			"^(.*)$": " 󱂬 Ventana"
+			".*[tT]hunar.*": "󰉋 Archivos",
+			".*[nN]emo.*": "󰉋 Archivos",
+			".*[nN]autilus.*": "󰉋 Archivos"
 		}
-	},"custom/separator": {
+	},
+	"custom/separator": {
 		"format": "  ",
 		"interval": "once",
 		"tooltip": false

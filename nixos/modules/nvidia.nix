@@ -1,4 +1,4 @@
-{config, pkgs, ...} : {
+{config, pkgs, pkgs-unstable,  ...} : {
 	# OpenGl
 	hardware.graphics = {
 		enable = true;
@@ -23,7 +23,17 @@
 		#Configuraciones de nvdia; acceso "nvidia-settings" 
 		nvidiaSettings = true; 
 		# Version del driver
-		package = config.boot.kernelPackages.nvidiaPackages.production;
+	package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
+      version = "570.195.03";
+      sha256_64bit = "sha256-1H3oHZpRNJamCtyc+nL+nhYsZfJyL7lgxPUxvXrF3B4=";
+      sha256_aarch64 = pkgs.lib.fakeSha256;
+      openSha256 = pkgs.lib.fakeSha256;
+      
+      # ¡Primer hash capturado!
+      settingsSha256 = "sha256-mjKkMEPV6W69PO8jKAKxAS861B82CtCpwVTeNr5CqUY="; 
+      
+      persistencedSha256 = pkgs.lib.fakeSha256;
+    };
 	};
   	environment.sessionVariables = {
     	GBM_BACKEND = "nvidia-drm";

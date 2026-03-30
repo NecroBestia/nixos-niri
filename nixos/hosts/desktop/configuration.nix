@@ -39,7 +39,7 @@
     ];
   };
   # Montaje del disco para uso de syncthing 
-  syncthing = {
+  services.syncthing = {
     dataDir = "/mnt/not_to_lose/SyncThing";  
   };
   systemd.services.syncthing = {

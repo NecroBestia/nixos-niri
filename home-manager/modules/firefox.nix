@@ -1,4 +1,4 @@
-{ pkgs, ...} : {
+{ pkgs, pkgs-unstable, ...} : {
 	programs.firefox = 
 	{
 		enable = true;
@@ -6,6 +6,8 @@
 #		firefox.override { 
 #			nativeMessagingHosts = [ tridactyl-native ];
 #		};
+		package = pkgs-unstable.firefox;
 	};
+
 
 }

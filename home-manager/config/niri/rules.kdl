@@ -16,7 +16,7 @@ window-rule {
 // Aplicaciones que se abriran en el segundo monitor por defecto 
 window-rule {
     match app-id="discord" 
-    match app-id="Spotify"
+    match app-id="spotify"
     open-on-output "HDMI-A-1" 
     open-maximized true
 }
