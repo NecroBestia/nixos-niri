@@ -83,7 +83,11 @@
   programs = {
     home-manager.enable = true; 
     waybar.enable = true;      
-    direnv.enable = true; 
+    direnv = {
+      enable = true; 
+      enableBashIntegration = true; 
+      nix-direnv.enable = true; 
+    }; 
   };
 
   # enlazarlos config files

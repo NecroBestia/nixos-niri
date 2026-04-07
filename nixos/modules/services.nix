@@ -35,7 +35,7 @@
         xdg-desktop-portal-gnome
       ];
       config = {
-        common.default = [ "gtk" "gnome" ];
+        common.default = [ "wlr" "gtk" "gnome" ];
         niri = {
           default = ["gtk" "gnome"];
           "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];

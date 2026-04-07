@@ -5,6 +5,9 @@
 		enable32Bit = true; 
 		extraPackages = with pkgs; [nvidia-vaapi-driver];
 	};
+	# Esto ayuda a que el entorno de escritorio sepa qué hacer con NVIDIA al suspender
+	systemd.services.nvidia-suspend.enable = true;
+	systemd.services.nvidia-resume.enable = true;
 	
 	#indicamos el driver para xserver; ni idea de que tan necesario es usando xwayland-
 	services.xserver.videoDrivers = ["nvidia"];
@@ -12,6 +15,7 @@
   	boot.kernelParams = [   
    		"nvidia_drm.fbdev=1"
    		"nvidia_drm.modeset=1"
+			"nvidia.NVreg_PreserveVideoMemoryAllocations=1"
   	];
 
 	hardware.nvidia = {
@@ -32,7 +36,7 @@
       # ¡Primer hash capturado!
       settingsSha256 = "sha256-mjKkMEPV6W69PO8jKAKxAS861B82CtCpwVTeNr5CqUY="; 
       
-      persistencedSha256 = pkgs.lib.fakeSha256;
+      persistencedSha256 = "sha256-h8pY3pY++J6BIsS2I9SInT6S3yP6X6U72XUeHnIe97o=";
     };
 	};
   	environment.sessionVariables = {
