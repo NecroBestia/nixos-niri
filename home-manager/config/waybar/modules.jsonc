@@ -78,24 +78,26 @@
 		"tooltip": false
 	
 	},
-	"wireplumber#sink": {
-	    "format": "{icon}:{volume}% ",
-		"format-muted": " ",
-		"on-click": "pavucontrol",
-		"on-click-right":"wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-		"format-icons": [" ", " ", " "],
-		"max-volume":100,
-		"scroll-step": 5
-	},
-	"wireplumber#source":{
-		"node-type": "Audio/Source",
-		"format":" {icon}:{volume}%",
-		"format-muted":"   ",
-		"format-icons": ["", "", ""],
-    		"on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle", // Toggle mute con click izquierdo
-    		"on-click-right": "pavucontrol -t 4",   // Abre la pestaña de micrófono de pavucontrol
-    		"scroll-step": 1              
-	},
+    "pulseaudio#sink": {
+        "format": "{icon}:{volume}% ",
+        "format-muted": " ",
+        "format-icons": {
+            "default": [" ", " ", " "]
+        },
+        "on-click": "pavucontrol",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "max-volume": 100,
+        "scroll-step": 5
+    },
+
+    "pulseaudio#source": {
+        "format": "{format_source}",
+        "format-source": " :{volume}%",
+        "format-source-muted": "   ",
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+        "on-click-right": "pavucontrol -t 4",
+        "scroll-step": 1
+    },
 	"custom/power": {
 		"format": " ⏻ ",
 		"on-click": "wlogout &",
