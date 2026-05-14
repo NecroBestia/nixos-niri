@@ -1,4 +1,4 @@
-{pkgs, ...}:{
+{pkgs,  ...}:{
   imports = [
     ../modules/bootloader.nix  
     ../modules/audio.nix       
@@ -9,6 +9,7 @@
     ../modules/displayManager.nix 
     ../modules/services.nix    
     ../modules/podman.nix
+    ../modules/vm.nix
   ];
 
    console.keyMap = "la-latin1";
@@ -55,6 +56,4 @@
     papirus-icon-theme
   ];  
   xdg.icons.enable =true;
-
-
 }

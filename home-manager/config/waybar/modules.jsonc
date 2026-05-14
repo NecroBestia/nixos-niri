@@ -90,13 +90,15 @@
         "scroll-step": 5
     },
 
-    "pulseaudio#source": {
-        "format": "{format_source}",
-        "format-source": " :{volume}%",
-        "format-source-muted": "   ",
-        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-        "on-click-right": "pavucontrol -t 4",
-        "scroll-step": 1
+  "pulseaudio#source": {
+      "format": "{format_source}",
+      "format-source": " :{volume}%",
+      "format-source-muted": "  ",
+      "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%+",
+      "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%-",
+      "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+      "on-click-right": "pavucontrol -t 4",
+      "max-volume": 100
     },
 	"custom/power": {
 		"format": " ⏻ ",

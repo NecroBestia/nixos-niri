@@ -1,22 +1,20 @@
-{config, pkgs, pkgs-unstable,  ...} : {
+{config, pkgs,  ...} : {
 	# OpenGl
 	hardware.graphics = {
 		enable = true;
 		enable32Bit = true; 
 		extraPackages = with pkgs; [nvidia-vaapi-driver];
 	};
-	# Esto ayuda a que el entorno de escritorio sepa qué hacer con NVIDIA al suspender
-	systemd.services.nvidia-suspend.enable = true;
-	systemd.services.nvidia-resume.enable = true;
 	
 	#indicamos el driver para xserver; ni idea de que tan necesario es usando xwayland-
 	services.xserver.videoDrivers = ["nvidia"];
  	boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
-  	boot.kernelParams = [   
+  boot.kernelParams = [   
    		"nvidia_drm.fbdev=1"
    		"nvidia_drm.modeset=1"
       "nvidia.NVreg_EnableGpuFirmware=0"
-
+      "nvidia.NVreg_PreserveVideoMemoryAllocations=1" 
+      "nvidia.NVreg_TemporaryFilePath=/var/tmp" 
   	];
 
 	hardware.nvidia = {

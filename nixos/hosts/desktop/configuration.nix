@@ -11,6 +11,14 @@
   networking.hostName = "desktop"; 
   networking.networkmanager.enable = true;
 
+  boot.resumeDevice = "/dev/disk/by-uuid/0bd2d507-cb1c-4306-85f3-5dab7366e9e7";
+  boot.kernelParams = [ 
+    "resume=UUID=0bd2d507-cb1c-4306-85f3-5dab7366e9e7"
+    "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
+    "device_suspende_asap" 
+    "no_console_suspend" 
+    "initcall_debug"
+  ];
   # Usuario principal
   users.users.necro = {
     isNormalUser = true;
@@ -49,7 +57,18 @@
   # Optimizaciones de apagado
   systemd = {
     settings.Manager.DefaultTimeoutStopSec = "10s";
-    services.opensnitchd.serviceConfig.TimeoutStopSec = lib.mkForce "2s";
+    services = { 
+      opensnitchd.serviceConfig.TimeoutStopSec = lib.mkForce "2s";
+      disable_async_ps = {
+        description = "Desactiva Power Management Asíncrono para evitar Error -5 con Nvidia";
+        wantedBy = [ "multi-user.target" "hibernate.target" ];
+        before = [ "systemd-hibernate.service" ];
+        script = ''
+          echo 0 > /sys/power/pm_async
+        '';
+        serviceConfig.Type = "oneshot";
+      };
+    };
   };
 
   # Mantener esta versión intacta
