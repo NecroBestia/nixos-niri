@@ -15,6 +15,7 @@
       "nvidia.NVreg_EnableGpuFirmware=0"
       "nvidia.NVreg_PreserveVideoMemoryAllocations=1" 
       "nvidia.NVreg_TemporaryFilePath=/var/tmp" 
+      "pcie_aspm=off"
   	];
 
 	hardware.nvidia = {

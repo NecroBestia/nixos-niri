@@ -56,4 +56,7 @@
     papirus-icon-theme
   ];  
   xdg.icons.enable =true;
+  # Desactiva el módulo por defecto
+  services.xserver.desktopManager.xterm.enable = false;
+  services.xserver.excludePackages = [ pkgs.xterm ];
 }

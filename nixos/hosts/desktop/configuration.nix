@@ -11,14 +11,7 @@
   networking.hostName = "desktop"; 
   networking.networkmanager.enable = true;
 
-  boot.resumeDevice = "/dev/disk/by-uuid/0bd2d507-cb1c-4306-85f3-5dab7366e9e7";
-  boot.kernelParams = [ 
-    "resume=UUID=0bd2d507-cb1c-4306-85f3-5dab7366e9e7"
-    "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
-    "device_suspende_asap" 
-    "no_console_suspend" 
-    "initcall_debug"
-  ];
+  # 2. Configuración de Resume (Hibernación)
   # Usuario principal
   users.users.necro = {
     isNormalUser = true;
@@ -43,7 +36,7 @@
       "umask=0022"
       "nofail"
       "force"
-      "x-system.automount"
+      "x-systemd.automount"
     ];
   };
   # Montaje del disco para uso de syncthing 
