@@ -20,6 +20,8 @@ in
       gnome-desktop      # Para thumbnails de imágenes y metadata
       ffmpegthumbnailer  # Para thumbnails de videos
       poppler-utils      #Para thumbnails de PDFs
+      ntfs3g 
+      exfat
     ];
 
     services = {
@@ -27,5 +29,15 @@ in
       gvfs.enable = true;
       udisks2.enable = true;
     };  
+
+    services.udisks2.settings = {
+      "mount_options.conf" = {
+        defaults = {
+          # Pasamos los parámetros como una lista limpia de strings
+          ntfs_defaults = [ "uid=$UID" "gid=$GID" "rw" "user" "exec" "umask=0022" "nofail" "force" "allow_other" ];
+          ntfs_drivers = [ "ntfs3" ];
+        };
+      };   
+    };
   };
 }
