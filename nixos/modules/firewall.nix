@@ -1,4 +1,4 @@
-{pkgs,  ...}:
+{pkgs,  pkgs-unstable, ...}:
 {
   networking.nftables.enable = true; 
   #DNS mas segura y privada. 
@@ -25,10 +25,11 @@
   #opensnitch; permite gestionar conexiones de programas al internet y viceversa. 
   services.opensnitch = {
     enable = true; 
+    package = pkgs-unstable.opensnitch;
     settings = {
       DefaultAction = "deny"; 
       LogLevel = 2;
     };
   };
-  environment.systemPackages = with pkgs; [opensnitch-ui];
+  environment.systemPackages = with pkgs-unstable; [opensnitch-ui];
 }
