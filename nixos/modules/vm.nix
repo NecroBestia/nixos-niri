@@ -20,7 +20,7 @@
 
   # 4. AÑADE TU USUARIO A LOS GRUPOS (Cambia "necro" por tu usuario real si es distinto)
   # 'libvirtd' te permite crear VMs sin usar sudo. 'kvm' te da acceso a la aceleración por hardware.
-  users.users.necro.extraGroups = [ "networkmanager" "wheel" "libvirtd" "kvm" ];
+  users.users.necro.extraGroups = ["libvirtd" "kvm" ];
 
   # (Opcional) Instalar un visor alternativo ligero si lo deseas
   environment.systemPackages = with pkgs; [

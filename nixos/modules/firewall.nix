@@ -8,7 +8,7 @@
     enable = true; 
     allowPing = true;
     allowedTCPPorts = [22];
-    trustedInterfaces = ["virvbr0"];
+    trustedInterfaces = ["virbr0"];
   };
   boot.kernel.sysctl = {
     "net.ipv4.conf.all.rp_filter" = 1;

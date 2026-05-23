@@ -98,7 +98,6 @@ in {
   qt = {
     enable = true; 
     platformTheme.name = "gtk";
-    style.name = themeName; 
   };
   
   dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";

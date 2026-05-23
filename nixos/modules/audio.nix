@@ -17,7 +17,7 @@
 				"default.clock.rate" = 48000;
 				"default.clock.quantum" = 32; 
 				"default.clock.min-quantum" = 32;
-				"dafault.clock.max-quantum" = 32; 
+				"default.clock.max-quantum" = 32; 
 			};	
 		};
 		#Para que otras aplicaciones puedan interactuar con el driver de audio

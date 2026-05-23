@@ -16,7 +16,7 @@
   users.users.necro = {
     isNormalUser = true;
     description = "necro";
-    extraGroups = [ "networkmanager" "wheel" "audio" "docker" "input" "storage" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "docker" "input" "storage" ];
     shell = pkgs.bash;
   };
 
