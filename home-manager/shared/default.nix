@@ -156,7 +156,7 @@ in {
     ".config/fuzzel/fuzzel.ini".source = ../config/fuzzel/fuzzel.ini; 
     ".config/kitty/kitty.conf".source = ../config/kitty/kitty.conf; 
     ".config/zathura/zathurarc".source = ../config/zathura/zathurarc; 
-    ".config/init.lua".source = ../config/neovim/init.lua;
+    ".config/nvim".source = ../config/neovim;
   };
 
   imports  = [
