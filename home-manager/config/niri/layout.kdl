@@ -37,9 +37,9 @@ layout {
     background-color "transparent"
     default-column-width { proportion 0.5; }
 }
-    cursor {
-      hide-when-typing
-    }
+cursor {
+  hide-when-typing
+}
 prefer-no-csd
 overview {
 	backdrop-color "transparent" 
