@@ -1,4 +1,4 @@
-{pkgs, ...}:{
+{pkgs,  ...}:{
   imports = [
     ../modules/bootloader.nix  
     ../modules/audio.nix       
@@ -9,6 +9,7 @@
     ../modules/displayManager.nix 
     ../modules/services.nix    
     ../modules/podman.nix
+    ../modules/vm.nix
   ];
 
    console.keyMap = "la-latin1";
@@ -17,8 +18,13 @@
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
     nerd-fonts.jetbrains-mono
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-cjk-serif 
+    noto-fonts-color-emoji
 
   ]; 
+  fonts.fontDir.enable=true;
   # Configuraciones del gestor de paquetes Nix agrupadas
   nix = {
     settings = {
@@ -50,6 +56,7 @@
     papirus-icon-theme
   ];  
   xdg.icons.enable =true;
-
-
+  # Desactiva el módulo por defecto
+  services.xserver.desktopManager.xterm.enable = false;
+  services.xserver.excludePackages = [ pkgs.xterm ];
 }

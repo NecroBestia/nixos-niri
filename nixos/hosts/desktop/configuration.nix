@@ -11,11 +11,12 @@
   networking.hostName = "desktop"; 
   networking.networkmanager.enable = true;
 
+  # 2. Configuración de Resume (Hibernación)
   # Usuario principal
   users.users.necro = {
     isNormalUser = true;
     description = "necro";
-    extraGroups = [ "networkmanager" "wheel" "audio" "docker" "input" "storage" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "docker" "input" "storage" ];
     shell = pkgs.bash;
   };
 
@@ -35,7 +36,7 @@
       "umask=0022"
       "nofail"
       "force"
-      "x-system.automount"
+      "x-systemd.automount"
     ];
   };
   # Montaje del disco para uso de syncthing 
@@ -49,7 +50,18 @@
   # Optimizaciones de apagado
   systemd = {
     settings.Manager.DefaultTimeoutStopSec = "10s";
-    services.opensnitchd.serviceConfig.TimeoutStopSec = lib.mkForce "2s";
+    services = { 
+      opensnitchd.serviceConfig.TimeoutStopSec = lib.mkForce "2s";
+      disable_async_ps = {
+        description = "Desactiva Power Management Asíncrono para evitar Error -5 con Nvidia";
+        wantedBy = [ "multi-user.target" "hibernate.target" ];
+        before = [ "systemd-hibernate.service" ];
+        script = ''
+          echo 0 > /sys/power/pm_async
+        '';
+        serviceConfig.Type = "oneshot";
+      };
+    };
   };
 
   # Mantener esta versión intacta

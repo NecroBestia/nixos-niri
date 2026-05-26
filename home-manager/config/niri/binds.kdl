@@ -135,7 +135,9 @@ binds {
     Mod+Shift+V { switch-focus-between-floating-and-tiling; }
     Mod+W { toggle-column-tabbed-display; }
 
-    Mod+Shift+S { screenshot; }
+
+    Mod+Shift+S { screenshot show-pointer=false;}
+
     Ctrl+Print { screenshot-screen; }
     Alt+Print { screenshot-window; }
 

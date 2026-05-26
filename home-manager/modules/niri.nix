@@ -29,7 +29,7 @@ in
 
     # Servicios de usuario relacionados
     services = {
-      mako.enable      = true;  # Notificaciones
+      mako.enable = true;  # Notificaciones
       swayidle  = {
         enable = true;
         systemdTarget ="graphical-session.target"; 
