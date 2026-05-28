@@ -8,6 +8,9 @@ input {
     mouse {
       accel-profile "flat"
 	  }
+    touchpad {
+      natural-scroll
+    }
     tablet {
         map-to-output "DP-1"
     }
