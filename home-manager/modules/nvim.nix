@@ -22,8 +22,7 @@
   ];
 
   # 5. Enlace a tu carpeta local de dotfiles (Ajusta la ruta si es necesario)
-  home.file.".config/nvim".source = ../config/neovim;
-
+  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "/home/necro/nixFlake/home-manager/config/neovim";
   # 6. Alias
   home.shellAliases = {
     vi = "nvim";

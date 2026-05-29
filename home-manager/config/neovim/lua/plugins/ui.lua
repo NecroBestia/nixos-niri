@@ -1,14 +1,5 @@
 return {
-  -- Tema principal
-  {
-    "folke/tokyonight.nvim",
-    lazy = false, -- Cargar inmediatamente al abrir
-    priority = 1000, -- Máxima prioridad
-    config = function()
-      vim.cmd([[colorscheme tokyonight]])
-    end,
-  },
-  
+
   -- Iconos (Requerido por los demás)
   { "nvim-tree/nvim-web-devicons", lazy = true },
 
@@ -17,7 +8,7 @@ return {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
-      require('lualine').setup { options = { theme = 'tokyonight' } }
+      require('lualine').setup({})
     end
   },
 

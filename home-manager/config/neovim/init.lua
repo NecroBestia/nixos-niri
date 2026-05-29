@@ -5,7 +5,7 @@ vim.g.maplocalleader = " "
 -- Cargar configuración base
 require("core.options")
 require("core.keymaps")
-
+vim.pack.add { { src = "https://github.com/catppuccin/nvim", name = "catppuccin" } }
 -- Instalar automáticamente lazy.nvim si no existe en el sistema
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then

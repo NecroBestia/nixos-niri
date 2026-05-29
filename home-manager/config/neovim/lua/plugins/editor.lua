@@ -1,16 +1,18 @@
 return {
-  -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate", -- Ordena compilar las gramáticas al instalar
+    build = ":TSUpdate",
+    -- Esto asegura que el plugin se cargue después de que Lazy esté listo
     config = function()
-      require('nvim-treesitter.configs').setup({
-        -- Idiomas a compilar automáticamente
-        ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "nix", "python", "rust", "cpp" },
-        highlight = { enable = true, additional_vim_regex_highlighting = false },
-        indent = { enable = true },
+      local ok, configs = pcall(require, "nvim-treesitter.configs")
+      if not ok then
+        return
+      end
+      configs.setup({
+        ensure_installed = { "c", "lua", "vim", "vimdoc", "nix", "python", "rust", "cpp" },
+        highlight = { enable = true },
       })
-    end
+    end,
   },
 
   -- Telescope
