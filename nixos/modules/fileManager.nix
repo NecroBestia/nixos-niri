@@ -1,8 +1,4 @@
 { config, pkgs, lib, ... }:
-
-let
-  user = "necro";
-in
 {
   options.fileManager.enable = lib.mkOption {
     type = lib.types.bool;

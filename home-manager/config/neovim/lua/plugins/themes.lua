@@ -1,5 +1,6 @@
   -- Tema principal
-  return{ {
+  return{
+  {
     "folke/tokyonight.nvim",
     lazy = false, -- Cargar inmediatamente al abrir
     priority = 1000, -- Máxima prioridad

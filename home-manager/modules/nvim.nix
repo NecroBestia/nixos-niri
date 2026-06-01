@@ -1,29 +1,38 @@
 { config, pkgs, pkgs-unstable, ... }:
 
-{
-  # 1. Apagamos el wrapper defectuoso de Home Manager
-  programs.neovim.enable = false;
-
-  home.packages = with pkgs; [
-    # 2. El binario puro de Neovim 0.12 (Inestable)
-    pkgs-unstable.neovim-unwrapped
-
-    # 3. Herramientas base vitales (Para que Lazy compile Treesitter y Telescope)
-    gcc gnumake unzip wget curl git
-    ripgrep fd
+let
+  # 1. Agrupamos las herramientas que SOLO queremos que vea Neovim
+  nvim-dependencies = with pkgs; [
+    gcc gnumake unzip wget curl git ripgrep fd
     wl-clipboard xclip 
-
-    # 4. Servidores LSP (Instalados por el sistema, consumidos por Lua)
-    clang-tools   # C/C++ (clangd)
-    nil           # Nix
-    pyright       # Python
-    rust-analyzer # Rust
-    nodejs        # Requerido por algunos componentes de autocompletado
+    clang-tools nil pyright rust-analyzer nodejs
   ];
 
-  # 5. Enlace a tu carpeta local de dotfiles (Ajusta la ruta si es necesario)
+  # 2. Creamos nuestro propio ejecutable de Neovim aislado
+  custom-neovim = pkgs.symlinkJoin {
+    name = "neovim-isolated";
+    paths = [ pkgs-unstable.neovim-unwrapped ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      # Envolvemos el binario para inyectarle un PATH exclusivo justo antes de abrirse
+      wrapProgram $out/bin/nvim \
+        --prefix PATH : ${pkgs.lib.makeBinPath nvim-dependencies}
+    '';
+  };
+
+in
+{
+  programs.neovim.enable = false;
+
+  home.packages = [
+    # 3. Instalamos ÚNICAMENTE nuestro Neovim aislado. 
+    # El entorno global de tu sistema queda totalmente limpio.
+    custom-neovim
+  ];
+
+  # Enlace dinámico (se mantiene igual)
   home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "/home/necro/nixFlake/home-manager/config/neovim";
-  # 6. Alias
+
   home.shellAliases = {
     vi = "nvim";
     vim = "nvim";

@@ -48,11 +48,10 @@ in {
       wlsunset playerctl wl-clipboard swww swayidle swaybg gsimplecal qalculate-qt 
       
       # Multimedia y Edición (Estables)
-      pavucontrol nomacs vlc zathura 
+      pavucontrol nomacs vlc sioyek zathura 
 
       # --- PAQUETES INESTABLES (Última versión) ---
       pkgs-unstable.krita
-      pkgs-unstable.spotify
       pkgs-unstable.obsidian
       pkgs-unstable.vscodium 
       pkgs-unstable.mupdf 
@@ -61,6 +60,7 @@ in {
       # Scripts locales
       myScripts.clipboard
       myScripts.niri-wallpaper
+      myScripts.spotify-startup
     ];
   };
 

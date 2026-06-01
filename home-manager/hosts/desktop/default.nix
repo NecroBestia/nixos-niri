@@ -1,4 +1,4 @@
-{pkgs,...}:{
+{pkgs, pkgs-unstable, ...}:{
   imports = [
     ../../shared/default.nix
   ];
@@ -7,9 +7,9 @@
     homeDirectory = "/home/necro"; 
     stateVersion = "25.05";
   };
-  home.packages = with pkgs; [
-    
-  ];
+  home.packages = [
+
+  ]; 
   #Configuracion dotfile waybar 
   xdg.configFile."waybar/config.jsonc".source= ../../config/waybar/configDesktop.jsonc;
   }

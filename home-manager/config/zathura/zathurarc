@@ -1,18 +1,46 @@
-# Oculta la barra de estado inferior
-set adjust-open "best-fit"
-set guioptions none 
-set window-title-home-tilde true 
-set window-title-page true
+# ~/.config/zathura/zathurarc
 
+# ── Ajuste de página ──────────────────────────────
+set adjust-open "best-fit"
+set pages-per-row 1
+set scroll-page-aware true
+set smooth-scroll true
+
+# ── UI ───────────────────────────────────────────
+set guioptions sb
+set window-title-home-tilde true
+set window-title-page true
+set statusbar-h-padding 8
+set statusbar-v-padding 4
+
+# ── Clipboard ────────────────────────────────────
 set selection-clipboard clipboard
+
+# ── Recolor (gruvbox dark) ────────────────────────
 set recolor true
 set recolor-keephue true
 set recolor-lightcolor "#282828"
 set recolor-darkcolor "#ebdbb2"
 
+# ── Zoom ─────────────────────────────────────────
+set zoom-min 10
+set zoom-step 5
 
-map h scroll left 0.05
-map l scroll right 0.05
+# ── Navegación ───────────────────────────────────
+set scroll-step 25
+set scroll-hstep 25 
+map h scroll left
+map l scroll right
+map J navigate next
+map K navigate previous
+
+# ── Vista ────────────────────────────────────────
 map i recolor
 map F toggle_fullscreen
 map [fullscreen] F toggle_fullscreen
+map = zoom in
+map - zoom out
+map 0 zoom default
+
+# ── Índice/TOC (muy útil en libros técnicos) ──────
+map <Tab> toggle_index

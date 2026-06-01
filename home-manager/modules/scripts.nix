@@ -75,4 +75,12 @@
     pkill swaybg || true
     $SWAYBG -i "$OVERVIEW_WALL_TMP" -m fill &
   '';
+  spotify-startup = pkgs.writeShellScriptBin "spotify-startup" ''
+  #!/bin/sh
+  if flatpak list | grep -qi spotify; then
+    flatpak run com.spotify.Client
+  else
+     spotify
+  fi
+  ''; 
 }

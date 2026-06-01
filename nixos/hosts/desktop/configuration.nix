@@ -2,7 +2,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../default.nix
+    ../shared/default.nix
     ../../modules/nvidia.nix      
     ../../modules/firewall.nix      
   ];

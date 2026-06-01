@@ -4,7 +4,7 @@
   imports =
     [ # Incluye los resultados del escaneo de hardware generado automáticamente.
       ./hardware-configuration.nix
-      ../default.nix
+      ../shared/default.nix
     ];
 
   # --- Redes ---
