@@ -4,10 +4,11 @@ vim.g.maplocalleader = " "
 
 require("vim._core.ui2").enable({})
 
-require("options")
-require("keymaps")
+require("core.options")
+require("core.keymaps")
+require("core.treesitter")
+require("core.lsp")
+
 require("pack")   
-require("treesitter")
-require("lsp")
 
 vim.cmd.colorscheme("tokyonight")
