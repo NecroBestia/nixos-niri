@@ -2,23 +2,12 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Cargar configuración base
-require("core.options")
-require("core.keymaps")
-vim.pack.add { { src = "https://github.com/catppuccin/nvim", name = "catppuccin" } }
--- Instalar automáticamente lazy.nvim si no existe en el sistema
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable",
-    lazypath,
-  })
-end
-vim.opt.rtp:prepend(lazypath)
+require("vim._core.ui2").enable({})
 
--- Iniciar Lazy y decirle que busque configuraciones en la carpeta "lua/plugins/"
-require("lazy").setup("plugins")
+require("options")
+require("keymaps")
+require("pack")   
+require("treesitter")
+require("lsp")
+
+vim.cmd.colorscheme("tokyonight")
