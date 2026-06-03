@@ -5,7 +5,7 @@ let
   nvim-dependencies = with pkgs; [
     gcc gnumake unzip wget curl git ripgrep fd
     wl-clipboard xclip 
-    clang-tools nil pyright rust-analyzer nodejs
+    clang-tools nil pyright rust-analyzer nodejs tree-sitter
   ];
 
   # 2. Creamos nuestro propio ejecutable de Neovim aislado

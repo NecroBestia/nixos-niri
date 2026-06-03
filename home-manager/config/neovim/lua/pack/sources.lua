@@ -1,5 +1,8 @@
 vim.pack.add({
+    -- Themes  
     "https://github.com/folke/tokyonight.nvim",
+    "https://github.com/rebelot/kanagawa.nvim",
+  { src = "https://github.com/bluz71/vim-moonfly-colors", name = "moonfly" },
     "https://github.com/lervag/vimtex", 
     "https://github.com/nvim-mini/mini.nvim",
     "https://github.com/rafamadriz/friendly-snippets",
