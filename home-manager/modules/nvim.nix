@@ -5,7 +5,7 @@ let
   nvim-dependencies = with pkgs; [
     gcc gnumake unzip wget curl git ripgrep fd
     wl-clipboard xclip 
-    clang-tools nil pyright rust-analyzer nodejs tree-sitter
+    clang-tools nil pyright rust-analyzer nodejs pkgs-unstable.tree-sitter
   ];
 
   # 2. Creamos nuestro propio ejecutable de Neovim aislado
@@ -32,8 +32,7 @@ in
 
   # Enlace dinámico (se mantiene igual)
   home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "/home/necro/nixFlake/home-manager/config/neovim";
-
-  home.shellAliases = {
+home.shellAliases = {
     vi = "nvim";
     vim = "nvim";
     vimdiff = "nvim -d";
