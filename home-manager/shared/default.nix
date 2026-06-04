@@ -48,14 +48,12 @@ in {
       wlsunset playerctl wl-clipboard swww swayidle swaybg gsimplecal qalculate-qt 
       
       # Multimedia y Edición (Estables)
-      pavucontrol nomacs vlc sioyek zathura 
+      pavucontrol nomacs vlc  zathura mupdf  
 
       # --- PAQUETES INESTABLES (Última versión) ---
       pkgs-unstable.krita
       pkgs-unstable.obsidian
       pkgs-unstable.vscodium 
-      pkgs-unstable.mupdf 
-      pkgs-unstable.libreoffice-qt-fresh 
       pkgs-unstable.xournalpp
       # Scripts locales
       myScripts.clipboard

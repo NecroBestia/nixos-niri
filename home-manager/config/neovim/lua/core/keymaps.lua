@@ -33,3 +33,12 @@ vim.keymap.set("n", "<leader>u", function()
     vim.cmd.packadd("nvim.undotree")
     require("undotree").open()
 end, { desc = "Toggle Builtin Undotree" })
+
+-- Shift + h (Ir a la pestaña de la izquierda)
+vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Buffer anterior" })
+
+-- Shift + l (Ir a la pestaña de la derecha)
+vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Buffer siguiente" })
+
+-- Espacio + b + d (Cerrar la pestaña actual)
+vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "Cerrar buffer/pestaña" })

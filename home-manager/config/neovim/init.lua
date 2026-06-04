@@ -16,4 +16,4 @@ require("core.treesitter")
 require("core.lsp")
 
 -- 4. El tema visual
-vim.cmd.colorscheme("tokyonight")
+vim.cmd.colorscheme("moonfly")
