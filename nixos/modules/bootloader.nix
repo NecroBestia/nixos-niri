@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{pkgs, ...}: {
   boot.loader = {
     efi.canTouchEfiVariables = true;
     grub = {
@@ -9,12 +9,9 @@
     };
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_zen;
-  
   # Usamos ntfs3 que es nativo y más rápido que ntfs tradicional
   boot.supportedFilesystems = [ "ntfs" "ntfs3" ]; 
   boot.plymouth.enable = false; 
-
 
   #boot.kernelParams = [ 
     #"quiet"

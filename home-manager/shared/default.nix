@@ -13,7 +13,7 @@ in {
   nixpkgs.config.allowUnfreePredicate = (_: true);
 
   home = {
-    stateVersion = "25.05"; 
+    stateVersion = "26.05"; 
     
     shellAliases = { 
       hm-switch = "home-manager switch --flake ~/nixFlake#\"necro@$HOSTNAME\""; 
@@ -42,10 +42,10 @@ in {
     # Paquetes ordenados y divididos por rama
     packages = with pkgs; [ 
       # Sistema y Terminal (Estables)
-      kitty starship neofetch htop tree curl nil direnv nix-direnv 
+      kitty starship fastfetch htop tree curl nil direnv nix-direnv libreoffice
       
       # Entorno Gráfico Wayland (Estables)
-      wlsunset playerctl wl-clipboard swww swayidle swaybg gsimplecal qalculate-qt 
+      wlsunset playerctl wl-clipboard awww swayidle swaybg gsimplecal qalculate-qt 
       
       # Multimedia y Edición (Estables)
       pavucontrol nomacs vlc  zathura mupdf  

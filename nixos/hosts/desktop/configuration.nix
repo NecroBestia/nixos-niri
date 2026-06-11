@@ -1,4 +1,10 @@
-{lib, pkgs, ... }:
+{lib, pkgs, inputs,  ... }:
+let 
+    pkgs-kernel = import inputs.nixpkgs-kernel{
+        inherit  (pkgs) system;
+        config.allowUnfree = true; 
+    }; 
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -36,6 +42,7 @@
       "umask=0022"
       "nofail"
       "force"
+      "x-gvfs-name=not_to_lose"
       "x-systemd.automount"
     ];
   };
@@ -64,6 +71,6 @@
     };
   };
 
-  # Mantener esta versión intacta
+    boot.kernelPackages = pkgs.linuxPackagesFor pkgs-kernel.linuxPackages_zen.kernel;  # Mantener esta versión intacta
   system.stateVersion = "25.05"; 
 }

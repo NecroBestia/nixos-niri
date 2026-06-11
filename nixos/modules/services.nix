@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs,lib,  ...}: {
 	services = 	
 	{
 	  # --- Configuracion de SSH ---
@@ -35,9 +35,9 @@
         xdg-desktop-portal-gnome
       ];
       config = {
-        common.default = [ "gtk" "gnome" ];
+        common.default =  [ "gtk" "gnome" ];
         niri = {
-          default = ["gtk" "gnome"];
+          default = lib.mkForce["gtk" "gnome"];
           "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
           "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
         };

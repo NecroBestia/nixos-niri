@@ -6,7 +6,10 @@
       ./hardware-configuration.nix
       ../shared/default.nix
     ];
-
+    # --- nixosconf --- 
+    # Permitir paquetes privativos (necesario para algunos drivers de red o codecs)
+    nixpkgs.config.allowUnfree = true;
+    nix.settings.experimental-features = [ "nix-command" "flakes" ];
   # --- Redes ---
   networking.hostName = "notebook";
   networking.networkmanager.enable = true;
@@ -45,9 +48,9 @@
 
   services.syncthing.dataDir = "/home/necro/Desktop/"; 
   programs.nm-applet.enable = true; 
-  # Permitir paquetes privativos (necesario para algunos drivers de red o codecs)
-  nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+   boot.kernelPackages = pkgs.linuxPackages_zen; 
+    
   # No cambies este valor a menos que sepas exactamente lo que haces.
   system.stateVersion = "25.05"; 
 }

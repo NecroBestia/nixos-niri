@@ -1,7 +1,6 @@
-{pkgs, ...}: 
+{ pkgs, ... }:
 {
-  clipboard = pkgs.writeShellScriptBin "niri-clipboard" 
-  '' 
+  clipboard = pkgs.writeShellScriptBin "niri-clipboard" ''
     # Usamos rutas absolutas para que el script sea independiente del sistema
     CLIPHIST="${pkgs.cliphist}/bin/cliphist"
     FUZZEL="${pkgs.fuzzel}/bin/fuzzel"
@@ -28,9 +27,9 @@
         ;;
     esac
   '';
-  niri-wallpaper = pkgs.writeShellScriptBin "niri-wallpaper" '' 
+  niri-wallpaper = pkgs.writeShellScriptBin "niri-wallpaper" ''
     # Binarios declarativos
-    SWWW="${pkgs.swww}/bin/swww"
+    AWWW="${pkgs.awww}/bin/awww"
     MAGICK="${pkgs.imagemagick}/bin/magick"
     SWAYBG="${pkgs.swaybg}/bin/swaybg"
     FIND="${pkgs.findutils}/bin/find"
@@ -53,7 +52,6 @@
     fi
 
     # 2. Generar un nombre único basado en la ruta del archivo (usando md5)
-    # Esto evita conflictos si dos fotos se llaman igual pero están en carpetas distintas
     WALL_HASH=$(echo "$WALLPAPER" | $MD5SUM | cut -d' ' -f1)
     CACHED_PHOTO="$CACHE_BLUR_DIR/$WALL_HASH.jpg"
 
@@ -63,24 +61,37 @@
         $MAGICK "$WALLPAPER" -filter Triangle -resize 140% -blur 0x6 "$CACHED_PHOTO"
     fi
 
-    # 4. Copiar de la caché al archivo que usa swaybg (para mantener consistencia)
+    # 4. Copiar de la caché al archivo que usa swaybg
     cp "$CACHED_PHOTO" "$OVERVIEW_WALL_TMP"
 
-    until $SWWW query >/dev/null 2>&1; do
+    # --- LÓGICA ANTI-CUELGUES ---
+    MAX_INTENTOS=10
+    INTENTO=0
+
+    # Cambiamos $SWWW por $AWWW y agregamos el contador
+    until $AWWW query >/dev/null 2>&1; do
+        if [ $INTENTO -ge $MAX_INTENTOS ]; then
+            echo "Error: El daemon de awww no respondió después de 5 segundos. Abortando."
+            exit 1
+        fi
         sleep 0.5
+        INTENTO=$((INTENTO+1))
     done
+    # ----------------------------
+
     # 5. Aplicar fondos
-    $SWWW img "$WALLPAPER" --transition-type fade
-    
+    $AWWW img "$WALLPAPER" --transition-type fade
+
     pkill swaybg || true
     $SWAYBG -i "$OVERVIEW_WALL_TMP" -m fill &
   '';
+
   spotify-startup = pkgs.writeShellScriptBin "spotify-startup" ''
-  #!/bin/sh
-  if flatpak list | grep -qi spotify; then
-    flatpak run com.spotify.Client
-  else
-     spotify
-  fi
-  ''; 
+    #!/bin/sh
+    if flatpak list | grep -qi spotify; then
+      flatpak run com.spotify.Client
+    else
+       spotify
+    fi
+  '';
 }

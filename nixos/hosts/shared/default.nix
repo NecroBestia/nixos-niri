@@ -1,15 +1,15 @@
 {pkgs,  ...}:{
   imports = [
-    ../modules/bootloader.nix  
-    ../modules/audio.nix       
-    ../modules/fileManager.nix 
-    ../modules/locale.nix      
-    ../modules/bluetooth.nix
-    ../modules/niri.nix 
-    ../modules/displayManager.nix 
-    ../modules/services.nix    
-    ../modules/podman.nix
-    ../modules/vm.nix
+    ../../modules/bootloader.nix  
+    ../../modules/audio.nix       
+    ../../modules/fileManager.nix 
+    ../../modules/locale.nix      
+    ../../modules/bluetooth.nix
+    ../../modules/niri.nix 
+    ../../modules/displayManager.nix 
+    ../../modules/services.nix    
+    ../../modules/podman.nix
+    ../../modules/vm.nix
   ];
 
    console.keyMap = "la-latin1";
