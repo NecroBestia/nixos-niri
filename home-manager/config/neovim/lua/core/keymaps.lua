@@ -41,4 +41,4 @@ vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Buffer anterior" })
 vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Buffer siguiente" })
 
 -- Espacio + b + d (Cerrar la pestaña actual)
-vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "Cerrar buffer/pestaña" })
+vim.keymap.set("n", "<S-w>", "<cmd>bdelete<CR>", { desc = "Cerrar buffer/pestaña" })
