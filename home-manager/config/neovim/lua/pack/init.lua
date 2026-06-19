@@ -2,4 +2,4 @@
 require("pack.commands")
 require("pack.sources")
 require("pack.mini")
-require("pack.plugins") 
+require("pack.plugins")
