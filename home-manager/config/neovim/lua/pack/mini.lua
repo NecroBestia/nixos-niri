@@ -89,6 +89,50 @@ MiniSnippets.setup({
 MiniSnippets.start_lsp_server({ match = false })
 
 -- =========================================================
--- Integración Git
+-- Barra de Estado Inferior (mini.statusline)
 -- =========================================================
-require("mini.diff").setup({ source = require("mini.diff").gen_source.git({ index = false }) })
+local statusline = require("mini.statusline")
+statusline.setup({
+    use_icons = true,         -- Muestra los iconos de los lenguajes
+    set_vim_settings = false, -- Evita conflictos con tus opciones globales
+})
+
+-- =========================================================
+-- Gestor de Sesiones (mini.sessions)
+-- =========================================================
+local sessions = require("mini.sessions")
+sessions.setup({
+    autowrite = true, -- Guarda automáticamente la sesión actual antes de salir
+    autoread = false, -- Evita cargar la última sesión de forma automática al abrir
+})
+
+-- =========================================================
+-- Pantalla de Inicio (mini.starter)
+-- =========================================================
+local starter = require("mini.starter")
+starter.setup({
+    evaluate_single = true, -- Si el filtro deja una sola opción, la abre de inmediato
+    
+    items = {
+        -- Conexión automática: Muestra tus últimas 5 sesiones guardadas
+        starter.sections.sessions(5, true), 
+        
+        starter.sections.builtin_actions(),
+        starter.sections.recent_files(5, false), -- Últimos 5 archivos globales
+        starter.sections.recent_files(5, true),  -- Últimos 5 archivos en el directorio actual
+        
+        -- Acción rápida personalizada para iniciar limpio
+        { name = 'Nuevo documento LaTeX', action = 'enew | set filetype=tex', section = 'Acciones Rápidas' },
+    },
+    
+    content_hooks = {
+        starter.gen_hook.adding_bullet("» "),
+        starter.gen_hook.aligning('center', 'center'), -- Centra el menú en la pantalla
+    },
+})
+
+-- =========================================================
+-- Integración Git (mini.diff y mini.git)
+-- =========================================================
+require("mini.diff").setup() -- Muestra los cambios (+, ~, -) de Git en el margen izquierdo
+require("mini.git").setup()  -- Habilita comandos y utilidades base de Git
