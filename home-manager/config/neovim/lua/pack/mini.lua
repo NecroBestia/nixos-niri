@@ -52,10 +52,11 @@ MiniPick.setup()
 MiniExtra.setup()
 
 -- Manteniendo tus atajos clásicos de Telescope
-vim.keymap.set("n", "<leader>ff", function() MiniPick.builtin.files() end, { desc = "Find Files" })
+vim.keymap.set("n", "<leader>ff", function() 
+    require("mini.pick").builtin.files({}, { source = { cwd = vim.fn.expand("~") } }) 
+end, { desc = "Global search" })
 vim.keymap.set("n", "<leader>fg", function() MiniPick.builtin.grep({ pattern = vim.fn.expand("<cword>") }) end, { desc = "Live Grep Word" })
 vim.keymap.set("n", "<leader>vh", function() MiniPick.builtin.help() end, { desc = "Help Tags" })
-
 -- =========================================================
 -- Autocompletado y Snippets
 -- =========================================================
@@ -130,7 +131,10 @@ starter.setup({
         starter.gen_hook.aligning('center', 'center'), -- Centra el menú en la pantalla
     },
 })
-
+-- Volver a la pantalla de inicio (Home)
+vim.keymap.set("n", "<leader>h", function() 
+    require("mini.starter").open() 
+end, { desc = "Abrir pantalla de inicio (Starter)" })
 -- =========================================================
 -- Integración Git (mini.diff y mini.git)
 -- =========================================================
