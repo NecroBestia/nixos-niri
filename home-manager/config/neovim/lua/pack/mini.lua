@@ -131,10 +131,27 @@ starter.setup({
         starter.gen_hook.aligning('center', 'center'), -- Centra el menú en la pantalla
     },
 })
--- Volver a la pantalla de inicio (Home)
-vim.keymap.set("n", "<leader>h", function() 
-    require("mini.starter").open() 
-end, { desc = "Abrir pantalla de inicio (Starter)" })
+-- =========================================================
+-- Volver al Inicio (Guardar, Limpiar y Desconectar Sesión)
+-- =========================================================
+vim.keymap.set("n", "<leader>h", function()
+    -- 1. Guardar y desconectar la sesión actual
+    if vim.v.this_session ~= "" then
+        require("mini.sessions").write() -- Guarda la estructura actual
+        vim.v.this_session = ""          -- Rompe el enlace para que no se sobreescriba más
+    end
+
+    -- 2. Cerrar todos los buffers (archivos) abiertos para dejar el área limpia
+    -- Usamos un escudo de seguridad: si no has guardado algo, abortará la limpieza
+    local ok, _ = pcall(function() vim.cmd("%bd") end)
+    if not ok then
+        vim.notify("¡Alto! Tienes archivos sin guardar. Ejecuta :wa primero.", vim.log.levels.WARN)
+        return
+    end
+
+    -- 3. Invocamos la pantalla de inicio sobre el editor limpio
+    require("mini.starter").open()
+end, { desc = "Ir al inicio y cerrar sesión" })
 -- =========================================================
 -- Integración Git (mini.diff y mini.git)
 -- =========================================================

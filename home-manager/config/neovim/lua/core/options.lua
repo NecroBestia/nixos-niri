@@ -2,11 +2,14 @@ local opt = vim.opt
 
 -- Desactiva el banner molesto del explorador de archivos nativo
 vim.g.netrw_banner = 0 
-
+opt.autochdir = true
 -- Números de línea
 opt.number = true
 opt.relativenumber = true
-
+-- Plegado codigo 
+opt.foldmethod = "expr" 
+opt.foldexpr = " v:lua.vim.treesitter.foldexpr()"
+opt.foldlevel = 99
 -- Tabulaciones (4 espacios)
 opt.tabstop = 2
 opt.softtabstop = 2

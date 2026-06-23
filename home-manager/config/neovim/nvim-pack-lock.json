@@ -28,6 +28,10 @@
       "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
+    "runner-nvim": {
+      "rev": "fff7bc209c0c1effa17c326eed3a2a64939ee009",
+      "src": "https://github.com/TheLazyCat00/runner-nvim"
+    },
     "tokyonight.nvim": {
       "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
       "src": "https://github.com/folke/tokyonight.nvim"
