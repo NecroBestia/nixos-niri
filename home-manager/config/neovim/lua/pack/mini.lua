@@ -52,10 +52,11 @@ MiniPick.setup()
 MiniExtra.setup()
 
 -- Manteniendo tus atajos clásicos de Telescope
-vim.keymap.set("n", "<leader>ff", function() MiniPick.builtin.files() end, { desc = "Find Files" })
+vim.keymap.set("n", "<leader>ff", function() 
+    require("mini.pick").builtin.files({}, { source = { cwd = vim.fn.expand("~") } }) 
+end, { desc = "Global search" })
 vim.keymap.set("n", "<leader>fg", function() MiniPick.builtin.grep({ pattern = vim.fn.expand("<cword>") }) end, { desc = "Live Grep Word" })
 vim.keymap.set("n", "<leader>vh", function() MiniPick.builtin.help() end, { desc = "Help Tags" })
-
 -- =========================================================
 -- Autocompletado y Snippets
 -- =========================================================
@@ -89,6 +90,70 @@ MiniSnippets.setup({
 MiniSnippets.start_lsp_server({ match = false })
 
 -- =========================================================
--- Integración Git
+-- Barra de Estado Inferior (mini.statusline)
 -- =========================================================
-require("mini.diff").setup({ source = require("mini.diff").gen_source.git({ index = false }) })
+local statusline = require("mini.statusline")
+statusline.setup({
+    use_icons = true,         -- Muestra los iconos de los lenguajes
+    set_vim_settings = false, -- Evita conflictos con tus opciones globales
+})
+
+-- =========================================================
+-- Gestor de Sesiones (mini.sessions)
+-- =========================================================
+local sessions = require("mini.sessions")
+sessions.setup({
+    autowrite = true, -- Guarda automáticamente la sesión actual antes de salir
+    autoread = false, -- Evita cargar la última sesión de forma automática al abrir
+})
+
+-- =========================================================
+-- Pantalla de Inicio (mini.starter)
+-- =========================================================
+local starter = require("mini.starter")
+starter.setup({
+    evaluate_single = true, -- Si el filtro deja una sola opción, la abre de inmediato
+    
+    items = {
+        -- Conexión automática: Muestra tus últimas 5 sesiones guardadas
+        starter.sections.sessions(5, true), 
+        
+        starter.sections.builtin_actions(),
+        starter.sections.recent_files(5, false), -- Últimos 5 archivos globales
+        starter.sections.recent_files(5, true),  -- Últimos 5 archivos en el directorio actual
+        
+        -- Acción rápida personalizada para iniciar limpio
+        { name = 'Nuevo documento LaTeX', action = 'enew | set filetype=tex', section = 'Acciones Rápidas' },
+    },
+    
+    content_hooks = {
+        starter.gen_hook.adding_bullet("» "),
+        starter.gen_hook.aligning('center', 'center'), -- Centra el menú en la pantalla
+    },
+})
+-- =========================================================
+-- Volver al Inicio (Guardar, Limpiar y Desconectar Sesión)
+-- =========================================================
+vim.keymap.set("n", "<leader>h", function()
+    -- 1. Guardar y desconectar la sesión actual
+    if vim.v.this_session ~= "" then
+        require("mini.sessions").write() -- Guarda la estructura actual
+        vim.v.this_session = ""          -- Rompe el enlace para que no se sobreescriba más
+    end
+
+    -- 2. Cerrar todos los buffers (archivos) abiertos para dejar el área limpia
+    -- Usamos un escudo de seguridad: si no has guardado algo, abortará la limpieza
+    local ok, _ = pcall(function() vim.cmd("%bd") end)
+    if not ok then
+        vim.notify("¡Alto! Tienes archivos sin guardar. Ejecuta :wa primero.", vim.log.levels.WARN)
+        return
+    end
+
+    -- 3. Invocamos la pantalla de inicio sobre el editor limpio
+    require("mini.starter").open()
+end, { desc = "Ir al inicio y cerrar sesión" })
+-- =========================================================
+-- Integración Git (mini.diff y mini.git)
+-- =========================================================
+require("mini.diff").setup() -- Muestra los cambios (+, ~, -) de Git en el margen izquierdo
+require("mini.git").setup()  -- Habilita comandos y utilidades base de Git

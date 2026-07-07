@@ -18,6 +18,9 @@
       poppler-utils      #Para thumbnails de PDFs
       ntfs3g 
       exfat
+      xdg-user-dirs
+      adwaita-icon-theme
+      shared-mime-info
     ];
 
     services = {

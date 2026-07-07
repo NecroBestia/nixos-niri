@@ -35,51 +35,68 @@
     FIND="${pkgs.findutils}/bin/find"
     SHUF="${pkgs.coreutils}/bin/shuf"
     MD5SUM="${pkgs.coreutils}/bin/md5sum"
+    FLOCK="${pkgs.util-linux}/bin/flock"
+    HEAD="${pkgs.coreutils}/bin/head"
+    SED="${pkgs.gnused}/bin/sed"
 
-    WALLPAPER_DIR="$HOME/Wallpapers"
-    # Carpeta específica para los fondos con blur
+    WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
     CACHE_BLUR_DIR="$HOME/.cache/niri-blur"
     OVERVIEW_WALL_TMP="$HOME/.cache/overview_wallpaper.jpg"
+    PLAYLIST="$HOME/.cache/niri-wallpaper-playlist.txt"
 
-    # Crear carpetas si no existen
     mkdir -p "$CACHE_BLUR_DIR"
 
-    # 1. Elegir un wallpaper aleatorio
-    WALLPAPER=$($FIND "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" \) | $SHUF -n 1)
+    # --- LÓGICA DE BARAJA (SIN REPETICIONES) ---
+    WALLPAPER=""
+
+    # Bucle por si borraste una foto que estaba en la lista
+    while true; do
+        # Si la playlist no existe o está vacía, barajamos todo de nuevo
+        if [ ! -s "$PLAYLIST" ]; then
+            $FIND "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" \) | $SHUF > "$PLAYLIST"
+        fi
+
+        # Leemos la primera línea
+        WALLPAPER=$($HEAD -n 1 "$PLAYLIST")
+        
+        # Borramos esa primera línea para no repetirla
+        $SED -i '1d' "$PLAYLIST"
+
+        # Comprobamos que el archivo sigue existiendo en tu disco
+        if [ -f "$WALLPAPER" ]; then
+            break # Encontramos un fondo válido, salimos del bucle
+        fi
+    done
+    # ---------------------------------------------
 
     if [ -z "$WALLPAPER" ]; then
         exit 1
     fi
 
-    # 2. Generar un nombre único basado en la ruta del archivo (usando md5)
+    # Hash único y caché
     WALL_HASH=$(echo "$WALLPAPER" | $MD5SUM | cut -d' ' -f1)
     CACHED_PHOTO="$CACHE_BLUR_DIR/$WALL_HASH.jpg"
 
-    # 3. Lógica de Caché: ¿Ya existe la versión con blur?
     if [ ! -f "$CACHED_PHOTO" ]; then
-        # No existe, la creamos
-        $MAGICK "$WALLPAPER" -filter Triangle -resize 140% -blur 0x6 "$CACHED_PHOTO"
+        if ! $MAGICK "$WALLPAPER" -filter Triangle -resize 140% -blur 0x6 "$CACHED_PHOTO"; then
+            exit 1
+        fi
     fi
 
-    # 4. Copiar de la caché al archivo que usa swaybg
     cp "$CACHED_PHOTO" "$OVERVIEW_WALL_TMP"
 
-    # --- LÓGICA ANTI-CUELGUES ---
+    # Esperar al daemon de awww (Max 5 segundos)
     MAX_INTENTOS=10
     INTENTO=0
-
-    # Cambiamos $SWWW por $AWWW y agregamos el contador
     until $AWWW query >/dev/null 2>&1; do
         if [ $INTENTO -ge $MAX_INTENTOS ]; then
-            echo "Error: El daemon de awww no respondió después de 5 segundos. Abortando."
             exit 1
         fi
         sleep 0.5
         INTENTO=$((INTENTO+1))
     done
-    # ----------------------------
 
-    # 5. Aplicar fondos
+    # Aplicar fondos
     $AWWW img "$WALLPAPER" --transition-type fade
 
     pkill swaybg || true

@@ -42,7 +42,7 @@ in {
     # Paquetes ordenados y divididos por rama
     packages = with pkgs; [ 
       # Sistema y Terminal (Estables)
-      kitty starship fastfetch htop tree curl nil direnv nix-direnv libreoffice
+      kitty starship fastfetch htop tree curl nil direnv nix-direnv libreoffice gh
       
       # Entorno Gráfico Wayland (Estables)
       wlsunset playerctl wl-clipboard awww swayidle swaybg gsimplecal qalculate-qt 
