@@ -19,7 +19,7 @@
     "net.ipv4.icmp_ignore_bogus_error_responses" = 1;
     # Protección contra ataques SYN Flood (DDoS básico)
     "net.ipv4.tcp_syncookies" = 1;
-    # Deshabilitar el reenvío de paquetes
+    # Habilitar el reenvío de paquetes (necesario para VMs)
     "net.ipv4.ip_forward" = 1;
   };
   #opensnitch; permite gestionar conexiones de programas al internet y viceversa. 

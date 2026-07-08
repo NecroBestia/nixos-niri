@@ -42,4 +42,4 @@ vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Buffer siguiente" })
 -- Shift + w (Cerrar la pestaña actual)
 vim.keymap.set("n", "<S-w>", "<cmd>bdelete<CR>", { desc = "Cerrar buffer/pestaña" })
 
-vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", {desc = "Salir modo termianl"})
+vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", {desc = "Salir modo terminal"})

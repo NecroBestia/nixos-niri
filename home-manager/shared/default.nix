@@ -55,6 +55,7 @@ in {
       pkgs-unstable.obsidian
       pkgs-unstable.vscodium 
       pkgs-unstable.xournalpp
+      pkgs-unstable.opencode
       # Scripts locales
       myScripts.clipboard
       myScripts.niri-wallpaper
