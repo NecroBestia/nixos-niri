@@ -8,7 +8,8 @@
     ../../modules/niri.nix 
     ../../modules/displayManager.nix 
     ../../modules/services.nix    
-    ../../modules/podman.nix
+    ../../modules/containers.nix
+    ../../modules/firewall.nix
     ../../modules/vm.nix
   ];
 
