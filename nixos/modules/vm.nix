@@ -1,29 +1,39 @@
-{config, pkgs, ...}: {# ==========================================
-  # VIRTUALIZACIÓN (KVM / QEMU / VIRT-MANAGER)
-  # ==========================================
-  
-  # 1. Habilitamos el demonio de virtualización nativo de Linux
-  virtualisation.libvirtd = {
-    enable = true;
-    qemu = {
-      package = pkgs.qemu_kvm;
-      runAsRoot = true;
-      swtpm.enable = true; # Soporte para TPM simulado (útil si luego quieres emular Windows 11)
-    };
+#===================================================================
+# VIRTUALIZACIÓN — KVM / QEMU / Virt-Manager
+#===================================================================
+# libvirtd: Demonio de virtualización que gestiona máquinas virtuales
+# KVM/QEMU. Virt-Manager es la interfaz gráfica.
+#
+# TOGGLEABLE: vm.libvirtd = false desactiva todo (útil en portátiles
+# donde no se necesita virtualización).
+#
+#   - qemu_kvm: Emulador optimizado con aceleración KVM.
+#   - runAsRoot = true: QEMU corre con permisos elevados para
+#     acceder a dispositivos KVM.
+#   - swtpm.enable = true: TPM simulado (esencial para Windows 11).
+#   - necro extraGroups: "libvirtd" + "kvm" para crear VMs sin sudo.
+#   - spice-vdagent: Copiar/pegar entre host y VM.
+#===================================================================
+{ config, pkgs, lib, ... }: {
+  options.vm.libvirtd = lib.mkOption {
+    type = lib.types.bool;
+    default = true;
+    description = "Enable libvirtd, virt-manager and virtualization tools";
   };
 
-  # 2. Habilitamos la interfaz gráfica para gestionar las VMs
-  programs.virt-manager.enable = true;
+  config = lib.mkIf config.vm.libvirtd {
+    virtualisation.libvirtd = {
+      enable = true;
+      qemu = {
+        package = pkgs.qemu_kvm;
+        runAsRoot = true;
+        swtpm.enable = true;
+      };
+    };
 
-  # 3. CRÍTICO: Virt-Manager necesita dconf para guardar tus preferencias (tamaño de ventana, etc.)
-  programs.dconf.enable = true;
-
-  # 4. AÑADE TU USUARIO A LOS GRUPOS (Cambia "necro" por tu usuario real si es distinto)
-  # 'libvirtd' te permite crear VMs sin usar sudo. 'kvm' te da acceso a la aceleración por hardware.
-  users.users.necro.extraGroups = ["libvirtd" "kvm" ];
-
-  # (Opcional) Instalar un visor alternativo ligero si lo deseas
-  environment.systemPackages = with pkgs; [
-    spice-vdagent # Permite copiar/pegar entre tu NixOS y la máquina virtual
-  ];
+    programs.virt-manager.enable = true;
+    programs.dconf.enable = true;
+    users.users.necro.extraGroups = [ "libvirtd" "kvm" ];
+    environment.systemPackages = with pkgs; [ spice-vdagent ];
+  };
 }

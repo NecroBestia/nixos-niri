@@ -16,8 +16,8 @@
 	"modules-right" : [
 		"niri/window",
 		"custom/separator",	
-		"pulseaudio#sink",
-		"pulseaudio#source",
+		"wireplumber#sink",
+		"wireplumber#source",
 		"custom/separator",		
     "custom/luz-azul",
     "custom/separator", 

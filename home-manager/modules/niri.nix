@@ -1,10 +1,31 @@
+#===================================================================
+# NIRI — Compositor Wayland (User-Level)
+#===================================================================
+# Este módulo configura el entorno de usuario para Niri:
+#   - Copia los archivos de configuración (config/niri/) a ~/.config/niri/.
+#   - Habilita servicios esenciales para el entorno Wayland.
+#
+# SERVICIOS:
+#   - mako: Notificaciones nativas de Wayland (reemplaza dunst/notify-send).
+#   - swayidle: Gestión de inactividad (bloqueo + suspensión).
+#     * timeout 600s (10 min): Bloquea la pantalla con swaylock.
+#     * timeout 1200s (20 min): Suspende el sistema.
+#     * before-sleep: Bloquea antes de suspender.
+#     * lock: Bloqueo manual.
+#   - polkit-gnome: Diálogo de autorización para apps que necesitan
+#     permisos del sistema (ej: mount, format).
+#   - gnome-keyring: Almacenamiento seguro de contraseñas y claves SSH.
+#
+# PROGRAMAS:
+#   - fuzzel: Lanzador de aplicaciones (similar a rofi/dmenu).
+#   - swaylock: Pantalla de bloqueo compatible con Wayland.
+#   - gcr: Paquete base de GNOME Crypto (necesario para gnome-keyring).
+#===================================================================
 { config, pkgs, lib, ... }:
 
 let
   cfg = config.programs.niri;
-in
-{
-  # Declaración de la opción
+in {
   options.programs.niri = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -13,37 +34,33 @@ in
     };
   };
 
-  # Configuración condicional
   config = lib.mkIf cfg.enable {
-    # Copiar archivos de configuración de Niri
-    xdg.configFile."niri/".source = lib.mkForce ../config/niri; 
-    # Paquetes esenciales para Niri y Wayland
+    xdg.configFile."niri/".source = lib.mkForce ../config/niri;
+
     home.packages = [ pkgs.gcr ];
 
-    # Programas opcionales útiles en entorno Niri
     programs = {
-      #alacritty.enable = true;
       fuzzel.enable   = true;
       swaylock.enable = true;
     };
 
-    # Servicios de usuario relacionados
     services = {
-      mako.enable = true;  # Notificaciones
-      swayidle  = {
+      mako.enable = true;
+
+      swayidle = {
         enable = true;
-        systemdTarget ="graphical-session.target"; 
-        extraArgs = [ 
+        systemdTarget = "graphical-session.target";
+        extraArgs = [
           "-w"
           "timeout" "600" "swaylock -f"
           "timeout" "1200" "loginctl suspend"
           "before-sleep" "swaylock -f"
           "lock" "swaylock -f"
         ];
-        
-        };  # Gestión de inactividad
-      polkit-gnome.enable = true; # Polkit para apps gráficas
-      gnome-keyring.enable = true; # Almacenamiento de credenciales
+      };
+
+      polkit-gnome.enable = true;
+      gnome-keyring.enable = true;
     };
   };
 }

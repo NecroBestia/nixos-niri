@@ -1,41 +1,63 @@
-{ pkgs, ... }:
-{
+#===================================================================
+# SCRIPTS PERSONALIZADOS
+#===================================================================
+# Tres scripts auxiliares para el entorno Niri:
+#
+# 1. niri-clipboard:
+#    Gestor del historial del portapapeles con interfaz fuzzel.
+#    Muestra el historial de cliphist en un menú; permite copiar
+#    un elemento o limpiar todo el historial.
+#    Atajo: Mod+Ctrl+V (en binds.kdl).
+#
+# 2. niri-wallpaper:
+#    Gestor de fondos de pantalla con dos capas:
+#      - awww: Fondo de pantalla animado (transiciones suaves).
+#      - swaybg: Fondo estático con blur (para el overview de Niri).
+#    Selecciona un wallpaper aleatorio sin repetir hasta agotar
+#    la lista. Genera una versión borrosa en caché para el overview.
+#    Atajo: Mod+Ctrl+Shift+W (en binds.kdl).
+#
+# 3. spotify-startup:
+#    Lanzador condicional de Spotify.
+#    Si está instalado como Flatpak, lo ejecuta; si no, intenta
+#    el binario nativo. Útil para entornos donde a veces se usa
+#    Spotify vía Flatpak y otras veces vía sistema.
+#    Se ejecuta al inicio (startup.kdl de Niri).
+#===================================================================
+{ pkgs, ... }: {
+  #-----------------------------------------------------------------
+  # niri-clipboard — Historial del Portapapeles
+  #-----------------------------------------------------------------
   clipboard = pkgs.writeShellScriptBin "niri-clipboard" ''
-    # Usamos rutas absolutas para que el script sea independiente del sistema
     CLIPHIST="${pkgs.cliphist}/bin/cliphist"
     FUZZEL="${pkgs.fuzzel}/bin/fuzzel"
     WLCOPY="${pkgs.wl-clipboard}/bin/wl-copy"
 
-    # --- Ejecución de la interfaz ---
-    # Concatenamos la opción de limpieza con la lista actual del historial
-    # El resultado se guarda en la variable 'selection'
     selection=$( (echo "wipe"; $CLIPHIST list) | $FUZZEL --dmenu --prompt "Clipboard: ")
 
-    # --- Lógica de procesamiento ---
     case "$selection" in
       "wipe")
-        # El usuario eligió borrar todo el historial
         $CLIPHIST wipe
         ;;
       "")
-        # El usuario cerró el menú sin elegir nada (Esc)
         exit 0
         ;;
       *)
-        # El usuario seleccionó un elemento para copiar
         echo "$selection" | $CLIPHIST decode | $WLCOPY
         ;;
     esac
   '';
+
+  #-----------------------------------------------------------------
+  # niri-wallpaper — Gestor de Fondos con Blur
+  #-----------------------------------------------------------------
   niri-wallpaper = pkgs.writeShellScriptBin "niri-wallpaper" ''
-    # Binarios declarativos
     AWWW="${pkgs.awww}/bin/awww"
     MAGICK="${pkgs.imagemagick}/bin/magick"
     SWAYBG="${pkgs.swaybg}/bin/swaybg"
     FIND="${pkgs.findutils}/bin/find"
     SHUF="${pkgs.coreutils}/bin/shuf"
     MD5SUM="${pkgs.coreutils}/bin/md5sum"
-    FLOCK="${pkgs.util-linux}/bin/flock"
     HEAD="${pkgs.coreutils}/bin/head"
     SED="${pkgs.gnused}/bin/sed"
 
@@ -46,34 +68,25 @@
 
     mkdir -p "$CACHE_BLUR_DIR"
 
-    # --- LÓGICA DE BARAJA (SIN REPETICIONES) ---
     WALLPAPER=""
 
-    # Bucle por si borraste una foto que estaba en la lista
     while true; do
-        # Si la playlist no existe o está vacía, barajamos todo de nuevo
         if [ ! -s "$PLAYLIST" ]; then
             $FIND "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" \) | $SHUF > "$PLAYLIST"
         fi
 
-        # Leemos la primera línea
         WALLPAPER=$($HEAD -n 1 "$PLAYLIST")
-        
-        # Borramos esa primera línea para no repetirla
         $SED -i '1d' "$PLAYLIST"
 
-        # Comprobamos que el archivo sigue existiendo en tu disco
         if [ -f "$WALLPAPER" ]; then
-            break # Encontramos un fondo válido, salimos del bucle
+            break
         fi
     done
-    # ---------------------------------------------
 
     if [ -z "$WALLPAPER" ]; then
         exit 1
     fi
 
-    # Hash único y caché
     WALL_HASH=$(echo "$WALLPAPER" | $MD5SUM | cut -d' ' -f1)
     CACHED_PHOTO="$CACHE_BLUR_DIR/$WALL_HASH.jpg"
 
@@ -85,7 +98,6 @@
 
     cp "$CACHED_PHOTO" "$OVERVIEW_WALL_TMP"
 
-    # Esperar al daemon de awww (Max 5 segundos)
     MAX_INTENTOS=10
     INTENTO=0
     until $AWWW query >/dev/null 2>&1; do
@@ -96,19 +108,20 @@
         INTENTO=$((INTENTO+1))
     done
 
-    # Aplicar fondos
     $AWWW img "$WALLPAPER" --transition-type fade
 
     pkill swaybg || true
     $SWAYBG -i "$OVERVIEW_WALL_TMP" -m fill &
   '';
 
+  #-----------------------------------------------------------------
+  # spotify-startup — Lanzador Condicional de Spotify
+  #-----------------------------------------------------------------
   spotify-startup = pkgs.writeShellScriptBin "spotify-startup" ''
-    #!/bin/sh
     if flatpak list | grep -qi spotify; then
       flatpak run com.spotify.Client
     else
-       spotify
+      spotify
     fi
   '';
 }
