@@ -124,4 +124,73 @@
       spotify
     fi
   '';
+
+  #-----------------------------------------------------------------
+  # move-hidden-files — Migracion Unica de Dotfiles a .hidden/
+  #-----------------------------------------------------------------
+  # Itera sobre todos los archivos/carpetas ocultos en $HOME y los
+  # mueve a $HOME/.hidden/ creando symlinks de vuelta.
+  # Respeta la lista de exclusiones para no romper el sistema.
+  # Uso: move-hidden-files
+  #-----------------------------------------------------------------
+  move-hidden-files = pkgs.writeShellScriptBin "move-hidden-files" ''
+    EXCLUDE=".hidden|.cache|.config|.local|.nix-profile|.nix-defexpr|.dataSync|.Trash-1000|.steampath|.steampid"
+
+    for item in "$HOME"/.[!.]*; do
+      [ -e "$item" ] || continue
+      name=$(basename "$item")
+
+      echo "$name" | grep -qE "^($EXCLUDE)$" && continue
+
+      if [ -L "$item" ] && [ "$(readlink "$item")" = "$HOME/.hidden/$name" ]; then
+        continue
+      fi
+
+      if [ -L "$item" ]; then
+        continue
+      fi
+
+      mkdir -p "$HOME/.hidden"
+
+      if [ -e "$HOME/.hidden/$name" ]; then
+        rm -rf "$item"
+      else
+        mv "$item" "$HOME/.hidden/$name"
+      fi
+      ln -sf "$HOME/.hidden/$name" "$item"
+    done
+  '';
+
+  #-----------------------------------------------------------------
+  # watch-hidden-files — Vigilancia en Tiempo Real con inotify
+  #-----------------------------------------------------------------
+  # Monitoriza $HOME con inotifywait. Cuando se crea o mueve un
+  # archivo/carpeta oculto a $HOME, lo mueve automaticamente a
+  # .hidden/ y crea un symlink.
+  # Uso: watch-hidden-files  (corre como servicio systemd)
+  #-----------------------------------------------------------------
+  watch-hidden-files = pkgs.writeShellScriptBin "watch-hidden-files" ''
+    EXCLUDE=".hidden|.cache|.config|.local|.nix-profile|.nix-defexpr|.dataSync|.Trash-1000|.steampath|.steampid"
+
+    ${pkgs.inotify-tools}/bin/inotifywait -m "$HOME" \
+      --exclude '\.hidden/.*' \
+      --format '%e %f' \
+      -e create -e moved_to | \
+    while read event name; do
+      [ "${name:0:1}" != "." ] && continue
+      path="$HOME/$name"
+
+      echo "$name" | grep -qE "^($EXCLUDE)$" && continue
+      [ -L "$path" ] && continue
+
+      mkdir -p "$HOME/.hidden"
+
+      if [ -e "$HOME/.hidden/$name" ]; then
+        rm -rf "$path"
+      else
+        mv "$path" "$HOME/.hidden/$name"
+      fi
+      ln -sf "$HOME/.hidden/$name" "$path"
+    done
+  '';
 }

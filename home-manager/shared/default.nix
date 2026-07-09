@@ -9,8 +9,10 @@
 #   themeName, cursorName, cursorSize, MyTerminal → Cambia aquí
 #   y se refleja en GTK, Qt, shell, y atajos.
 #===================================================================
-{ pkgs, pkgs-unstable, ... }:
+{ config, pkgs, pkgs-unstable, inputs, ... }:
 let
+  # Secrets importados desde flake input (path externo no trackeado).
+  secrets = builtins.fromJSON (builtins.readFile inputs.secrets-config);
   themeName = "Colloid-Dark";
   cursorName = "Bibata-Modern-Ice";
   cursorSize = 24;
@@ -37,6 +39,7 @@ in {
     shellAliases = {
       hm-switch = "home-manager switch --flake ~/nixFlake#\"necro@$HOSTNAME\"";
       sys-switch = "sudo nixos-rebuild switch --flake ~/nixFlake#$HOSTNAME";
+      nvidia-settings = "nvidia-settings --config='${config.xdg.configHome}/nvidia/settings'";
     };
 
     #-----------------------------------------------------------------
@@ -66,6 +69,12 @@ in {
       XCURSOR_THEME = cursorName;
       XCURSOR_SIZE = toString cursorSize;
       TERMINAL = MyTerminal;
+
+      # Redireccion XDG para dotfiles de historial
+      HISTFILE = "$XDG_STATE_HOME/bash/history";
+      IPYTHONDIR = "$XDG_CONFIG_HOME/ipython";
+      NODE_REPL_HISTORY = "$XDG_DATA_HOME/node_repl_history";
+      PYTHON_HISTORY = "$XDG_STATE_HOME/python_history";
     };
 
     #-----------------------------------------------------------------
@@ -97,6 +106,8 @@ in {
       myScripts.clipboard       # Historial del portapapeles con fuzzel.
       myScripts.niri-wallpaper  # Gestor de fondos con blur + awww.
       myScripts.spotify-startup # Lanzador condicional (Flatpak/nativo).
+      myScripts.move-hidden-files   # Migracion unica de dotfiles a .hidden/.
+      myScripts.watch-hidden-files  # Vigilancia en tiempo real con inotify.
     ];
   };
 
@@ -110,6 +121,7 @@ in {
     bash = {
       enable = true;
       enableCompletion = true;
+      historyFile = "$XDG_STATE_HOME/bash/history";
     };
 
     starship = {
@@ -118,9 +130,23 @@ in {
     };
 
     direnv = {
-      enable = true;              # Carga automática de .envrc.
+      enable = true;
       enableBashIntegration = true;
-      nix-direnv.enable = true;   # Caché de direnv para flakes.
+      nix-direnv.enable = true;
+    };
+
+    git = {
+      enable = true;
+      settings = {
+        user.name = secrets.gitUserName;
+        user.email = secrets.gitUserEmail;
+        credential."https://github.com".helper = [ "" "!${config.home.homeDirectory}/.nix-profile/bin/.gh-wrapped auth git-credential" ];
+        credential."https://gist.github.com".helper = [ "" "!${config.home.homeDirectory}/.nix-profile/bin/.gh-wrapped auth git-credential" ];
+      };
+    };
+
+    ssh = {
+      enable = true;
     };
   };
 
@@ -209,5 +235,6 @@ in {
     ../modules/nvim.nix      # Neovim aislado con LSPs.
     ../modules/wlogout.nix   # Menú de apagado/reinicio.
     ../modules/systemd.nix   # wlsunset (filtro luz azul + timer 10PM).
+    ../modules/hidden-dotfiles.nix  # Gestion de dotfiles en .hidden/.
   ];
 }

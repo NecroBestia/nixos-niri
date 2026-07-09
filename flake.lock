@@ -74,7 +74,21 @@
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nixpkgs-kernel": "nixpkgs-kernel",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "secrets-config": "secrets-config"
+      }
+    },
+    "secrets-config": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783633438,
+        "narHash": "sha256-X7ARrYgN4w7SGJWjaSFcFfDf9/BS6RqQyKb2wSk4KZg=",
+        "path": "/home/necro/.config/nixFlake/secrets.json",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/necro/.config/nixFlake/secrets.json",
+        "type": "path"
       }
     }
   },
