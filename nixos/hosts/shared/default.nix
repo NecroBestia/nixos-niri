@@ -92,4 +92,7 @@
   # Desactiva el gestor de sesión Xterm por defecto.
   services.xserver.desktopManager.xterm.enable = false;
   services.xserver.excludePackages = [ pkgs.xterm ];
+
+  # Activa uso de contenedores 
+  programs.containers.enable = true; 
 }
