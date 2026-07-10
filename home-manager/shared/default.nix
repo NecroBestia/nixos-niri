@@ -84,7 +84,7 @@ in {
     packages = with pkgs; [
       # Sistema y Terminal
       kitty starship fastfetch htop tree curl nil direnv
-      nix-direnv libreoffice gh
+      nix-direnv libreoffice gh 
 
       # Entorno Gráfico Wayland
       wlsunset playerctl wl-clipboard awww swayidle swaybg
