@@ -103,6 +103,7 @@ in {
       myScripts.clipboard       # Historial del portapapeles con fuzzel.
       myScripts.niri-wallpaper  # Gestor de fondos con blur + awww.
       myScripts.spotify-startup # Lanzador condicional (Flatpak/nativo).
+      myScripts.niri-symlinks   # Creador de enlaces simbólicos.
     ];
   };
 
@@ -176,9 +177,47 @@ in {
           - Propose a version bump (patch/minor/major)
           - Provide a copy-pasteable `gh release create` command
         '';
+
+        # UI/UX — Diseño visual de sitios web
+        frontend-design = builtins.path { path = "${inputs.anthropic-skills}/skills/frontend-design"; };
+        ui-ux-pro-max = builtins.path { path = "${inputs.opencode-kit}/.opencode/skills/ui-ux-pro-max"; };
+        ui-ux-designer = builtins.path { path = "${inputs.opencode-6-2026}/opencode-config/skill-libraries/web-development/ui-ux-designer"; };
+        ui-ux-design-review = builtins.path { path = "${inputs.tutiendaweb-public}/.opencode/skills/ui-ux-design-review"; };
+        frontend-ui-ux = builtins.path { path = "${inputs.oh-my-opencode}/packages/shared-skills/skills/frontend"; };
+        typeui = builtins.path { path = "${inputs.typeui}/plugins/openclaw/typeui/skills/typeui"; };
+
+        # Next.js / Node.js — Rendimiento y buenas prácticas
+        react-best-practices = builtins.path { path = "${inputs.vercel-skills}/skills/react-best-practices"; };
+
+        # Skills de desarrollo (Anthropic oficiales)
+        mcp-builder = builtins.path { path = "${inputs.anthropic-skills}/skills/mcp-builder"; };
+        webapp-testing = builtins.path { path = "${inputs.anthropic-skills}/skills/webapp-testing"; };
+
+        # Utilidades
+        stop-slop = builtins.path { path = inputs.stop-slop; };
+        composio-cli = builtins.path { path = "${inputs.composio-skills}/skills/composio-cli"; };
       };
 
-      settings = { };
+      settings = {
+        plugin = [
+          "superpowers@git+https://github.com/obra/superpowers.git"
+          "opencode-command-inject"
+          "FlowDeck"
+          "@forloop-cc/forloop-opencode-plugin-planner"
+          "opencode-worktree"
+          "opencode-agent-memory"
+          "oh-my-opencode-slim"
+          "opencode-notify"
+          "opencode-dynamic-context-pruning"
+        ];
+
+        mcp = {
+          context7 = {
+            type = "local";
+            command = ["npx" "-y" "@upstash/context7-mcp"];
+          };
+        };
+      };
     };
   };
 

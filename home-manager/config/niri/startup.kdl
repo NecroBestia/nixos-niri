@@ -1,5 +1,6 @@
 spawn-at-startup "waybar"
 spawn-at-startup "awww-daemon"
+spawn-at-startup "niri-symlinks"
 spawn-at-startup "niri-wallpaper"
 spawn-at-startup "opensnitch-ui"
 spawn-at-startup "spotify-startup"  

@@ -47,6 +47,44 @@
       url = "github:vercel-labs/agent-skills";
       flake = false;
     };
+
+    # Skills UI/UX — Diseño visual de sitios web.
+    anthropic-skills = {
+      url = "github:anthropics/skills";
+      flake = false;
+    };
+    opencode-kit = {
+      url = "github:skeletorflet/opencode-kit";
+      flake = false;
+    };
+    opencode-6-2026 = {
+      url = "github:mohamednaeem92-max/OPENCODE-6-2026";
+      flake = false;
+    };
+    tutiendaweb-public = {
+      url = "github:MaxiAramayo/TuTiendaWeb-public";
+      flake = false;
+    };
+    oh-my-opencode = {
+      url = "github:code-yeongyu/oh-my-opencode";
+      flake = false;
+    };
+    typeui = {
+      url = "github:bergside/typeui";
+      flake = false;
+    };
+
+    # stop-slop — Elimina clichés y marcas de IA de textos.
+    stop-slop = {
+      url = "github:hardikpandya/stop-slop";
+      flake = false;
+    };
+
+    # Composio — 1000+ integraciones SaaS como skill + MCP.
+    composio-skills = {
+      url = "github:composio-community/opencode-skills";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-kernel, home-manager, ... } @ inputs:
