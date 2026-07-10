@@ -9,7 +9,7 @@
 #   themeName, cursorName, cursorSize, MyTerminal → Cambia aquí
 #   y se refleja en GTK, Qt, shell, y atajos.
 #===================================================================
-{ config, pkgs, pkgs-unstable, ... }:
+{ config, pkgs, pkgs-unstable, inputs, ... }:
 let
   themeName = "Colloid-Dark";
   cursorName = "Bibata-Modern-Ice";
@@ -98,7 +98,6 @@ in {
       pkgs-unstable.obsidian   # Notas Markdown con graph view.
       pkgs-unstable.vscodium   # VS Code sin telemetría.
       pkgs-unstable.xournalpp  # Anotaciones en PDF.
-      pkgs-unstable.opencode   # Cliente de Claude para terminal.
 
       # Scripts locales
       myScripts.clipboard       # Historial del portapapeles con fuzzel.
@@ -143,6 +142,43 @@ in {
 
     ssh = {
       enable = true;
+      enableDefaultConfig = false;
+      settings."*" = {
+        ForwardAgent = false;
+        AddKeysToAgent = "no";
+        Compression = false;
+        ServerAliveInterval = 0;
+        ServerAliveCountMax = 3;
+        HashKnownHosts = false;
+        UserKnownHostsFile = "~/.ssh/known_hosts";
+        ControlMaster = "no";
+        ControlPath = "~/.ssh/master-%r@%n:%p";
+        ControlPersist = "no";
+      };
+    };
+
+    opencode = {
+      enable = true;
+      package = pkgs-unstable.opencode;
+
+      skills = {
+        nixos = builtins.path { path = inputs.nixos-skill; };
+
+        web-design-guidelines = builtins.path { path = "${inputs.vercel-skills}/skills/web-design-guidelines"; };
+
+        git-release = ''
+          ---
+          name: git-release
+          description: Create consistent releases and changelogs from merged PRs
+          ---
+          ## What I do
+          - Draft release notes from merged PRs
+          - Propose a version bump (patch/minor/major)
+          - Provide a copy-pasteable `gh release create` command
+        '';
+      };
+
+      settings = { };
     };
   };
 

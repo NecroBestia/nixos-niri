@@ -29,7 +29,6 @@
 # Útil en portátiles que cambian de red frecuentemente.
 #===================================================================
 { config, pkgs, pkgs-unstable, lib, ... }: {
-  networking.nftables.enable = true; 
   #DNS mas segura y privada. 
   networking.nameservers = [ "9.9.9.9" ];
   #Configuracion Firewall

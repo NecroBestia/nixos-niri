@@ -25,7 +25,7 @@
     };
   };
 
-  boot.supportedFilesystems = [ "ntfs" "ntfs3" ];
+  boot.supportedFilesystems = [ "ntfs3" ];
   boot.plymouth.enable = false;
 
   boot.initrd.systemd.enable = true;

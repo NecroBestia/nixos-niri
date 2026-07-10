@@ -32,7 +32,7 @@
         sddm-astronaut
         kdePackages.qtmultimedia
         kdePackages.qtsvg
-        kdePackages.qt5compat
+        qt6.qt5compat
       ];
     };
   };

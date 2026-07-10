@@ -35,7 +35,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    xdg.configFile."niri/".source = lib.mkForce ../config/niri;
+    xdg.configFile."niri/".source = ../config/niri;
 
     home.packages = [ pkgs.gcr ];
 
@@ -49,7 +49,7 @@ in {
 
       swayidle = {
         enable = true;
-        systemdTarget = "graphical-session.target";
+        systemdTargets = [ "graphical-session.target" ];
         extraArgs = [
           "-w"
           "timeout" "600" "swaylock -f"

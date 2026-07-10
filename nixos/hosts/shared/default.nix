@@ -6,7 +6,7 @@
 # (ej: vm.libvirtd = false en notebook, opensnitch = false en notebook).
 # Tambíén define configuraciones base como fonts, nix, seguridad, etc.
 #===================================================================
-{ pkgs, ... }: {
+{ config, pkgs, lib, ... }: {
   #-----------------------------------------------------------------
   # MÓDULOS IMPORTADOS (Aplican a ambos hosts)
   #-----------------------------------------------------------------
@@ -40,7 +40,8 @@
   users.users.necro = {
     isNormalUser = true;
     description = "necro";
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" "docker" "input" "storage" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "input" "storage" ]
+      ++ lib.optionals (config.programs.containers.backend == "docker") [ "docker" ];
   };
 
   #-----------------------------------------------------------------
@@ -104,6 +105,4 @@
   services.xserver.desktopManager.xterm.enable = false;
   services.xserver.excludePackages = [ pkgs.xterm ];
 
-  # Activa uso de contenedores 
-  programs.containers.enable = true; 
 }

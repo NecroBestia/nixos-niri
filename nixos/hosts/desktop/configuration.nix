@@ -16,7 +16,7 @@ let
   # más nuevo rompe la compatibilidad.
   # Se importa de un nixpkgs específico (rev d756e13).
   pkgs-kernel = import inputs.nixpkgs-kernel {
-    inherit (pkgs) system;
+    inherit (pkgs.stdenv.hostPlatform) system;
     config.allowUnfree = true;
   };
 in
@@ -43,7 +43,6 @@ in
   #-----------------------------------------------------------------
   # SERVICIOS
   #-----------------------------------------------------------------
-  programs.dconf.enable = true;           # Necesario para virt-manager, etc.
   hardware.opentabletdriver.enable = true; # Driver para tabletas gráficas.
 
   #-----------------------------------------------------------------

@@ -35,6 +35,18 @@
     # (6.18.13) para mantener compatibilidad con el driver.
     # No actualizar sin verificar compatibilidad.
     nixpkgs-kernel.url = "github:NixOS/nixpkgs/d756e131ad4cc63b6e0dde373fbae0ce4ce9d683";
+
+    # Skill NixOS completo con referencias oficiales (SKILL.md + docs).
+    nixos-skill = {
+      url = "github:marceloeatworld/nixos-ai-skill";
+      flake = false;
+    };
+
+    # Skills de Vercel (web-design-guidelines, composition-patterns, etc).
+    vercel-skills = {
+      url = "github:vercel-labs/agent-skills";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-kernel, home-manager, ... } @ inputs:

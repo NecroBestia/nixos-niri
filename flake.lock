@@ -21,6 +21,22 @@
         "type": "github"
       }
     },
+    "nixos-skill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783590168,
+        "narHash": "sha256-tT65FGioWOB/r235avvLAx9AsboeMkpsEffsLopRoDY=",
+        "owner": "marceloeatworld",
+        "repo": "nixos-ai-skill",
+        "rev": "2ab72f42c4a931f609a31b8b94b8bbb7a90efd4a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "marceloeatworld",
+        "repo": "nixos-ai-skill",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1780902259,
@@ -72,9 +88,27 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
+        "nixos-skill": "nixos-skill",
         "nixpkgs": "nixpkgs",
         "nixpkgs-kernel": "nixpkgs-kernel",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "vercel-skills": "vercel-skills"
+      }
+    },
+    "vercel-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781126507,
+        "narHash": "sha256-LSFC0Zxc4Lgisu5/r6qBF1R0X36hePkVPfbvbx48YdY=",
+        "owner": "vercel-labs",
+        "repo": "agent-skills",
+        "rev": "f8a72b9603728bb92a217a879b7e62e43ad76c81",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vercel-labs",
+        "repo": "agent-skills",
+        "type": "github"
       }
     }
   },
