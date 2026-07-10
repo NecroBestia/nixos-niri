@@ -7,7 +7,7 @@
 # Waybar del notebook usa grupos colapsables para ahorrar espacio
 # horizontal en la pantalla 1366x768.
 #===================================================================
-{ pkgs, ... }: {
+{ lib, pkgs, ... }: {
   imports = [
     ../../shared/default.nix
   ];
@@ -22,4 +22,7 @@
 
   # Configuración de Waybar específica del portátil (grupos colapsables).
   xdg.configFile."waybar/config.jsonc".source = ../../config/waybar/configNotebook.jsonc;
+
+  # Wlogout: CSS compacto para pantalla 1366x768 (sobrescribe el compartido).
+  home.file.".config/wlogout/style.css".source = lib.mkForce ../../config/wlogout/styleNotebook.css;
 }
