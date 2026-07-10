@@ -17,8 +17,9 @@
 # Los plugins se definen en lua/pack/sources.lua y se cachean
 # en nvim-pack-lock.json.
 #
-# NOTA: La ruta del symlink es absoluta (mkOutOfStoreSymlink).
-# Si se mueve el flake, actualizar la ruta.
+# NOTA: La ruta es relativa al flake. Editar los archivos en
+# config/neovim/ requiere ejecutar home-manager switch para
+# que los cambios tomen efecto.
 #===================================================================
 { config, pkgs, pkgs-unstable, ... }:
 
@@ -46,8 +47,7 @@ in {
     custom-neovim
   ];
 
-  home.file.".config/nvim".source =
-    config.lib.file.mkOutOfStoreSymlink "/home/necro/nixFlake/home-manager/config/neovim";
+  home.file.".config/nvim".source = ../config/neovim;
 
   home.shellAliases = {
     vi = "nvim";

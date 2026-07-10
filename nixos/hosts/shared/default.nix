@@ -32,6 +32,17 @@
   #-----------------------------------------------------------------
   console.keyMap = "la-latin1";
 
+  networking.networkmanager.enable = true;
+
+  #-----------------------------------------------------------------
+  # USUARIO
+  #-----------------------------------------------------------------
+  users.users.necro = {
+    isNormalUser = true;
+    description = "necro";
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "docker" "input" "storage" ];
+  };
+
   #-----------------------------------------------------------------
   # FUENTES DEL SISTEMA
   #-----------------------------------------------------------------

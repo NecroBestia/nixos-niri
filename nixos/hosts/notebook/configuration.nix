@@ -19,7 +19,6 @@
   # IDENTIDAD
   #-----------------------------------------------------------------
   networking.hostName = "notebook";
-  networking.networkmanager.enable = true;
 
   #-----------------------------------------------------------------
   # TECLADO
@@ -28,7 +27,6 @@
     layout = "latam";
     variant = "";
   };
-  console.keyMap = "la-latin1";
 
   #-----------------------------------------------------------------
   # OPTIMIZACIONES ThinkPad
@@ -60,15 +58,6 @@
     "w /sys/class/power_supply/BAT0/charge_control_start_threshold - - - - 75"
     "w /sys/class/power_supply/BAT0/charge_control_end_threshold   - - - - 80"
   ];
-
-  #-----------------------------------------------------------------
-  # USUARIO PRINCIPAL
-  #-----------------------------------------------------------------
-  users.users.necro = {
-    isNormalUser = true;
-    description = "necro";
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" "docker" "input" "storage" ];
-  };
 
   #-----------------------------------------------------------------
   # PAQUETES DE SISTEMA (Portátil)

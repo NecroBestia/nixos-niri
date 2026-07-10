@@ -9,10 +9,8 @@
 #   themeName, cursorName, cursorSize, MyTerminal → Cambia aquí
 #   y se refleja en GTK, Qt, shell, y atajos.
 #===================================================================
-{ config, pkgs, pkgs-unstable, inputs, ... }:
+{ config, pkgs, pkgs-unstable, ... }:
 let
-  # Secrets importados desde flake input (path externo no trackeado).
-  secrets = builtins.fromJSON (builtins.readFile inputs.secrets-config);
   themeName = "Colloid-Dark";
   cursorName = "Bibata-Modern-Ice";
   cursorSize = 24;
@@ -106,8 +104,6 @@ in {
       myScripts.clipboard       # Historial del portapapeles con fuzzel.
       myScripts.niri-wallpaper  # Gestor de fondos con blur + awww.
       myScripts.spotify-startup # Lanzador condicional (Flatpak/nativo).
-      myScripts.move-hidden-files   # Migracion unica de dotfiles a .hidden/.
-      myScripts.watch-hidden-files  # Vigilancia en tiempo real con inotify.
     ];
   };
 
@@ -121,7 +117,7 @@ in {
     bash = {
       enable = true;
       enableCompletion = true;
-      historyFile = "$XDG_STATE_HOME/bash/history";
+      historyFile = "${config.xdg.stateHome}/bash/history";
     };
 
     starship = {
@@ -138,8 +134,8 @@ in {
     git = {
       enable = true;
       settings = {
-        user.name = secrets.gitUserName;
-        user.email = secrets.gitUserEmail;
+        user.name = "necrobestia";
+        user.email = "necrobestiaa@gmail.com";
         credential."https://github.com".helper = [ "" "!${config.home.homeDirectory}/.nix-profile/bin/.gh-wrapped auth git-credential" ];
         credential."https://gist.github.com".helper = [ "" "!${config.home.homeDirectory}/.nix-profile/bin/.gh-wrapped auth git-credential" ];
       };
@@ -235,6 +231,5 @@ in {
     ../modules/nvim.nix      # Neovim aislado con LSPs.
     ../modules/wlogout.nix   # Menú de apagado/reinicio.
     ../modules/systemd.nix   # wlsunset (filtro luz azul + timer 10PM).
-    ../modules/hidden-dotfiles.nix  # Gestion de dotfiles en .hidden/.
   ];
 }

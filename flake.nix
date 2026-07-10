@@ -35,12 +35,6 @@
     # (6.18.13) para mantener compatibilidad con el driver.
     # No actualizar sin verificar compatibilidad.
     nixpkgs-kernel.url = "github:NixOS/nixpkgs/d756e131ad4cc63b6e0dde373fbae0ce4ce9d683";
-
-    # Secrets locales (fuera del repo — ~/.config/nixFlake/secrets.json).
-    secrets-config = {
-      url = "path:/home/necro/.config/nixFlake/secrets.json";
-      flake = false;
-    };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-kernel, home-manager, ... } @ inputs:

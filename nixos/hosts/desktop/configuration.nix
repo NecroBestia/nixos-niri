@@ -39,20 +39,6 @@ in
   # IDENTIDAD
   #-----------------------------------------------------------------
   networking.hostName = "desktop";
-  networking.networkmanager.enable = true;
-
-  #-----------------------------------------------------------------
-  # USUARIO PRINCIPAL
-  #-----------------------------------------------------------------
-  users.users.necro = {
-    isNormalUser = true;
-    description = "necro";
-    extraGroups = [
-      "networkmanager" "wheel" "video" "audio"
-      "docker" "input" "storage"
-    ];
-    shell = pkgs.bash;
-  };
 
   #-----------------------------------------------------------------
   # SERVICIOS
