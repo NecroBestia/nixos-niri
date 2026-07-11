@@ -54,7 +54,7 @@
   '';
 
   #-----------------------------------------------------------------
-  # niri-wallpaper — Gestor de Fondos con Blur
+  # niri-wallpaper — Gestor de Fondos (awww + swaybg blur)
   #-----------------------------------------------------------------
   niri-wallpaper = pkgs.writeShellScriptBin "niri-wallpaper" ''
     AWWW="${pkgs.awww}/bin/awww"
@@ -73,11 +73,33 @@
 
     mkdir -p "$CACHE_BLUR_DIR"
 
-    WALLPAPER=""
+    # ──────────────────────────────────────────────
+    # 1. ESPERAR A QUE EXISTA EL DIRECTORIO
+    #    Niri lanza niri-symlinks y niri-wallpaper
+    #    en paralelo. Si el symlink no existe aún,
+    #    el script espera hasta 5s.
+    # ──────────────────────────────────────────────
+    if [ ! -d "$WALLPAPER_DIR" ]; then
+        for i in 1 2 3 4 5 6 7 8 9 10; do
+            [ -d "$WALLPAPER_DIR" ] && break
+            sleep 0.5
+        done
+    fi
 
+    # Fallback: ruta directa si el symlink falla
+    if [ ! -d "$WALLPAPER_DIR" ]; then
+        WALLPAPER_DIR="$HOME/nixFlake/wallpapers"
+    fi
+
+    # ──────────────────────────────────────────────
+    # 2. ELEGIR WALLPAPER ALEATORIO
+    #    find -L es clave: sigue symlinks, si no
+    #    no encuentra archivos en el directorio.
+    # ──────────────────────────────────────────────
+    WALLPAPER=""
     while true; do
         if [ ! -s "$PLAYLIST" ]; then
-            $FIND "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" \) | $SHUF > "$PLAYLIST"
+            $FIND -L "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" \) | $SHUF > "$PLAYLIST"
         fi
 
         WALLPAPER=$($HEAD -n 1 "$PLAYLIST")
@@ -89,34 +111,53 @@
     done
 
     if [ -z "$WALLPAPER" ]; then
+        notify-send "niri-wallpaper" "No hay wallpapers en $WALLPAPER_DIR" -t 5000
         exit 1
     fi
 
+    # ──────────────────────────────────────────────
+    # 3. GENERAR VERSIÓN BORROSA EN CACHÉ
+    #    Para el overview de niri (swaybg la muestra)
+    # ──────────────────────────────────────────────
     WALL_HASH=$(echo "$WALLPAPER" | $MD5SUM | cut -d' ' -f1)
     CACHED_PHOTO="$CACHE_BLUR_DIR/$WALL_HASH.jpg"
 
     if [ ! -f "$CACHED_PHOTO" ]; then
         if ! $MAGICK "$WALLPAPER" -filter Triangle -resize 140% -blur 0x6 "$CACHED_PHOTO"; then
+            notify-send "niri-wallpaper" "Error generando blur" -t 3000
             exit 1
         fi
     fi
 
     cp "$CACHED_PHOTO" "$OVERVIEW_WALL_TMP"
 
+    # ──────────────────────────────────────────────
+    # 4. ESPERAR A QUE awww-daemon ESTÉ LISTO
+    # ──────────────────────────────────────────────
     MAX_INTENTOS=10
     INTENTO=0
     until $AWWW query >/dev/null 2>&1; do
         if [ $INTENTO -ge $MAX_INTENTOS ]; then
+            notify-send "niri-wallpaper" "awww-daemon no responde" -t 5000
             exit 1
         fi
         sleep 0.5
         INTENTO=$((INTENTO+1))
     done
 
+    # ──────────────────────────────────────────────
+    # 5. ESTABLECER WALLPAPER
+    #    awww: transición animada (fade).
+    #    swaybg: fondo estático blur para overview.
+    #    swaybg arranca DESPUÉS, así que el blur
+    #    es lo que se muestra en todo momento.
+    # ──────────────────────────────────────────────
     $AWWW img "$WALLPAPER" --transition-type fade
 
-    pkill swaybg || true
+    pkill swaybg 2>/dev/null || true
     $SWAYBG -i "$OVERVIEW_WALL_TMP" -m fill &
+
+    notify-send "Wallpaper" " $(basename "$WALLPAPER")" -t 3000
   '';
 
   #-----------------------------------------------------------------

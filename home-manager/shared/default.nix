@@ -84,7 +84,7 @@ in {
     packages = with pkgs; [
       # Sistema y Terminal
       kitty starship fastfetch htop tree curl nil direnv
-      nix-direnv libreoffice gh 
+      nix-direnv libreoffice gh libnotify 
 
       # Entorno Gráfico Wayland
       wlsunset playerctl wl-clipboard awww swayidle swaybg
@@ -158,67 +158,6 @@ in {
       };
     };
 
-    opencode = {
-      enable = true;
-      package = pkgs-unstable.opencode;
-
-      skills = {
-        nixos = builtins.path { path = inputs.nixos-skill; };
-
-        web-design-guidelines = builtins.path { path = "${inputs.vercel-skills}/skills/web-design-guidelines"; };
-
-        git-release = ''
-          ---
-          name: git-release
-          description: Create consistent releases and changelogs from merged PRs
-          ---
-          ## What I do
-          - Draft release notes from merged PRs
-          - Propose a version bump (patch/minor/major)
-          - Provide a copy-pasteable `gh release create` command
-        '';
-
-        # UI/UX — Diseño visual de sitios web
-        frontend-design = builtins.path { path = "${inputs.anthropic-skills}/skills/frontend-design"; };
-        ui-ux-pro-max = builtins.path { path = "${inputs.opencode-kit}/.opencode/skills/ui-ux-pro-max"; };
-        ui-ux-designer = builtins.path { path = "${inputs.opencode-6-2026}/opencode-config/skill-libraries/web-development/ui-ux-designer"; };
-        ui-ux-design-review = builtins.path { path = "${inputs.tutiendaweb-public}/.opencode/skills/ui-ux-design-review"; };
-        frontend-ui-ux = builtins.path { path = "${inputs.oh-my-opencode}/packages/shared-skills/skills/frontend"; };
-        typeui = builtins.path { path = "${inputs.typeui}/plugins/openclaw/typeui/skills/typeui"; };
-
-        # Next.js / Node.js — Rendimiento y buenas prácticas
-        react-best-practices = builtins.path { path = "${inputs.vercel-skills}/skills/react-best-practices"; };
-
-        # Skills de desarrollo (Anthropic oficiales)
-        mcp-builder = builtins.path { path = "${inputs.anthropic-skills}/skills/mcp-builder"; };
-        webapp-testing = builtins.path { path = "${inputs.anthropic-skills}/skills/webapp-testing"; };
-
-        # Utilidades
-        stop-slop = builtins.path { path = inputs.stop-slop; };
-        composio-cli = builtins.path { path = "${inputs.composio-skills}/skills/composio-cli"; };
-      };
-
-      settings = {
-        plugin = [
-          "superpowers@git+https://github.com/obra/superpowers.git"
-          "opencode-command-inject"
-          "FlowDeck"
-          "@forloop-cc/forloop-opencode-plugin-planner"
-          "opencode-worktree"
-          "opencode-agent-memory"
-          "oh-my-opencode-slim"
-          "opencode-notify"
-          "opencode-dynamic-context-pruning"
-        ];
-
-        mcp = {
-          context7 = {
-            type = "local";
-            command = ["npx" "-y" "@upstash/context7-mcp"];
-          };
-        };
-      };
-    };
   };
 
   #-----------------------------------------------------------------
@@ -306,5 +245,6 @@ in {
     ../modules/nvim.nix      # Neovim aislado con LSPs.
     ../modules/wlogout.nix   # Menú de apagado/reinicio.
     ../modules/systemd.nix   # wlsunset (filtro luz azul + timer 10PM).
+    ../modules/opencode.nix  # opencode (skills, plugins, MCPs).
   ];
 }

@@ -10,18 +10,26 @@
 #   home-manager/   → Configuración de usuario (Home Manager).
 #   ├── hosts/      → Por máquina (desktop, notebook).
 #   ├── shared/     → Común a ambas máquinas.
-#   ├── modules/    → Módulos funcionales (niri, firefox, etc.).
+#   ├── modules/    → Módulos funcionales (niri, firefox, opencode...).
+#   │   ├── ai-inputs.nix  → Inputs de skills IA (importado abajo).
+#   │   └── opencode.nix   → Config de opencode (skills, plugins, MCP).
 #   └── config/     → Archivos dotfiles (waybar, niri, kitty...).
 #===================================================================
 {
   description = "Flake NixOS + Home Manager (Desktop & Notebook)";
 
+  #===================================================================
+  # INPUTS DEL SISTEMA
+  #===================================================================
+  # Estos inputs son la base del sistema operativo y no deben
+  # modificarse sin verificar compatibilidad.
+  #===================================================================
   inputs = {
     # Rama ESTABLE de NixOS (usada como base del sistema).
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
     # Rama UNSTABLE para paquetes que necesitan versión reciente
-    # (niri, neovim, krita, obsidian, vscodium, etc.).
+    # (niri, neovim, krita, obsidian, vscodium, opencode, etc.).
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     # Home Manager sincronizado con la rama estable de nixpkgs.
@@ -36,39 +44,57 @@
     # No actualizar sin verificar compatibilidad.
     nixpkgs-kernel.url = "github:NixOS/nixpkgs/d756e131ad4cc63b6e0dde373fbae0ce4ce9d683";
 
-    # Skill NixOS completo con referencias oficiales (SKILL.md + docs).
+    #===================================================================
+    # INPUTS DE SKILLS IA
+    #===================================================================
+    # Ver home-manager/modules/ai-inputs.nix para documentación
+    # detallada de cada input. Los inputs deben definirse aquí
+    # porque el schema de flake no permite importarlos.
+    #===================================================================
+
+    # NixOS — Skill oficial con documentación completa del sistema.
     nixos-skill = {
       url = "github:marceloeatworld/nixos-ai-skill";
       flake = false;
     };
 
-    # Skills de Vercel (web-design-guidelines, composition-patterns, etc).
+    # Vercel — Skills de diseño web y buenas prácticas React/Next.js.
     vercel-skills = {
       url = "github:vercel-labs/agent-skills";
       flake = false;
     };
 
-    # Skills UI/UX — Diseño visual de sitios web.
+    # Anthropic — Skills oficiales de desarrollo (MCP, testing, frontend).
     anthropic-skills = {
       url = "github:anthropics/skills";
       flake = false;
     };
+
+    # opencode-kit — Skills UI/UX adicionales.
     opencode-kit = {
       url = "github:skeletorflet/opencode-kit";
       flake = false;
     };
+
+    # OPENCODE-6-2026 — Skills de diseño UI/UX.
     opencode-6-2026 = {
       url = "github:mohamednaeem92-max/OPENCODE-6-2026";
       flake = false;
     };
+
+    # TuTiendaWeb — Skills de revisión de diseño UI/UX.
     tutiendaweb-public = {
       url = "github:MaxiAramayo/TuTiendaWeb-public";
       flake = false;
     };
+
+    # oh-my-opencode — Skills de frontend compartidas.
     oh-my-opencode = {
       url = "github:code-yeongyu/oh-my-opencode";
       flake = false;
     };
+
+    # TypeUI — Skills de diseño con paletas y layouts.
     typeui = {
       url = "github:bergside/typeui";
       flake = false;
