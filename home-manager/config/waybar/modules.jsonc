@@ -111,7 +111,7 @@
 		"format": "{usage}% 󰍛",
 		"interval": 1,
 		"min-length": 5,
-		"on-click-right": "gnome-system-monitor"
+		"on-click-right": "kitty -e htop"
 	},
   "custom/luz-azul": {
     "format":"{}",
