@@ -31,9 +31,6 @@
   #-----------------------------------------------------------------
   # OPTIMIZACIONES ThinkPad
   #-----------------------------------------------------------------
-  # acpi_call: Permite controlar la carga de la batería.
-  boot.kernelModules = [ "acpi_call" ];
-  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
 
   # thermald: Termal daemon de Intel para evitar throttling.
   services.thermald.enable = true;
