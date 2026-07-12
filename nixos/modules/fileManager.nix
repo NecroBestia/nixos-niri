@@ -25,7 +25,6 @@
     environment.systemPackages = with pkgs; [
       nautilus
       gvfs
-      polkit_gnome
       udisks2
       gnome-autoar           # Compresión/descompresión ZIP, TAR, etc.
       gnome-desktop          # Thumbnails de imágenes y metadatos.
