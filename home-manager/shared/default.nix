@@ -83,7 +83,7 @@ in {
     # reciente). El resto usa nixpkgs estable.
     packages = with pkgs; [
       # Sistema y Terminal
-      kitty starship fastfetch htop tree curl nil direnv
+      kitty starship fastfetch tree curl nil direnv
       nix-direnv libreoffice gh libnotify 
 
       # Entorno Gráfico Wayland
