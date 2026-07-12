@@ -31,8 +31,6 @@
       gnome-desktop          # Thumbnails de imágenes y metadatos.
       ffmpegthumbnailer      # Thumbnails de videos.
       poppler-utils          # Thumbnails de PDFs.
-      ntfs3g                 # Driver NTFS userspace (respaldo).
-      exfat                  # Soporte para discos exFAT.
       xdg-user-dirs          # Directorios estándar del usuario.
       adwaita-icon-theme     # Iconos base de GNOME.
       shared-mime-info       # Tipos MIME del sistema.
