@@ -9,7 +9,7 @@
 # DEPENDENCIAS INCLUIDAS:
 #   - Compilación: gcc, gnumake, unzip
 #   - LSPs: clangd (C/C++), nil (Nix), pyright (Python),
-#     rust-analyzer (Rust), tree-sitter
+#     rust-analyzer (Rust), lua_ls (Lua), texlab (LaTeX), tree-sitter
 #   - Utilidades: ripgrep, fd (búsqueda), curl, git
 #   - Portapapeles: wl-clipboard, xclip
 #
@@ -28,6 +28,7 @@ let
     gcc gnumake unzip wget curl git ripgrep fd
     wl-clipboard xclip
     clang-tools nil pyright rust-analyzer nodejs pkgs-unstable.tree-sitter
+    lua-language-server texlab texlive.combined.scheme-medium
   ];
 
   custom-neovim = pkgs.symlinkJoin {
