@@ -275,10 +275,14 @@ in {
     ".config/zathura/zathurarc".source  = ../config/zathura/zathurarc;
 
     # Thumbnailer para PDF (pdftoppm viene con poppler-utils)
+    # Flags clave:
+    #   -singlefile | Solo primera página (antes renderizaba todas → lento)
+    #   -f 1 -l 1   | Refuerza página única
+    #   sh wrapper  | Saca .png de %o porque pdftoppm lo agrega solo
     ".local/share/thumbnailers/pdf-thumbnailer.thumbnailer".text = ''
       [Thumbnailer Entry]
       TryExec=pdftoppm
-      Exec=pdftoppm -png -scale-to 1024 %i %o
+      Exec=sh -c 'exec pdftoppm -png -scale-to 1024 -singlefile -f 1 -l 1 "$1" "$(dirname "$2")/$(basename "$2" .png)"' -- %i %o
       MimeType=application/pdf;
     '';
 

@@ -70,6 +70,12 @@ in {
         "opencode-command-inject"
         "opencode-worktree"
         "opencode-agent-memory"
+        "opencode-context-cache"
+        "@ramtinj95/opencode-tokenscope"
+        "opencode-deepseek-cache@latest"
+        # DCP: Comprime contexto dinámicamente (dedup + resumen).
+        # Puede reducir cache hits (~85% con DCP vs ~95% sin él).
+        # Comentar la línea de abajo para deshabilitar y comparar.
         "opencode-dynamic-context-pruning"
       ];
 
@@ -78,6 +84,73 @@ in {
           type = "local";
           command = ["npx" "-y" "@upstash/context7-mcp"];
           enabled = false;  # Bajo demanda para no ralentizar el startup
+        };
+      };
+
+      #-----------------------------------------------------------------
+      # AGENTS — Subagentes especializados
+      #-----------------------------------------------------------------
+      # Usan system prompts estables para maximizar cache hits en DeepSeek
+      # (cada subagente arranca sesión nueva, pero el prefix se cachea si
+      # el prompt es consistente entre llamadas).
+      #-----------------------------------------------------------------
+      agent = {
+        code-reviewer = {
+          description = "Revisa código buscando bugs, seguridad y maintainability";
+          mode = "subagent";
+          hidden = true;
+          prompt = ''
+            Eres un code reviewer experto. Tu única responsabilidad es revisar código.
+
+            Reglas:
+            - Señalá bugs, problemas de seguridad, y malas prácticas
+            - Sugerí mejoras específicas con ejemplos de código
+            - Sé conciso y directo
+            - No escribas código nuevo, solo revisá el existente
+          '';
+          permission = {
+            edit = "deny";
+            bash."*" = "deny";
+          };
+        };
+
+        debugger = {
+          description = "Debuggea bugs sistemáticamente";
+          mode = "subagent";
+          hidden = true;
+          prompt = ''
+            Eres un debugger experto. Debuggeás problemas de forma sistemática.
+
+            Metodología:
+            1. Entendé el error y el contexto
+            2. Identificá la causa raíz con hipótesis concretas
+            3. Verificá cada hipótesis con comandos o lectura de código
+            4. Proponé la solución más simple
+          '';
+          permission = {
+            edit = "deny";
+          };
+        };
+
+        refactor = {
+          description = "Refactoriza código sin cambiar comportamiento";
+          mode = "subagent";
+          hidden = true;
+          prompt = ''
+            Eres un refactor engineer. Refactorizás código mejorando su estructura
+            sin cambiar comportamiento.
+
+            Principios:
+            - Mantené la semántica exacta
+            - Mejorá nombres de variables y funciones
+            - Extraé lógica repetida en funciones reutilizables
+            - Simplificá condicionales complejos
+            - No cambiés APIs públicas ni firmas de funciones
+          '';
+          permission = {
+            edit = "allow";
+            bash."*" = "deny";
+          };
         };
       };
     };
