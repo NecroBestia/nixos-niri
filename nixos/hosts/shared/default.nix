@@ -78,6 +78,11 @@
   nixpkgs.config.allowUnfree = true;  # Paquetes privativos.
 
   #-----------------------------------------------------------------
+  # GSETTINGS — Schemas para GLib (necesario para thumbnails, íconos)
+  #-----------------------------------------------------------------
+  environment.pathsToLink = [ "/share/gsettings-schemas" ];
+
+  #-----------------------------------------------------------------
   # SEGURIDAD
   #-----------------------------------------------------------------
   security = {
@@ -97,6 +102,7 @@
     sddm-astronaut # Tema para el gestor de sesión SDDM.
     htop           # Monitor de procesos interactivo.
     papirus-icon-theme  # Iconos para el escritorio.
+    glib           # gsettings CLI + schemas (necesario para thumbnails, íconos de carpeta).
   ];
 
   xdg.icons.enable = true;
