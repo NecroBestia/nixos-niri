@@ -35,9 +35,7 @@
   # thermald: Termal daemon de Intel para evitar throttling.
   services.thermald.enable = true;
 
-  # throttled: Gestión de límites de energía de la CPU (undo TDP).
   # FRENAR: En ThinkPads viejos evita que la CPU se ahogue.
-  services.throttled.enable = true;
 
   # fwupd: Actualización de firmware Lenovo/Linux desde el sistema.
   services.fwupd.enable = true;
