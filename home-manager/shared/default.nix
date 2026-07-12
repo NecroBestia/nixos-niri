@@ -273,6 +273,22 @@ in {
     ".config/fuzzel/fuzzel.ini".source  = ../config/fuzzel/fuzzel.ini;
     ".config/kitty/kitty.conf".source   = ../config/kitty/kitty.conf;
     ".config/zathura/zathurarc".source  = ../config/zathura/zathurarc;
+
+    # Thumbnailer para PDF (pdftoppm viene con poppler-utils)
+    ".local/share/thumbnailers/pdf-thumbnailer.thumbnailer".text = ''
+      [Thumbnailer Entry]
+      TryExec=pdftoppm
+      Exec=pdftoppm -png -scale-to 1024 %i %o
+      MimeType=application/pdf;
+    '';
+
+    # TUI plugins para OpenCode (sidebars de monitoreo)
+    ".config/opencode/tui.jsonc".text = builtins.toJSON {
+      plugin = [
+        "opencode-visual-cache@latest"
+        "opencode-subagent-statusline@latest"
+      ];
+    };
   };
 
   #-----------------------------------------------------------------
