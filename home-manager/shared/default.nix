@@ -98,6 +98,7 @@ in {
       pkgs-unstable.obsidian   # Notas Markdown con graph view.
       pkgs-unstable.vscodium   # VS Code sin telemetría.
       pkgs-unstable.xournalpp  # Anotaciones en PDF.
+      pkgs-unstable.opensnitch-ui # Firewall interactivo (GUI)
 
       # Scripts locales
       myScripts.clipboard       # Historial del portapapeles con fuzzel.

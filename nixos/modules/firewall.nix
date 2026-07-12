@@ -62,5 +62,4 @@
     };
   };
 
-  environment.systemPackages = lib.mkIf config.services.opensnitch.enable (with pkgs-unstable; [opensnitch-ui]);
 }
