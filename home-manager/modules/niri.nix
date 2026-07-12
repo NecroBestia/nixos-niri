@@ -19,7 +19,6 @@
 # PROGRAMAS:
 #   - fuzzel: Lanzador de aplicaciones (similar a rofi/dmenu).
 #   - swaylock: Pantalla de bloqueo compatible con Wayland.
-#   - gcr: Paquete base de GNOME Crypto (necesario para gnome-keyring).
 #===================================================================
 { config, pkgs, lib, ... }:
 
@@ -37,7 +36,6 @@ in {
   config = lib.mkIf cfg.enable {
     xdg.configFile."niri/".source = ../config/niri;
 
-    home.packages = [ pkgs.gcr ];
 
     programs = {
       fuzzel.enable   = true;
