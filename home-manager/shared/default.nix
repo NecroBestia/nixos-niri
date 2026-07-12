@@ -199,13 +199,52 @@ in {
     mimeApps = {
       enable = true;
       defaultApplications = {
+        # Navegador
+        "x-scheme-handler/http"  = [ "firefox.desktop" ];
+        "x-scheme-handler/https" = [ "firefox.desktop" ];
+        "text/html"              = [ "firefox.desktop" ];
+
+        # Archivos
         "inode/directory" = [ "org.gnome.Nautilus.desktop" ];
+
+        # Texto y código
+        "text/plain"            = [ "nvim.desktop" ];
+        "text/markdown"         = [ "nvim.desktop" ];
+        "application/json"      = [ "nvim.desktop" ];
+        "application/xml"       = [ "nvim.desktop" ];
+        "application/x-yaml"    = [ "nvim.desktop" ];
+        "text/x-nix"            = [ "nvim.desktop" ];
+        "text/x-python"         = [ "nvim.desktop" ];
+        "text/x-shellscript"    = [ "nvim.desktop" ];
+
+        # PDF
         "application/pdf" = [ "org.pwmt.zathura.desktop" "firefox.desktop" ];
-        "image/png"  = [ "org.nomacs.ImageLounge.desktop" ];
-        "image/jpeg" = [ "org.nomacs.ImageLounge.desktop" ];
-        "image/webp" = [ "org.nomacs.ImageLounge.desktop" ];
-        "image/gif"  = [ "org.nomacs.ImageLounge.desktop" ];
-        "image/svg+xml" = [ "org.nomacs.ImageLounge.desktop" ];
+
+        # Imágenes
+        "image/png"    = [ "org.nomacs.ImageLounge.desktop" ];
+        "image/jpeg"   = [ "org.nomacs.ImageLounge.desktop" ];
+        "image/webp"   = [ "org.nomacs.ImageLounge.desktop" ];
+        "image/gif"    = [ "org.nomacs.ImageLounge.desktop" ];
+        "image/svg+xml"= [ "org.nomacs.ImageLounge.desktop" ];
+        "image/bmp"    = [ "org.nomacs.ImageLounge.desktop" ];
+        "image/tiff"   = [ "org.nomacs.ImageLounge.desktop" ];
+
+        # Audio
+        "audio/mpeg"      = [ "vlc.desktop" ];
+        "audio/ogg"       = [ "vlc.desktop" ];
+        "audio/flac"      = [ "vlc.desktop" ];
+        "audio/wav"       = [ "vlc.desktop" ];
+        "audio/x-m4a"     = [ "vlc.desktop" ];
+        "audio/x-matroska"= [ "vlc.desktop" ];
+
+        # Video
+        "video/mp4"       = [ "vlc.desktop" ];
+        "video/mpeg"      = [ "vlc.desktop" ];
+        "video/x-matroska"= [ "vlc.desktop" ];
+        "video/webm"      = [ "vlc.desktop" ];
+        "video/avi"       = [ "vlc.desktop" ];
+        "video/x-msvideo" = [ "vlc.desktop" ];
+        "video/quicktime" = [ "vlc.desktop" ];
       };
     };
 
