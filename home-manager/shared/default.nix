@@ -88,7 +88,7 @@ in {
 
       # Entorno Gráfico Wayland
       wlsunset playerctl wl-clipboard awww swayidle swaybg
-      gsimplecal qalculate-qt
+      gsimplecal
 
       # Multimedia y Edición
       pavucontrol nomacs vlc zathura mupdf
