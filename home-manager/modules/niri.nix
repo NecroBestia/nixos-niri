@@ -8,7 +8,7 @@
 # SERVICIOS:
 #   - mako: Notificaciones nativas de Wayland (reemplaza dunst/notify-send).
 #   - swayidle: Gestión de inactividad (bloqueo + suspensión).
-#     * timeout 600s (10 min): Bloquea la pantalla con swaylock.
+#     * timeout 600s (10 min): Bloquea la pantalla vía Noctalia.
 #     * timeout 1200s (20 min): Suspende el sistema.
 #     * before-sleep: Bloquea antes de suspender.
 #     * lock: Bloqueo manual.
@@ -17,7 +17,6 @@
 #   - gnome-keyring: Almacenamiento seguro de contraseñas y claves SSH.
 #
 # PROGRAMAS:
-#   - fuzzel: Lanzador de aplicaciones (similar a rofi/dmenu).
 #   - swaylock: Pantalla de bloqueo compatible con Wayland.
 #===================================================================
 { config, pkgs, lib, ... }:
@@ -38,7 +37,6 @@ in {
 
 
     programs = {
-      fuzzel.enable   = true;
       swaylock.enable = true;
     };
 
@@ -50,10 +48,10 @@ in {
         systemdTargets = [ "graphical-session.target" ];
         extraArgs = [
           "-w"
-          "timeout" "600" "swaylock -f"
+          "timeout" "600" "noctalia msg session lock"
           "timeout" "1200" "loginctl suspend"
-          "before-sleep" "swaylock -f"
-          "lock" "swaylock -f"
+          "before-sleep" "noctalia msg session lock"
+          "lock" "noctalia msg session lock"
         ];
       };
 
