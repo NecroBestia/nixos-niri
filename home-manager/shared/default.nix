@@ -111,7 +111,6 @@ in {
   #-----------------------------------------------------------------
   programs = {
     home-manager.enable = true;
-    waybar.enable = true;
 
     bash = {
       enable = true;
@@ -181,10 +180,6 @@ in {
   # SERVICIOS DE USUARIO
   #-----------------------------------------------------------------
   services = {
-    # cliphist: Historial del portapapeles con soporte de imágenes.
-    #   bind: Mod+Ctrl+V (definido en binds.kdl de Niri).
-    cliphist = { enable = true; package = pkgs.cliphist; };
-
     # udiskie: Montaje automático de discos extraíbles.
     #   No requiere sudo, notifica con mako.
     udiskie = { enable = true; automount = true; notify = true; tray = "auto"; };
@@ -299,10 +294,9 @@ in {
   imports = [
     ../modules/niri.nix      # Niri + swayidle + polkit + keyring.
     ../modules/firefox.nix   # Firefox desde unstable.
-    ../modules/waybar.nix    # Barra de estado Waybar.
     ../modules/nvim.nix      # Neovim aislado con LSPs.
-    ../modules/wlogout.nix   # Menú de apagado/reinicio.
     ../modules/systemd.nix   # wlsunset (filtro luz azul + timer 10PM).
     ../modules/opencode.nix  # opencode (skills, plugins, MCPs).
+    ../modules/noctalia.nix  # Noctalia: recortes, wallpaper y helpers.
   ];
 }
