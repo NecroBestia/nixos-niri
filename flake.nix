@@ -46,8 +46,7 @@
 
     # Noctalia v5 — Wayland shell nativo (bar, launcher, notifs, wallpaper, etc.).
     noctalia = {
-      url = "github:noctalia-dev/noctalia";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:noctalia-dev/noctalia/cachix";
     };
 
     #===================================================================
