@@ -44,6 +44,12 @@
     # No actualizar sin verificar compatibilidad.
     nixpkgs-kernel.url = "github:NixOS/nixpkgs/d756e131ad4cc63b6e0dde373fbae0ce4ce9d683";
 
+    # Noctalia v5 — Wayland shell nativo (bar, launcher, notifs, wallpaper, etc.).
+    noctalia = {
+      url = "github:noctalia-dev/noctalia";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     #===================================================================
     # INPUTS DE SKILLS IA
     #===================================================================
