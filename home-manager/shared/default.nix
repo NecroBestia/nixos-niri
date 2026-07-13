@@ -16,7 +16,7 @@ let
   cursorSize = 24;
   MyTerminal = "kitty";
 
-  # Scripts personalizados (clipboard, wallpaper, spotify).
+  # Scripts personalizados (spotify, symlinks).
   myScripts = import ../modules/scripts.nix { inherit pkgs; };
 in {
   nixpkgs.config.allowUnfree = true;
