@@ -1,10 +1,11 @@
 binds {
     Alt+Shift+H { show-hotkey-overlay; }
     Mod+T { spawn "kitty"; }
-    Mod+Space { spawn "fuzzel"; }
-    Super+Alt+L { spawn "wlogout"; }
-    Mod+Ctrl+Shift+W { spawn "niri-wallpaper"; } 
-    Mod+Ctrl+V { spawn "niri-clipboard" ;}
+    Mod+Space { spawn "noctalia msg launcher toggle"; }
+    Super+Alt+L { spawn "noctalia msg session open"; }
+    Mod+N { spawn "noctalia msg notification-center toggle"; }
+    Mod+Ctrl+Shift+W { spawn "noctalia msg wallpaper next"; } 
+    Mod+Ctrl+V { spawn "noctalia msg clipboard toggle"; }
     Mod+Alt+H {spawn-sh "pkill -SIGUSR1 waybar";}   
     XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+"; }
     XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
