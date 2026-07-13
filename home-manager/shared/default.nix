@@ -91,8 +91,8 @@ in {
       gsimplecal
 
       # Multimedia y Edición
-      pavucontrol nomacs vlc zathura mupdf
-
+      pavucontrol nomacs vlc zathura mupdf qalculate-qt
+ 
       # Inestables (Última versión desde nixpkgs-unstable)
       pkgs-unstable.krita      # Ilustración digital.
       pkgs-unstable.obsidian   # Notas Markdown con graph view.

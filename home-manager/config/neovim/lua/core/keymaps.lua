@@ -1,5 +1,3 @@
--- Ejemplo: Limpiar el resaltado de búsqueda al presionar Escape
-vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.g.mapleader = " "
 
 vim.keymap.set("x", "p", [["_dP]], { desc = "Paste over selection without losing yanked text" })

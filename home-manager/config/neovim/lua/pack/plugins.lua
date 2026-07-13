@@ -23,9 +23,9 @@ if term_ok then
     vim.keymap.set("n", "<leader>tt", "<cmd>ToggleTerm<CR>", { desc = "Abrir Terminal Flotante" })
 end
 -- =========================================================
--- Decoraciones markdown (render_markdown) 
+-- Decoraciones markdown (render-markdown) 
 -- =========================================================
-local render_ok, render_md = pcall(require, "render_markdown") 
+local render_ok, render_md = pcall(require, "render-markdown") 
 if render_ok then 
   render_md.setup({
     -- soporte latex 
@@ -127,8 +127,8 @@ if zen_ok then
             backdrop = 0.95, -- Oscurece ligeramente el fondo fuera de la zona de texto
             width = 100,     -- Ancho del texto centrado (ideal para leer LaTeX cómodamente)
             options = {
-                number = true,         -- Oculta los números de línea
-                relativenumber = true, -- Oculta los números relativos
+                number = true,         -- Muestra los números de línea
+                relativenumber = true, -- Muestra los números relativos
             }
         },
         plugins = {
