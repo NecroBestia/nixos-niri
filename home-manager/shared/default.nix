@@ -87,7 +87,7 @@ in {
       nix-direnv libreoffice gh libnotify 
 
       # Entorno Gráfico Wayland
-      wlsunset playerctl wl-clipboard awww swayidle swaybg
+      wlsunset playerctl wl-clipboard swayidle
       gsimplecal
 
       # Multimedia y Edición
@@ -101,8 +101,6 @@ in {
       pkgs-unstable.opensnitch-ui # Firewall interactivo (GUI)
 
       # Scripts locales
-      myScripts.clipboard       # Historial del portapapeles con fuzzel.
-      myScripts.niri-wallpaper  # Gestor de fondos con blur + awww.
       myScripts.spotify-startup # Lanzador condicional (Flatpak/nativo).
       myScripts.niri-symlinks   # Creador de enlaces simbólicos.
     ];
