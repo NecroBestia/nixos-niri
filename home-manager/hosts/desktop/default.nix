@@ -4,10 +4,8 @@
 # Configuración específica del usuario para la PC de sobremesa.
 # Hereda toda la configuración compartida de ../shared/default.nix.
 #
-# Cada host tiene su propio archivo Waybar:
-#   - Desktop: configDesktop.jsonc (muestra módulos de audio
-#     wireplumber#sink/source directamente, sin grupos).
-#   - Notebook: configNotebook.jsonc (usa grupos colapsables).
+# Waybar no se usa (Noctalia v5 reemplaza la barra).
+# Los estilos waybar/style.css quedan como referencia.
 #===================================================================
 { pkgs, pkgs-unstable, ... }: {
   imports = [
@@ -21,7 +19,4 @@
   };
 
   home.packages = [ ];
-
-  # Configuración de Waybar específica del escritorio.
-  xdg.configFile."waybar/config.jsonc".source = ../../config/waybar/configDesktop.jsonc;
 }

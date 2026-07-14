@@ -27,10 +27,44 @@ window-rule {
     off
   } 
 }
-//configuracion el wallpaper del overview
+// Noctalia backdrop: blurred/tinted wallpaper in overview
 layer-rule {
-    match namespace="^wallpaper$"
-	  place-within-backdrop true
+    match namespace="^noctalia-backdrop"
+    place-within-backdrop true
+}
+// Noctalia settings window
+window-rule {
+    match app-id="dev.noctalia.Noctalia"
+    open-floating true
+    default-column-width { fixed 1080; }
+    default-window-height { fixed 920; }
+}
+debug {
+    honor-xdg-activation-with-invalid-serial
+}
+// Blur + transparencia para ventanas
+window-rule {
+    background-effect {
+        blur true
+    }
+}
+window-rule {
+    match is-focused=false
+    opacity 0.85
+}
+// Blur para superficies Noctalia
+layer-rule {
+    match namespace="^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"
+    background-effect {
+        blur true
+        xray false
+    }
+}
+blur {
+    passes 2
+    offset 3.0
+    noise 0.03
+    saturation 1.0
 }
 
 

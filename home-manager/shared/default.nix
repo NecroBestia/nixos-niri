@@ -6,12 +6,11 @@
 # que importa este shared y añade lo específico (como el json de Waybar).
 #
 # VARIABLES GLOBALES:
-#   themeName, cursorName, cursorSize, MyTerminal → Cambia aquí
-#   y se refleja en GTK, Qt, shell, y atajos.
+#   cursorName, cursorSize, MyTerminal → Cambia aquí
+#   y se refleja en cursor, shell, y atajos.
 #===================================================================
 { config, pkgs, pkgs-unstable, inputs, ... }:
 let
-  themeName = "Colloid-Dark";
   cursorName = "Bibata-Modern-Ice";
   cursorSize = 24;
   MyTerminal = "kitty";
@@ -20,7 +19,6 @@ let
   myScripts = import ../modules/scripts.nix { inherit pkgs; };
 in {
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.allowUnfreePredicate = (_: true);
 
   home = {
     stateVersion = "26.05";
@@ -59,7 +57,6 @@ in {
     # Fuerzan Wayland en todas las apps que lo soporten.
     # QT_QPA_PLATFORM = "wayland;xcb": Prefiere Wayland, fallback X11.
     sessionVariables = {
-      GTK_THEME = themeName;
       XDG_SESSION_TYPE = "wayland";
       XDG_CURRENT_DESKTOP = "niri";
       XDG_SESSION_DESKTOP = "niri";
@@ -87,7 +84,7 @@ in {
       nix-direnv libreoffice gh libnotify 
 
       # Entorno Gráfico Wayland
-      wlsunset playerctl wl-clipboard swayidle
+      playerctl wl-clipboard swayidle
       gsimplecal
 
       # Multimedia y Edición
@@ -161,12 +158,12 @@ in {
   #-----------------------------------------------------------------
   # APARIENCIA (GTK + Qt + DConf)
   #-----------------------------------------------------------------
+  # Noctalia genera el tema GTK dinámicamente desde el wallpaper
+  # (builtin_ids = ["gtk3", "gtk4"] en config.toml).
+  # Solo definimos iconos, cursor, y Qt que Noctalia no toca.
   gtk = {
     enable = true;
-    theme = { name = themeName; package = pkgs.colloid-gtk-theme; };
     iconTheme = { name = "Colloid"; package = pkgs.colloid-icon-theme; };
-    gtk3.extraConfig = { gtk-application-prefer-dark-theme = 1; };
-    gtk4.extraConfig = { gtk-application-prefer-dark-theme = 1; };
   };
 
   qt = {
@@ -181,7 +178,7 @@ in {
   #-----------------------------------------------------------------
   services = {
     # udiskie: Montaje automático de discos extraíbles.
-    #   No requiere sudo, notifica con mako.
+    #   No requiere sudo, notifica con Noctalia.
     udiskie = { enable = true; automount = true; notify = true; tray = "auto"; };
   };
 
@@ -263,7 +260,6 @@ in {
   # Conectan los archivos de configuración (en config/) con sus
   # ubicaciones esperadas (~/.config/).
   home.file = {
-    ".config/fuzzel/fuzzel.ini".source  = ../config/fuzzel/fuzzel.ini;
     ".config/kitty/kitty.conf".source   = ../config/kitty/kitty.conf;
     ".config/zathura/zathurarc".source  = ../config/zathura/zathurarc;
 
@@ -292,11 +288,11 @@ in {
   # MÓDULOS DE HOME MANAGER
   #-----------------------------------------------------------------
   imports = [
-    ../modules/niri.nix      # Niri + swayidle + polkit + keyring.
+    ../modules/niri.nix      # Niri + polkit + keyring.
     ../modules/firefox.nix   # Firefox desde unstable.
     ../modules/nvim.nix      # Neovim aislado con LSPs.
-    ../modules/systemd.nix   # wlsunset (filtro luz azul + timer 10PM).
     ../modules/opencode.nix  # opencode (skills, plugins, MCPs).
     ../modules/noctalia.nix  # Noctalia: recortes, wallpaper y helpers.
+    ../modules/stylix.nix    # Stylix: Firefox theme + GRUB/console (GTK a cargo de Noctalia).
   ];
 }

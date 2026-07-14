@@ -1,16 +1,12 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
-  imports = [ inputs.stylix.nixosModules.stylix ];
+  imports = [ inputs.stylix.homeModules.stylix ];
 
-  disabledModules = [ "${inputs.stylix}/modules/kmscon/nixos.nix" ];
-
-  config.stylix = {
+  stylix = {
     enable = true;
     autoEnable = false;
     polarity = "dark";
-    enableReleaseChecks = false;
-
     image = lib.mkIf (builtins.pathExists "/home/necro/.cache/current-stylix-wallpaper")
       "/home/necro/.cache/current-stylix-wallpaper";
 
@@ -39,9 +35,17 @@
       };
     };
 
+    enableReleaseChecks = false;
+
     targets = {
-      grub.enable = true;
-      console.enable = true;
+      waybar.enable = false;
+      kitty.enable = false;
+      fuzzel.enable = false;
+      firefox = {
+        enable = true;
+        profileNames = [ "default" ];
+      };
+      swaync.enable = false;
     };
   };
 }

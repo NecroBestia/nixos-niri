@@ -22,6 +22,7 @@
     };
     displayManager.sddm = {
       enable = true;
+      package = pkgs.kdePackages.sddm;
       theme = "sddm-astronaut-theme";
       settings = {
         General = {

@@ -25,6 +25,7 @@
     ../../modules/containers.nix       # Podman (runtime de contenedores).
     ../../modules/firewall.nix         # Firewall nftables + opensnitch.
     ../../modules/vm.nix               # Virtualización libvirtd (toggleable).
+    ../../modules/stylix.nix           # Stylix: tema GRUB/consola desde wallpaper.
   ];
 
   #-----------------------------------------------------------------

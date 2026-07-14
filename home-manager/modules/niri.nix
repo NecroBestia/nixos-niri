@@ -6,7 +6,6 @@
 #   - Habilita servicios esenciales para el entorno Wayland.
 #
 # SERVICIOS:
-#   - mako: Notificaciones nativas de Wayland (reemplaza dunst/notify-send).
 #   - swayidle: Gestión de inactividad (bloqueo + suspensión).
 #     * timeout 600s (10 min): Bloquea la pantalla vía Noctalia.
 #     * timeout 1200s (20 min): Suspende el sistema.
@@ -18,6 +17,10 @@
 #
 # PROGRAMAS:
 #   - swaylock: Pantalla de bloqueo compatible con Wayland.
+#
+# NOTIFICACIONES:
+#   Gestionadas por Noctalia (notification.daemon = true en config.toml).
+#   No se usa mako ni swaync explícitamente.
 #===================================================================
 { config, pkgs, lib, ... }:
 
@@ -35,14 +38,11 @@ in {
   config = lib.mkIf cfg.enable {
     xdg.configFile."niri/".source = ../config/niri;
 
-
     programs = {
       swaylock.enable = true;
     };
 
     services = {
-      mako.enable = true;
-
       swayidle = {
         enable = true;
         systemdTargets = [ "graphical-session.target" ];

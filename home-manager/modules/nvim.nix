@@ -48,11 +48,54 @@ in {
     custom-neovim
   ];
 
-  home.file.".config/nvim".source = ../config/neovim;
+  home.file.".config/nvim" = {
+    source = ../config/neovim;
+    force = true;
+  };
 
   home.shellAliases = {
     vi = "nvim";
     vim = "nvim";
     vimdiff = "nvim -d";
   };
+
+  #-----------------------------------------------------------------
+  # FIX: El directorio .config/nvim es un symlink read-only del Nix store.
+  #      vim.pack (Neovim 0.12+) necesita escribir nvim-pack-lock.json
+  #      para sincronizar el lock data → falla con EROFS.
+  #
+  #      Solución: después de que HM cree los symlinks, reemplazamos
+  #      nvim-pack-lock.json con una copia escribible.
+  #-----------------------------------------------------------------
+  home.activation.ensureWritableNvimPackLock = config.lib.dag.entryAfter ["linkGeneration"] ''
+    nvim_dir="${config.home.homeDirectory}/.config/nvim"
+    lock="$nvim_dir/nvim-pack-lock.json"
+
+    # Limpia backups viejos que HM deja al regenerar el symlink
+    old_backup="${config.home.homeDirectory}/.config/nvim.backup"
+    if [ -e "$old_backup" ]; then
+      rm -rf "$old_backup"
+    fi
+
+    if [ -h "$nvim_dir" ]; then
+      echo "nvim: replacing store symlink with writable directory"
+      store_path="$(readlink -f "$nvim_dir")"
+      existing_lock=""
+      if [ -f "$lock" ]; then
+        existing_lock=$(cat "$lock" 2>/dev/null)
+      fi
+      rm -f "$nvim_dir"
+      cp -r "$store_path" "$nvim_dir"
+      chmod -R u+w "$nvim_dir"
+      if [ -n "$existing_lock" ]; then
+        echo "$existing_lock" > "$lock"
+        echo "nvim: preserved existing lock data"
+      fi
+    fi
+    if [ ! -f "$lock" ] || [ ! -w "$lock" ]; then
+      echo '{"plugins":{}}' >"$lock"
+      chmod u+w "$lock"
+      echo "nvim-pack-lock.json: created writable lock file"
+    fi
+  '';
 }

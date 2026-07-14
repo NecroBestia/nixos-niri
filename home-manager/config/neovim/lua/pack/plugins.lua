@@ -132,10 +132,11 @@ if zen_ok then
             }
         },
         plugins = {
-            -- Se integra con tus otras herramientas
             options = {
                 enabled = true,
-                twilight = true, -- ¡Enciende Twilight automáticamente al entrar al Modo Zen!
+            },
+            twilight = {
+                enabled = true,
             },
         }
     })

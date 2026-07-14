@@ -2,11 +2,10 @@
 # OPENCODE — Configuración de IA (Skills, Plugins, MCPs)
 #===================================================================
 # Módulo independiente con toda la configuración de opencode.
-# Importado desde shared/default.nix y alimentado por los inputs
-# definidos en ai-inputs.nix (ver flake.nix).
+# Importado desde shared/default.nix.
 #
 # DEPENDENCIAS:
-#   inputs        → Skills descargadas (definidas en ai-inputs.nix)
+#   inputs        → Skills descargadas (definidas en flake.nix)
 #   pkgs-unstable → opencode desde nixpkgs-unstable
 #===================================================================
 { config, pkgs, pkgs-unstable, inputs, ... }:

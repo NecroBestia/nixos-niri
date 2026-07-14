@@ -49,16 +49,15 @@ directory = "~/Pictures/Wallpapers"
 
 [wallpaper.automation]
 enabled = true
-interval_minutes = 30
 order = "random"
 recursive = true
 
 [bar.main]
 position = "top"
-thickness = 34
+thickness = 28
 background_opacity = 0.6
 radius = 0
-margin_ends = 180
+margin_ends = 25
 margin_edge = 6
 padding = 14
 widget_spacing = 6
@@ -70,7 +69,7 @@ capsule = false
 
 start = ["launcher", "workspaces"]
 center = ["clock"]
-end = ["media", "tray", "notifications", "clipboard", "volume", "control-center", "session"]
+end = ["tray", "battery", "volume", "notifications", "control-center", "session"]
 
 [notification]
 enable_daemon = true
@@ -122,7 +121,7 @@ enable_overdrive = false
 enable_sounds = false
 
 [brightness]
-enable_ddcutil = true
+enable_ddcutil = false
 
 [nightlight]
 enabled = true

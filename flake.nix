@@ -11,9 +11,9 @@
 #   ├── hosts/      → Por máquina (desktop, notebook).
 #   ├── shared/     → Común a ambas máquinas.
 #   ├── modules/    → Módulos funcionales (niri, firefox, opencode...).
-#   │   ├── ai-inputs.nix  → Inputs de skills IA (importado abajo).
+#   │   ├── ai-inputs.nix  → (Eliminado — inputs definidos directamente acá).
 #   │   └── opencode.nix   → Config de opencode (skills, plugins, MCP).
-#   └── config/     → Archivos dotfiles (waybar, niri, kitty...).
+#   └── config/     → Archivos dotfiles (niri, kitty, neovim, noctalia...).
 #===================================================================
 {
   description = "Flake NixOS + Home Manager (Desktop & Notebook)";
@@ -52,9 +52,8 @@
     #===================================================================
     # INPUTS DE SKILLS IA
     #===================================================================
-    # Ver home-manager/modules/ai-inputs.nix para documentación
-    # detallada de cada input. Los inputs deben definirse aquí
-    # porque el schema de flake no permite importarlos.
+    # Cada input de skill se define directamente aquí (el schema de
+    # flake no permite importarlos desde otro archivo).
     #===================================================================
 
     # NixOS — Skill oficial con documentación completa del sistema.
@@ -115,6 +114,12 @@
     composio-skills = {
       url = "github:composio-community/opencode-skills";
       flake = false;
+    };
+
+    # Stylix — Theming dinámico desde wallpaper (GTK, Firefox, kitty, GRUB, etc.).
+    stylix = {
+      url = "github:danth/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 

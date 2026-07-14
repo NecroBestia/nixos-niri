@@ -36,6 +36,13 @@ in
   ];
 
   #-----------------------------------------------------------------
+  # PAQUETES EXTRA (Solo Desktop)
+  #-----------------------------------------------------------------
+  environment.systemPackages = with pkgs; [
+    ddcutil # Brillo monitores vía DDC/CI (Noctalia).
+  ];
+
+  #-----------------------------------------------------------------
   # IDENTIDAD
   #-----------------------------------------------------------------
   networking.hostName = "desktop";
@@ -49,7 +56,7 @@ in
   # MONTAJE NTFS (Discos Compartidos con Windows)
   #-----------------------------------------------------------------
   # Cada entrada monta una partición NTFS con:
-  #   - uid/gid 1000 → Propietario necro.
+  #   - uid=1000 gid=100 → Propietario necro.
   #   - umask 0022  → Permisos 755.
   #   - force       → Monta incluso si no está limpio (Windows híbrido).
   #   - nofail      → No bloquea el arranque si falta el disco.
@@ -98,6 +105,12 @@ in
   services.syncthing = {
     dataDir = "/mnt/not_to_lose/SyncThing";
   };
+
+  #-----------------------------------------------------------------
+  # DDC/CI — Brillo de monitores externos (Noctalia)
+  #-----------------------------------------------------------------
+  hardware.i2c.enable = true;
+  users.users.necro.extraGroups = [ "i2c" ];
 
   #-----------------------------------------------------------------
   # KERNEL

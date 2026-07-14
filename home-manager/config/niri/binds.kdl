@@ -1,25 +1,24 @@
 binds {
     Alt+Shift+H { show-hotkey-overlay; }
     Mod+T { spawn "kitty"; }
-    Mod+Space { spawn "noctalia msg launcher toggle"; }
-    Super+Alt+L { spawn "noctalia msg session open"; }
-    Mod+N { spawn "noctalia msg notification-center toggle"; }
-    Mod+Ctrl+Shift+W { spawn "noctalia msg wallpaper next"; } 
-    Mod+Ctrl+V { spawn "noctalia msg clipboard toggle"; }
-    Mod+Alt+H {spawn-sh "pkill -SIGUSR1 waybar";}   
-    XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+"; }
-    XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
-    XF86AudioMute        { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
-    XF86AudioMicMute     { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+    Mod+Space { spawn-sh "noctalia msg panel-toggle launcher"; }
+    Super+Alt+L { spawn-sh "noctalia msg panel-toggle session"; }
+    Mod+N { spawn-sh "noctalia msg panel-toggle control-center"; }
+    Mod+Ctrl+Shift+W { spawn-sh "noctalia msg wallpaper-next"; } 
+    Mod+Ctrl+V { spawn-sh "noctalia msg panel-toggle clipboard"; }
+    XF86AudioRaiseVolume { spawn-sh "noctalia msg volume-up"; }
+    XF86AudioLowerVolume { spawn-sh "noctalia msg volume-down"; }
+    XF86AudioMute        { spawn-sh "noctalia msg volume-mute"; }
+    XF86AudioMicMute     { spawn-sh "noctalia msg volume-mic-mute"; }
     
-    // -- Configuraciones de audio
+    // -- Configuraciones de audio (playerctl)
     XF86AudioPlay { spawn-sh "playerctl play-pause"; }
     XF86AudioStop { spawn-sh "playerctl stop"; }
     XF86AudioPrev { spawn-sh "playerctl previous"; }
     XF86AudioNext { spawn-sh "playerctl next"; }
     
-    XF86MonBrightnessUp { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
-    XF86MonBrightnessDown { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+    XF86MonBrightnessUp { spawn-sh "noctalia msg brightness-up"; }
+    XF86MonBrightnessDown { spawn-sh "noctalia msg brightness-down"; }
     // -- Configuraciones de audio
     Mod+O { toggle-overview; }
     Mod+Q { close-window; }
