@@ -137,5 +137,10 @@ sunset = "22:00"
 [battery]
 warning_threshold = 10
 
+[theme.templates.user.nvim-base16]
+input_path = "templates/nvim-base16.lua"
+output_path = "$XDG_CONFIG_HOME/nvim/lua/noctalia.lua"
+post_hook = "pkill -SIGUSR1 nvim"
+
 [hooks]
-wallpaper_changed = "ln -sf \"$NOCTALIA_WALLPAPER_PATH\" /home/necro/.cache/current-stylix-wallpaper; noctalia msg templates-apply; niri msg action load-config-file"
+wallpaper_changed = "ln -sf \"$NOCTALIA_WALLPAPER_PATH\" /home/necro/.cache/current-stylix-wallpaper; noctalia msg templates-apply; pkill -SIGUSR1 nvim; niri msg action load-config-file"

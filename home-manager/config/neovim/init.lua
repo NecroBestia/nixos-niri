@@ -15,5 +15,10 @@ require("pack")
 require("core.treesitter")
 require("core.lsp")
 
--- 4. El tema visual
-vim.cmd.colorscheme("moonfly")
+-- 4. El tema visual (Noctalia genera base16 desde el wallpaper)
+local ok = pcall(require, 'noctalia')
+if ok then
+  require('noctalia').setup()
+else
+  vim.cmd.colorscheme('moonfly')
+end

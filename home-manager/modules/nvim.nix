@@ -81,8 +81,12 @@ in {
       echo "nvim: replacing store symlink with writable directory"
       store_path="$(readlink -f "$nvim_dir")"
       existing_lock=""
+      existing_noctalia=""
       if [ -f "$lock" ]; then
         existing_lock=$(cat "$lock" 2>/dev/null)
+      fi
+      if [ -f "$nvim_dir/lua/noctalia.lua" ]; then
+        existing_noctalia=$(cat "$nvim_dir/lua/noctalia.lua" 2>/dev/null)
       fi
       rm -f "$nvim_dir"
       cp -r "$store_path" "$nvim_dir"
@@ -90,6 +94,11 @@ in {
       if [ -n "$existing_lock" ]; then
         echo "$existing_lock" > "$lock"
         echo "nvim: preserved existing lock data"
+      fi
+      if [ -n "$existing_noctalia" ]; then
+        echo "$existing_noctalia" > "$nvim_dir/lua/noctalia.lua"
+        chmod u+w "$nvim_dir/lua/noctalia.lua"
+        echo "nvim: preserved noctalia-rendered theme"
       fi
     fi
     if [ ! -f "$lock" ] || [ ! -w "$lock" ]; then

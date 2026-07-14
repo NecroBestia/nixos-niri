@@ -42,15 +42,27 @@ window-rule {
 debug {
     honor-xdg-activation-with-invalid-serial
 }
-// Blur + transparencia para ventanas
+// Blur solo para tiling
 window-rule {
+    match is-floating=false
     background-effect {
         blur true
     }
 }
+// Tiled unfocused: 80% opacidad (20% transparente)
 window-rule {
-    match is-focused=false
-    opacity 0.85
+    match is-floating=false is-focused=false
+    opacity 0.80
+}
+// Tiled focused: 90% opacidad (10% transparente)
+window-rule {
+    match is-floating=false is-focused=true
+    opacity 0.95
+}
+// Floating sin foco: 98% transparente, sin blur
+window-rule {
+    match is-floating=true is-focused=false
+    opacity 0.02
 }
 // Blur para superficies Noctalia
 layer-rule {

@@ -15,4 +15,6 @@
   home.file.".cache/noctalia-symlink-stub".text = ''
     # Stub — deleted after first wallpaper change creates the actual symlink
   '';
+
+  home.file.".config/noctalia/templates/".source = ../config/noctalia/templates;
 }
