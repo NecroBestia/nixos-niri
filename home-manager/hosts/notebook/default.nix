@@ -17,5 +17,5 @@
 
   home.packages = with pkgs; [ ];
 
-  programs.noctalia.settings = ../config/noctalia/configNotebook.toml;
+  programs.noctalia.settings = ../../config/noctalia/configNotebook.toml;
 }

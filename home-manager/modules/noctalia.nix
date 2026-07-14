@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ lib, pkgs, inputs, ... }:
 
 {
   imports = [ inputs.noctalia.homeModules.default ];
@@ -9,7 +9,7 @@
 
     systemd.enable = true;
 
-    settings = ../config/noctalia/config.toml;
+    settings = lib.mkDefault ../config/noctalia/config.toml;
   };
 
   home.file.".cache/noctalia-symlink-stub".text = ''

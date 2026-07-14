@@ -43,15 +43,18 @@
   # power-profiles-daemon: Perfiles de energía (rendimiento, balanceado, ahorro).
   services.power-profiles-daemon.enable = true;
 
+  # upower: Backend de batería para Noctalia y otros entornos Wayland.
+  services.upower.enable = true;
+
   #-----------------------------------------------------------------
   # BATERÍA (ThinkPad)
   #-----------------------------------------------------------------
   # charge_control_start/end_threshold: Limita la carga al 75-80%
   # para prolongar la vida útil de la batería Li-ion.
-  # NOTA: Solamente BAT0 existe en este modelo (batería interna).
+  # NOTA: BAT1 es la batería interna en este modelo.
   systemd.tmpfiles.rules = [
-    "w /sys/class/power_supply/BAT0/charge_control_start_threshold - - - - 75"
-    "w /sys/class/power_supply/BAT0/charge_control_end_threshold   - - - - 80"
+    "w /sys/class/power_supply/BAT1/charge_control_start_threshold - - - - 75"
+    "w /sys/class/power_supply/BAT1/charge_control_end_threshold   - - - - 80"
   ];
 
   #-----------------------------------------------------------------

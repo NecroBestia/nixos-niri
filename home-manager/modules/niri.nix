@@ -36,11 +36,27 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    xdg.configFile."niri/".source = ../config/niri;
+    xdg.configFile."niri/" = {
+      source = ../config/niri;
+      force = true;
+    };
 
     programs = {
       swaylock.enable = true;
     };
+
+    # Reemplaza el symlink del nix store por un directorio escribible,
+    # para que Noctalia pueda escribir noctalia.kdl y modificar config.kdl.
+    home.activation.ensureWritableNiriConfig = config.lib.dag.entryAfter ["linkGeneration"] ''
+      niri_dir="${config.home.homeDirectory}/.config/niri"
+      if [ -h "$niri_dir" ]; then
+        echo "niri: replacing store symlink with writable directory"
+        store_path="$(readlink -f "$niri_dir")"
+        rm -f "$niri_dir"
+        cp -r "$store_path" "$niri_dir"
+        chmod -R u+w "$niri_dir"
+      fi
+    '';
 
     services = {
       swayidle = {

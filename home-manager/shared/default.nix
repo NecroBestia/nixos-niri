@@ -158,9 +158,9 @@ in {
   #-----------------------------------------------------------------
   # APARIENCIA (GTK + Qt + DConf)
   #-----------------------------------------------------------------
-  # Noctalia genera el tema GTK dinámicamente desde el wallpaper
-  # (builtin_ids = ["gtk3", "gtk4"] en config.toml).
-  # Solo definimos iconos, cursor, y Qt que Noctalia no toca.
+  # Noctalia maneja todo dinámicamente (colores GTK, gtk-theme,
+  # color-scheme) vía sus templates built-in y apply.sh.
+  # Aquí solo ponemos lo que Noctalia NO toca: iconos y cursor.
   gtk = {
     enable = true;
     iconTheme = { name = "Colloid"; package = pkgs.colloid-icon-theme; };
@@ -168,10 +168,12 @@ in {
 
   qt = {
     enable = true;
-    platformTheme.name = "gtk";  # Qt sigue el tema GTK.
+    platformTheme.name = "gtk3";
+    style = {
+      name = "adwaita-dark";
+      package = pkgs.adwaita-qt6;
+    };
   };
-
-  dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
 
   #-----------------------------------------------------------------
   # SERVICIOS DE USUARIO
@@ -295,4 +297,17 @@ in {
     ../modules/noctalia.nix  # Noctalia: recortes, wallpaper y helpers.
     ../modules/stylix.nix    # Stylix: Firefox theme + GRUB/console (GTK a cargo de Noctalia).
   ];
+
+  # Reemplaza el symlink de kitty.conf por un archivo escribible,
+  # para que Noctalia pueda actualizar las paletas dinámicamente.
+  home.activation.ensureWritableKittyConfig = config.lib.dag.entryAfter ["linkGeneration"] ''
+    kitty_conf="${config.home.homeDirectory}/.config/kitty/kitty.conf"
+    if [ -h "$kitty_conf" ]; then
+      echo "kitty: replacing store symlink with writable file"
+      store_path="$(readlink -f "$kitty_conf")"
+      rm -f "$kitty_conf"
+      cp "$store_path" "$kitty_conf"
+      chmod u+w "$kitty_conf"
+    fi
+  '';
 }

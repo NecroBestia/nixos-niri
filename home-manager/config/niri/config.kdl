@@ -3,7 +3,8 @@ include "outputs.kdl"
 include "layout.kdl"
 include "startup.kdl" 
 include "rules.kdl"
-include "binds.kdl" 
+include "binds.kdl"
+include "noctalia.kdl" 
 hotkey-overlay {
 }
 animations {

@@ -8,6 +8,8 @@ vim.pack.add({
     "https://github.com/rebelot/kanagawa.nvim", 
     -- Tema muy oscuro con alto contraste, excelente para concentrarse.
     { src = "https://github.com/bluz71/vim-moonfly-colors", name = "moonfly" }, 
+    -- Base16 colorscheme (usado por matugen para aplicar colores del wallpaper).
+    "https://github.com/RRethy/base16-nvim", 
 
     -- ==========================================
     -- Plugins (El Motor de tu Flujo de Trabajo)
