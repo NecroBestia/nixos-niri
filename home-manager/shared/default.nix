@@ -158,11 +158,12 @@ in {
   #-----------------------------------------------------------------
   # APARIENCIA (GTK + Qt + DConf)
   #-----------------------------------------------------------------
-  # Noctalia maneja todo dinámicamente (colores GTK, gtk-theme,
-  # color-scheme) vía sus templates built-in y apply.sh.
-  # Aquí solo ponemos lo que Noctalia NO toca: iconos y cursor.
+  # Noctalia maneja colores GTK vía templates built-in (gtk.css).
+  # Home-manager agrega gtk-application-prefer-dark-theme=1 en
+  # settings.ini que Noctalia no toca, más dconf color-scheme.
   gtk = {
     enable = true;
+    colorScheme = "dark";
     iconTheme = { name = "Colloid"; package = pkgs.colloid-icon-theme; };
   };
 
