@@ -9,14 +9,14 @@ function M.setup()
     base05 = '{{colors.on_surface.default.hex}}',
     base06 = '{{colors.on_surface.default.hex}}',
     base07 = '{{colors.on_background.default.hex}}',
-    base08 = '{{colors.error.default.hex | set_hue 0 | set_lightness 55 | saturate 40}}',
-    base09 = '{{colors.tertiary.default.hex | set_hue 25 | saturate 30 | set_lightness 60}}',
-    base0A = '{{colors.secondary.default.hex | set_hue 50 | saturate 30 | set_lightness 65}}',
-    base0B = '{{colors.primary.default.hex | set_hue 120 | saturate 30 | set_lightness 60}}',
-    base0C = '{{colors.tertiary_fixed_dim.default.hex | set_hue 180 | saturate 30 | set_lightness 65}}',
-    base0D = '{{colors.primary_fixed_dim.default.hex | set_hue 220 | saturate 30 | set_lightness 65}}',
-    base0E = '{{colors.secondary_fixed_dim.default.hex | set_hue 280 | saturate 30 | set_lightness 65}}',
-    base0F = '{{colors.error_container.default.hex | set_lightness 25 | saturate 20}}',
+    base08 = '{{colors.error.default.hex | rotate_hue 0 | set_lightness 55 | saturate 30}}',
+    base09 = '{{colors.tertiary.default.hex | rotate_hue 30 | set_lightness 60 | saturate 20}}',
+    base0A = '{{colors.secondary.default.hex | rotate_hue 60 | set_lightness 65 | saturate 20}}',
+    base0B = '{{colors.primary.default.hex | rotate_hue 120 | set_lightness 60 | saturate 20}}',
+    base0C = '{{colors.tertiary_fixed_dim.default.hex | rotate_hue 180 | set_lightness 65 | saturate 20}}',
+    base0D = '{{colors.primary_fixed_dim.default.hex | rotate_hue 220 | set_lightness 65 | saturate 20}}',
+    base0E = '{{colors.secondary_fixed_dim.default.hex | rotate_hue 280 | set_lightness 65 | saturate 20}}',
+    base0F = '{{colors.error_container.default.hex | rotate_hue 0 | set_lightness 25 | saturate 15}}',
   }
 end
 
