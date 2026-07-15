@@ -49,7 +49,7 @@ directory = "~/Pictures/Wallpapers"
 
 [wallpaper.automation]
 enabled = true
-interval_minutes = 30
+interval_seconds = 1800
 order = "random"
 recursive = true
 
