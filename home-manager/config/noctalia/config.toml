@@ -206,6 +206,7 @@ timeout = 660.0
 [theme.templates.user.kitty]
 input_path = "templates/kitty.conf"
 output_path = "$XDG_CONFIG_HOME/kitty/current-theme.conf"
+post_hook = "kill -SIGUSR1 $(pidof kitty 2>/dev/null)"
 
 [theme.templates.user.nvim-base16]
 input_path = "templates/nvim-base16.lua"
