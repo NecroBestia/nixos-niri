@@ -39,7 +39,7 @@ pure_black_dark = true
 
 [theme.templates]
 enable_builtin_templates = true
-builtin_ids = ["gtk3", "gtk4", "niri", "qt", "starship"]
+builtin_ids = ["gtk3", "gtk4", "niri", "kitty", "qt", "starship"]
 enable_community_templates = true
 community_ids = ["obsidian", "vscode", "opencode", "papirus-icons", "zathura"]
 
@@ -202,11 +202,6 @@ timeout = 900.0
 action = "screen_off"
 enabled = false
 timeout = 660.0
-
-[theme.templates.user.kitty]
-input_path = "templates/kitty.conf"
-output_path = "$XDG_CONFIG_HOME/kitty/current-theme.conf"
-post_hook = "kill -SIGUSR1 $(pidof kitty 2>/dev/null)"
 
 [theme.templates.user.nvim-base16]
 input_path = "templates/nvim-base16.lua"
