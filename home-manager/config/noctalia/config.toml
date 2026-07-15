@@ -5,7 +5,7 @@ high_contrast = false
 [shell]
 corner_radius_scale = 0
 font_family = "JetBrainsMono Nerd Font"
-time_format = "{:%H:%M}"
+time_format = "{:%I:%M %p}"
 date_format = "%A, %x"
 clipboard_enabled = true
 clipboard_history_max_entries = 100
@@ -22,6 +22,10 @@ control_center_placement = "attached"
 enabled = true
 speed = 1.0
 
+[shell.launcher]
+categories = false
+compact = true
+
 [shell.shadow]
 direction = "down"
 alpha = 0.55
@@ -30,7 +34,7 @@ alpha = 0.55
 mode = "dark"
 source = "wallpaper"
 wallpaper_scheme = "m3-tonal-spot"
-pure_black_dark = false
+pure_black_dark = true
 
 [theme.templates]
 enable_builtin_templates = true
@@ -68,9 +72,16 @@ auto_hide = false
 reserve_space = true
 capsule = false
 
-start = ["launcher", "workspaces"]
-center = ["clock"]
-end = ["media", "tray", "notifications", "clipboard", "volume", "control-center", "session"]
+start = ["workspaces", "spacer_2", "tray"]
+end = ["media", "spacer_2", "group:g1", "spacer_2", "control-center", "session"]
+
+[[bar.main.capsule_group]]
+enabled = true
+fill = "surface_variant"
+id = "g1"
+members = ["notifications", "clipboard", "volume"]
+opacity = 1.0
+padding = 6.0
 
 [notification]
 enable_daemon = true
@@ -95,6 +106,7 @@ volume = true
 brightness = true
 dnd = true
 lock_keys = true
+power_profile = false
 
 [lockscreen]
 enabled = true
@@ -115,7 +127,7 @@ memory_poll_seconds = 2.0
 network_poll_seconds = 3.0
 
 [weather]
-enabled = false
+enabled = true
 
 [audio]
 enable_overdrive = false
@@ -130,10 +142,62 @@ temperature_day = 6500
 temperature_night = 3500
 
 [location]
-auto_locate = false
+auto_locate = true
 custom_schedule = true
 sunrise = "07:00"
 sunset = "22:00"
+
+[widget.media]
+album_art_only = true
+art_size = 22
+
+[widget.clock]
+format = "{:%I:%M %p}"
+
+[widget.spacer_2]
+type = "spacer"
+
+[control_center]
+hidden_tabs = ["power"]
+
+[control_center.calendar]
+show_events_card = false
+
+[[control_center.shortcuts]]
+type = "wifi"
+
+[[control_center.shortcuts]]
+type = "bluetooth"
+
+[[control_center.shortcuts]]
+type = "caffeine"
+
+[[control_center.shortcuts]]
+type = "nightlight"
+
+[[control_center.shortcuts]]
+type = "notification"
+
+[[control_center.shortcuts]]
+type = "clipboard"
+
+[idle]
+behavior_order = ["lock", "screen-off", "lock-and-suspend"]
+
+[idle.behavior.lock]
+action = "lock"
+enabled = false
+timeout = 600.0
+
+[idle.behavior.lock-and-suspend]
+action = "lock_and_suspend"
+enabled = true
+timeout = 900.0
+
+[idle.behavior.screen-off]
+action = "screen_off"
+enabled = false
+timeout = 660.0
 
 [theme.templates.user.nvim-base16]
 input_path = "templates/nvim-base16.lua"
