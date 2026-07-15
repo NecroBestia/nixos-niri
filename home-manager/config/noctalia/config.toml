@@ -11,6 +11,7 @@ clipboard_enabled = true
 clipboard_history_max_entries = 100
 polkit_agent = true
 shared_gl_context = true
+niri_overview_type_to_launch_enabled = true
 
 [shell.panel]
 transparency_mode = "glass"
@@ -113,6 +114,9 @@ enabled = true
 blurred_desktop = true
 blur_intensity = 0.5
 tint_intensity = 0.3
+
+[lockscreen_widgets]
+enabled = false
 
 [backdrop]
 enabled = true
