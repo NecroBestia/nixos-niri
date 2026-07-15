@@ -77,6 +77,7 @@ in {
       rm -rf "$old_backup"
     fi
 
+    # Si el directorio es un symlink, reemplazarlo con copia escribible
     if [ -h "$nvim_dir" ]; then
       echo "nvim: replacing store symlink with writable directory"
       store_path="$(readlink -f "$nvim_dir")"
@@ -101,6 +102,17 @@ in {
         echo "nvim: preserved noctalia-rendered theme"
       fi
     fi
+
+    # Asegurar que todo el arbol sea escribible (maneja casos donde HM regenera subdirs readonly)
+    if [ -d "$nvim_dir" ] && [ ! -w "$nvim_dir" ]; then
+      echo "nvim: fixing read-only directory"
+      chmod -R u+w "$nvim_dir"
+    fi
+    if [ -d "$nvim_dir/lua" ] && [ ! -w "$nvim_dir/lua" ]; then
+      echo "nvim: fixing read-only lua directory"
+      chmod -R u+w "$nvim_dir/lua"
+    fi
+
     if [ ! -f "$lock" ] || [ ! -w "$lock" ]; then
       echo '{"plugins":{}}' >"$lock"
       chmod u+w "$lock"

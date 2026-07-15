@@ -41,7 +41,7 @@ pure_black_dark = true
 enable_builtin_templates = true
 builtin_ids = ["gtk3", "gtk4", "niri", "qt", "starship"]
 enable_community_templates = true
-community_ids = ["neovim", "obsidian", "vscode", "opencode", "papirus-icons", "zathura"]
+community_ids = ["obsidian", "vscode", "opencode", "papirus-icons", "zathura"]
 
 [wallpaper]
 enabled = true
