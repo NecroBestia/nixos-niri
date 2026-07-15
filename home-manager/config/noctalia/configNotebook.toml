@@ -29,7 +29,7 @@ alpha = 0.55
 [theme]
 mode = "dark"
 source = "wallpaper"
-wallpaper_scheme = "m3-tonal-spot"
+wallpaper_scheme = "faithful"
 pure_black_dark = false
 
 [theme.templates]

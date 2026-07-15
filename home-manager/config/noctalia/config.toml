@@ -34,7 +34,7 @@ alpha = 0.55
 [theme]
 mode = "dark"
 source = "wallpaper"
-wallpaper_scheme = "m3-tonal-spot"
+wallpaper_scheme = "faithful"
 pure_black_dark = true
 
 [theme.templates]
@@ -209,4 +209,4 @@ output_path = "$XDG_CONFIG_HOME/nvim/lua/noctalia.lua"
 post_hook = "pkill -SIGUSR1 nvim"
 
 [hooks]
-wallpaper_changed = "ln -sf \"$NOCTALIA_WALLPAPER_PATH\" /home/necro/.cache/current-stylix-wallpaper; noctalia msg templates-apply; pkill -SIGUSR1 nvim; niri msg action load-config-file"
+wallpaper_changed = "ln -sf \"$NOCTALIA_WALLPAPER_PATH\" /home/necro/.cache/current-stylix-wallpaper; noctalia msg templates-apply; kill -SIGUSR1 $(pidof kitty 2>/dev/null); pkill -SIGUSR1 nvim; niri msg action load-config-file"
