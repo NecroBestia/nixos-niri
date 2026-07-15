@@ -116,7 +116,7 @@ blur_intensity = 0.5
 tint_intensity = 0.3
 
 [lockscreen_widgets]
-enabled = false
+enabled = true
 
 [backdrop]
 enabled = true
