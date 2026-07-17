@@ -7,11 +7,10 @@
 # Portales XDG: Integración entre apps Flatpak/nativas y Wayland.
 #
 # PORTALES XDG:
-#   - common.default = [ "gtk" "gnome" ]: Las apps Flatpak usan
-#     los backends GTK y GNOME para diálogos de archivo, etc.
-#   - niri.default = lib.mkForce [ "gtk" "gnome" ]: Fuerza estos
-#     mismos backends para el compositor Niri (evita que el portal
-#     predeterminado use KDE/WLROOTS si están disponibles).
+#   - common.default = [ "gnome" ]: GNOME es el backend por defecto
+#     para todos los portales. GTK está disponible pero no default,
+#     para evitar que interfiera con ScreenCast en Niri.
+#   - niri.default = [ "gnome" ]: Misma razón para Niri.
 #   - ScreenCast/Screenshot usa "gnome": Portal de captura de
 #     pantalla compatible con Niri + GNOME.
 #===================================================================
@@ -53,9 +52,9 @@
         xdg-desktop-portal-gnome
       ];
       config = {
-        common.default = [ "gtk" "gnome" ];
+        common.default = [ "gnome" ];
         niri = {
-          default = lib.mkForce [ "gtk" "gnome" ];
+          default = lib.mkForce [ "gnome" ];
           "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
           "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
         };
