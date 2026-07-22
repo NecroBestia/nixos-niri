@@ -170,6 +170,22 @@
         "type": "github"
       }
     },
+    "graphify": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784296582,
+        "narHash": "sha256-3iO6c/eqA/hsbPEJQc69xt1mxpPOk+OK71FMTxQ7fiQ=",
+        "owner": "Graphify-Labs",
+        "repo": "graphify",
+        "rev": "8cee776cee7d5dc3279085797bde2d2dcce21e36",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Graphify-Labs",
+        "repo": "graphify",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -364,6 +380,7 @@
       "inputs": {
         "anthropic-skills": "anthropic-skills",
         "composio-skills": "composio-skills",
+        "graphify": "graphify",
         "home-manager": "home-manager",
         "nixos-skill": "nixos-skill",
         "nixpkgs": "nixpkgs",
@@ -416,15 +433,15 @@
         "tinted-zed": "tinted-zed"
       },
       "locked": {
-        "lastModified": 1783358511,
-        "narHash": "sha256-/F85cBWvU8b2hpawuCog464065ZTJtdMgVPWwJ9yHjE=",
-        "owner": "danth",
+        "lastModified": 1784059683,
+        "narHash": "sha256-q5MZrmKlg9A4ORx3EQcr7qkuidMU1gVZ+xJ3nCK+xgc=",
+        "owner": "nix-community",
         "repo": "stylix",
-        "rev": "14814ef555d8148ab82eba5054e654cd9eae3a1f",
+        "rev": "c8ccc31f3ea29dc3eb5b54945e5eb549529491d6",
         "type": "github"
       },
       "original": {
-        "owner": "danth",
+        "owner": "nix-community",
         "repo": "stylix",
         "type": "github"
       }

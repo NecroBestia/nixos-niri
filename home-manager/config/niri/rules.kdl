@@ -10,8 +10,21 @@ window-rule {
 // Aplicaciones que se abriran maximizadas 
 window-rule {
     match app-id="vlc"
-    match app-id="firefox"
     open-maximized true 
+}
+window-rule {
+    match app-id="firefox"
+    open-maximized true
+    default-column-display "normal"
+    draw-border-with-background false
+    tab-indicator {
+        active-color "#00000000"
+        inactive-color "#00000000"
+        urgent-color "#00000000"
+    }
+    shadow {
+        off
+    }
 }
 // Aplicaciones que se abriran en el segundo monitor por defecto 
 window-rule {
@@ -63,6 +76,17 @@ window-rule {
 window-rule {
     match is-floating=true is-focused=false
     opacity 0.02
+}
+// no aplica transparencia a opensnitch incluso si esta fuera de foco
+window-rule { 
+  match is-floating=true app-id="opensnitch_ui"
+  opacity 1.00
+}
+window-rule{
+  match is-floating=true app-id="org.gnome.Nautilus"
+  default-column-width { fixed 890; }
+  default-window-height { fixed 550; }
+
 }
 // Blur para superficies Noctalia
 layer-rule {

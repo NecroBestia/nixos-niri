@@ -18,7 +18,8 @@
   # spotify-startup — Lanzador Condicional de Spotify
   #-----------------------------------------------------------------
   spotify-startup = pkgs.writeShellScriptBin "spotify-startup" ''
-    if flatpak list | grep -qi spotify; then
+    # Guard: fallaba con "flatpak: command not found" si flatpak no estaba instalado.
+    if command -v flatpak >/dev/null 2>&1 && flatpak list 2>/dev/null | grep -qi spotify; then
       flatpak run com.spotify.Client
     else
       spotify

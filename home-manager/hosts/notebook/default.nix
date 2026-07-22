@@ -15,7 +15,7 @@
     stateVersion = "26.05";
   };
 
-  home.packages = with pkgs; [ ];
+  home.packages = [ ];  # with pkgs; removido: innecesario en lista vacía y generaba advertencia.
 
   programs.noctalia.settings = ../../config/noctalia/configNotebook.toml;
 }

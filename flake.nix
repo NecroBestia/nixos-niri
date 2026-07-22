@@ -1,5 +1,5 @@
 #===================================================================
-# FLATE PRINCIPAL — NixOS + Home Manager
+# FLAKE PRINCIPAL — NixOS + Home Manager (corregido: FLATE → FLAKE, era typo)
 #===================================================================
 # Este flake gestiona la configuración completa de dos máquinas:
 #   - desktop: PC de sobremesa con GPU NVIDIA y discos NTFS.
@@ -116,10 +116,17 @@
       flake = false;
     };
 
-    # Stylix — Theming dinámico desde wallpaper (GTK, Firefox, kitty, GRUB, etc.).
+    # Stylix — Theming dinámico desde wallpaper. Usamos nix-community/stylix porque danth/stylix
+    # fue transferido a nix-community (el antiguo URL quedó obsoleto).
     stylix = {
-      url = "github:danth/stylix";
+      url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Graphify — Knowledge graph para codebases (skill + CLI).
+    graphify = {
+      url = "github:Graphify-Labs/graphify";
+      flake = false;
     };
   };
 

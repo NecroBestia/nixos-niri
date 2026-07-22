@@ -9,7 +9,7 @@
 #   cursorName, cursorSize, MyTerminal → Cambia aquí
 #   y se refleja en cursor, shell, y atajos.
 #===================================================================
-{ config, pkgs, pkgs-unstable, inputs, ... }:
+{ config, pkgs, pkgs-unstable, ... }:
 let
   cursorName = "Bibata-Modern-Ice";
   cursorSize = 24;
@@ -80,19 +80,21 @@ in {
     # reciente). El resto usa nixpkgs estable.
     packages = with pkgs; [
       # Sistema y Terminal
-      kitty starship fastfetch tree curl nil direnv
-      nix-direnv libreoffice gh libnotify btop 
+      kitty starship fastfetch tree curl nil        # direnv removido: ya configurado via programs.direnv.
+      libreoffice gh libnotify btop                   # nix-direnv removido: idem.
 
       # Entorno Gráfico Wayland
-      playerctl wl-clipboard swayidle
+      playerctl wl-clipboard                            # swayidle removido: redundante.
       gsimplecal
 
       # Multimedia y Edición
       pavucontrol nomacs vlc zathura mupdf qalculate-qt
- 
+      pkgs.devenv            # Entornos dev declarativos con servicios
+
       # Inestables (Última versión desde nixpkgs-unstable)
       pkgs-unstable.krita      # Ilustración digital.
       pkgs-unstable.obsidian   # Notas Markdown con graph view.
+      pkgs-unstable.vesktop   # Discord client con Vencord integrado.
       pkgs-unstable.vscodium   # VS Code sin telemetría.
       pkgs-unstable.xournalpp  # Anotaciones en PDF.
       pkgs-unstable.opensnitch-ui # Firewall interactivo (GUI)
@@ -265,6 +267,8 @@ in {
   home.file = {
     ".config/kitty/kitty.conf".source   = ../config/kitty/kitty.conf;
     ".config/zathura/zathurarc".source  = ../config/zathura/zathurarc;
+    ".config/sioyek/keys_user.config".source  = ../config/sioyek/keys_user.config;
+    ".config/sioyek/prefs_user.config".source = ../config/sioyek/prefs_user.config;
 
     # Thumbnailer para PDF (pdftoppm viene con poppler-utils)
     # Flags clave:
@@ -281,14 +285,32 @@ in {
     # TUI plugins para OpenCode (sidebars de monitoreo)
     ".config/opencode/tui.jsonc".text = builtins.toJSON {
       plugin = [
-        "opencode-visual-cache@latest"
-        "opencode-subagent-statusline@latest"
+        "opencode-visual-cache@1.2.16"
+        "opencode-subagent-statusline@1.2.0"
       ];
     };
   };
 
   #-----------------------------------------------------------------
   # MÓDULOS DE HOME MANAGER
+  #-----------------------------------------------------------------
+  # KITTY.CONF — Intencionalmente NO hacemos writable
+  #-----------------------------------------------------------------
+  # El builtin template de Noctalia para kitty ejecuta un apply.sh cuyo
+  # comportamiento depende de si kitty.conf tiene permiso de escritura:
+  #
+  #   [ -w kitty.conf ] → kitty +kitten themes --reload-in=all noctalia
+  #                       (cuelga: hace DNS a codeload.github.com, sin TTY)
+  #
+  #   [ ! -w kitty.conf ] → kitty +runpy "reload_conf_in_all_kitties()"
+  #                       (funciona: usa el socket IPC de kitty en background)
+  #
+  # Como HM despliega kitty.conf como symlink al nix store (read-only),
+  # apply.sh toma SIEMPRE la rama fallback que funciona. NO reemplazamos
+  # el symlink con un archivo escribible — eso rompería la recarga.
+  #
+  # El wallpaper_changed hook en config.toml también envía SIGUSR1 (~2s
+  # después del cambio) como respaldo adicional.
   #-----------------------------------------------------------------
   imports = [
     ../modules/niri.nix      # Niri + polkit + keyring.
@@ -297,18 +319,7 @@ in {
     ../modules/opencode.nix  # opencode (skills, plugins, MCPs).
     ../modules/noctalia.nix  # Noctalia: recortes, wallpaper y helpers.
     ../modules/stylix.nix    # Stylix: Firefox theme + GRUB/console (GTK a cargo de Noctalia).
-  ];
+    ../modules/sioyek.nix    # Sioyek: PDF reader con Qt/XCB (fix NVIDIA Wayland).
 
-  # Reemplaza el symlink de kitty.conf por un archivo escribible,
-  # para que Noctalia pueda actualizar las paletas dinámicamente.
-  home.activation.ensureWritableKittyConfig = config.lib.dag.entryAfter ["linkGeneration"] ''
-    kitty_conf="${config.home.homeDirectory}/.config/kitty/kitty.conf"
-    if [ -h "$kitty_conf" ]; then
-      echo "kitty: replacing store symlink with writable file"
-      store_path="$(readlink -f "$kitty_conf")"
-      rm -f "$kitty_conf"
-      cp "$store_path" "$kitty_conf"
-      chmod u+w "$kitty_conf"
-    fi
-  '';
+  ];
 }

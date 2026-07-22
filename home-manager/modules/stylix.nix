@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{ lib, inputs, ... }:
 
 {
   imports = [ inputs.stylix.homeModules.stylix ];
@@ -7,8 +7,7 @@
     enable = true;
     autoEnable = false;
     polarity = "dark";
-    image = lib.mkIf (builtins.pathExists "/home/necro/.cache/current-stylix-wallpaper")
-      "/home/necro/.cache/current-stylix-wallpaper";
+    image = lib.mkIf (builtins.pathExists "/home/necro/.cache/current-stylix-wallpaper") "/home/necro/.cache/current-stylix-wallpaper";
 
     base16Scheme = {
       slug = "catppuccin-mocha";
