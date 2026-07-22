@@ -8,15 +8,19 @@
 #   inputs        → Skills descargadas (definidas en flake.nix)
 #   pkgs-unstable → opencode desde nixpkgs-unstable
 #===================================================================
-{ config, pkgs, pkgs-unstable, inputs, ... }:
+{ pkgs-unstable, inputs, pkgs, ... }:
 
 let
   # Atajo para builtins.path (reduce ruido visual).
   skill = path: builtins.path { inherit path; };
-in {
+in
+{
   programs.opencode = {
     enable = true;
     package = pkgs-unstable.opencode;
+    extraPackages = with pkgs; [
+      pkgs.uv                   # Solo en PATH de opencode (para graphify CLI)
+    ];
 
     #-----------------------------------------------------------------
     # SKILLS — Conocimiento especializado para el agente
@@ -41,48 +45,53 @@ in {
       '';
 
       # UI/UX
-      frontend-design    = skill "${inputs.anthropic-skills}/skills/frontend-design";
-      ui-ux-pro-max      = skill "${inputs.opencode-kit}/.opencode/skills/ui-ux-pro-max";
-      ui-ux-designer     = skill "${inputs.opencode-6-2026}/opencode-config/skill-libraries/web-development/ui-ux-designer";
+      frontend-design = skill "${inputs.anthropic-skills}/skills/frontend-design";
+      ui-ux-pro-max = skill "${inputs.opencode-kit}/.opencode/skills/ui-ux-pro-max";
+      ui-ux-designer = skill "${inputs.opencode-6-2026}/opencode-config/skill-libraries/web-development/ui-ux-designer";
       ui-ux-design-review = skill "${inputs.tutiendaweb-public}/.opencode/skills/ui-ux-design-review";
-      frontend-ui-ux     = skill "${inputs.oh-my-opencode}/packages/shared-skills/skills/frontend";
-      typeui             = skill "${inputs.typeui}/plugins/openclaw/typeui/skills/typeui";
+      frontend-ui-ux = skill "${inputs.oh-my-opencode}/packages/shared-skills/skills/frontend";
+      typeui = skill "${inputs.typeui}/plugins/openclaw/typeui/skills/typeui";
 
       # Next.js / Node.js
       react-best-practices = skill "${inputs.vercel-skills}/skills/react-best-practices";
 
       # Desarrollo general
-      mcp-builder    = skill "${inputs.anthropic-skills}/skills/mcp-builder";
+      mcp-builder = skill "${inputs.anthropic-skills}/skills/mcp-builder";
       webapp-testing = skill "${inputs.anthropic-skills}/skills/webapp-testing";
 
       # Utilidades
-      stop-slop    = skill inputs.stop-slop;
+      stop-slop = skill inputs.stop-slop;
       composio-cli = skill "${inputs.composio-skills}/skills/composio-cli";
+
+      # Graphify — Knowledge graph interactivo
+      graphify = skill "${inputs.graphify}/graphify/skill-opencode.md";
     };
 
     #-----------------------------------------------------------------
     # SETTINGS — Plugins y MCPs
     #-----------------------------------------------------------------
     settings = {
+      # WARN: Las versiones deben actualizarse manualmente. Correr
+      # `cat ~/.cache/opencode/packages/<plugin>/package.json` para
+      # ver la versión resuelta después de un `nixos-rebuild`.
       plugin = [
-        "superpowers@git+https://github.com/obra/superpowers.git"
-        "opencode-command-inject"
-        "opencode-worktree"
-        "opencode-agent-memory"
-        "opencode-context-cache"
-        "@ramtinj95/opencode-tokenscope"
-        "opencode-deepseek-cache@latest"
-        # DCP: Comprime contexto dinámicamente (dedup + resumen).
-        # Puede reducir cache hits (~85% con DCP vs ~95% sin él).
-        # Comentar la línea de abajo para deshabilitar y comparar.
-        "opencode-dynamic-context-pruning"
+        "superpowers@git+https://github.com/obra/superpowers.git#d884ae04edebef577e82ff7c4e143debd0bbec99"
+        "opencode-command-inject@1.3.0"
+        "opencode-worktree@0.4.1"
+        "opencode-agent-memory@0.2.0"
+        "@ramtinj95/opencode-tokenscope@1.8.0"
+        "opencode-deepseek-cache@2.2.0"
       ];
 
       mcp = {
         context7 = {
           type = "local";
-          command = ["npx" "-y" "@upstash/context7-mcp"];
-          enabled = false;  # Bajo demanda para no ralentizar el startup
+          command = [
+            "npx"
+            "-y"
+            "@upstash/context7-mcp"
+          ];
+          enabled = false; # Bajo demanda para no ralentizar el startup
         };
       };
 

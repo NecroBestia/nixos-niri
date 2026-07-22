@@ -22,7 +22,7 @@
 #   Gestionadas por Noctalia (notification.daemon = true en config.toml).
 #   No se usa mako ni swaync explícitamente.
 #===================================================================
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.programs.niri;

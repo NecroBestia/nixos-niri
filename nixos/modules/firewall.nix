@@ -36,7 +36,7 @@
     enable = true; 
     allowPing = true;
     allowedTCPPorts = [22];
-    trustedInterfaces = ["virbr0"];
+    trustedInterfaces = lib.optionals config.vm.libvirtd [ "virbr0" ]; # Condicional: virbr0 solo existe si libvirtd está activo (evita error si se desactiva).
   };
   # Hardening de red (sysctl)
   boot.kernel.sysctl = {

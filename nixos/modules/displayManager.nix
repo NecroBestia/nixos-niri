@@ -37,4 +37,8 @@
       ];
     };
   };
+
+  # Garantiza que el tema esté disponible en el closure del sistema
+  # (extraPackages a veces no lo mete en /run/current-system/sw/).
+  environment.systemPackages = with pkgs; [ sddm-astronaut ];
 }

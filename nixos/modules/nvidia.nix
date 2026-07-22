@@ -32,7 +32,8 @@
 
   services.xserver.videoDrivers = [ "nvidia" ];
 
-  boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_drm" ];
+  boot.kernelModules = [ "nvidia_uvm" ];   # uvm no necesita initrd: se carga post-boot.
   boot.kernelParams = [
     "nvidia_drm.fbdev=1"
     "nvidia_drm.modeset=1"

@@ -66,19 +66,22 @@
   nix = {
     settings = {
       experimental-features = [ "nix-command" "flakes" ];  # Flakes habilitado.
-      auto-optimise-store = true;     # Deduplica el store automáticamente.
-      download-buffer-size = 524288000; # 500 MB buffer de descarga.
+      auto-optimise-store = false;    # false: evita CPU/IO en segundo plano y fragmentación del store.
+      download-buffer-size = 67108864; # 64 MB: 500MB previo consumía RAM innecesaria.
       extra-substituters = [ "https://noctalia.cachix.org" ];
       extra-trusted-public-keys = [ "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=" ];
     };
     gc = {
-      automatic = true;               # Limpieza automática diaria.
-      dates = "daily";
-      options = "--delete-older-than 10d";  # Borra generaciones >10 días.
+      automatic = true;               # Limpieza automática.
+      dates = "weekly";               # weekly (no daily): diario desgasta SSD innecesariamente.
+      options = "--delete-older-than 30d";  # 30d: 10d era muy agresivo para un equipo de uso diario.
     };
   };
 
-  nixpkgs.config.allowUnfree = true;  # Paquetes privativos.
+  # Necesario aquí (no es duplicado inútil): nixpkgs.lib.nixosSystem crea su propia instancia
+  # de pkgs internamente, ignorando el `config.allowUnfree = true` que definimos en flake.nix
+  # para los pkgs globales (que solo usan home-manager y pkgs-unstable).
+  nixpkgs.config.allowUnfree = true;
 
   #-----------------------------------------------------------------
   # GSETTINGS — Schemas para GLib (necesario para thumbnails, íconos)
@@ -101,11 +104,8 @@
     vim            # Editor de respaldo.
     wget           # Descarga por HTTP.
     git            # Control de versiones.
-    home-manager   # Gestor de config de usuario.
-    sddm-astronaut # Tema para el gestor de sesión SDDM.
     htop           # Monitor de procesos interactivo.
     papirus-icon-theme  # Iconos para el escritorio.
-    glib           # gsettings CLI + schemas (necesario para thumbnails, íconos de carpeta).
   ];
 
   xdg.icons.enable = true;
@@ -113,5 +113,8 @@
   # Desactiva el gestor de sesión Xterm por defecto.
   services.xserver.desktopManager.xterm.enable = false;
   services.xserver.excludePackages = [ pkgs.xterm ];
+
+  # speech-dispatcher (síntesis de voz) — innecesario en ambos equipos.
+  services.speechd.enable = false;
 
 }

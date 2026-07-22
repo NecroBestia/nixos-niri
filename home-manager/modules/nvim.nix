@@ -25,10 +25,10 @@
 
 let
   nvim-dependencies = with pkgs; [
-    gcc gnumake unzip wget curl git ripgrep fd
-    wl-clipboard xclip
-    clang-tools nil pyright rust-analyzer nodejs pkgs-unstable.tree-sitter
-    lua-language-server texlab texlive.combined.scheme-medium
+    gcc gnumake unzip curl git ripgrep fd               # wget removido: curl ya cubre descargas.
+    wl-clipboard                                           # xclip removido: no útil en Wayland.
+    clang-tools nil pyright rust-analyzer pkgs-unstable.tree-sitter # nodejs removido: no necesario para LSPs.
+    lua-language-server texlab texlive.combined.scheme-full # Elección: scheme completo (independiente del peso)
   ];
 
   custom-neovim = pkgs.symlinkJoin {

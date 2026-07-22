@@ -3,7 +3,10 @@
 -- =========================================================
 local MiniFiles = require("mini.files")
 MiniFiles.setup({ mappings = { go_in = "<CR>", go_in_plus = "L", go_out = "_", go_out_plus = "H" } })
-vim.keymap.set("n", "-", "<cmd>lua MiniFiles.open()<CR>", { desc = "Toggle mini file explorer" })
+vim.keymap.set("n", "-", function()
+  local path = vim.api.nvim_buf_get_name(0)
+  if path ~= "" then MiniFiles.open(path) else MiniFiles.open() end
+end, { desc = "Toggle mini file explorer (current file dir)" })
 
 -- Superpoderes para MiniFiles: Abrir en Pantalla Dividida
 local map_split = function(buf_id, lhs, direction)

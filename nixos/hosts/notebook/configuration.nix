@@ -7,7 +7,7 @@
 #   - Sin virtualización (vm.libvirtd = false).
 #   - Sin opensnitch (services.opensnitch.enable = false).
 #===================================================================
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -81,8 +81,23 @@
   #-----------------------------------------------------------------
   # MÓDULOS DESACTIVADOS PARA ESTE HOST
   #-----------------------------------------------------------------
+  programs.containers.enable = false; # Sin contenedores (Podman) en portátil (ahorra recursos del sistema).
   vm.libvirtd = false;               # Sin virtualización en portátil.
   services.opensnitch.enable = false; # Sin firewall interactivo.
+
+  #-----------------------------------------------------------------
+  # OPTIMIZACIONES POST-LOGIN
+  #-----------------------------------------------------------------
+  # Los portales XDG y servicios innecesarios no arrancan al login
+  # para reducir el delay post-login (~6.5s en ThinkPad).
+  # Se activan bajo demanda vía D-Bus cuando alguna app los necesita.
+  systemd.user.services.xdg-desktop-portal.wantedBy = lib.mkForce [];
+  systemd.user.services.xdg-desktop-portal-gnome.wantedBy = lib.mkForce [];
+  systemd.user.services.xdg-desktop-portal-gtk.wantedBy = lib.mkForce [];
+  systemd.user.services.gvfs-gphoto2-volume-monitor.wantedBy = lib.mkForce [];
+  systemd.user.services.gvfs-afc-volume-monitor.wantedBy = lib.mkForce [];
+  systemd.user.services.gvfs-goa-volume-monitor.wantedBy = lib.mkForce [];
+  systemd.user.services.obex.wantedBy = lib.mkForce [];
 
   #-----------------------------------------------------------------
   # STATE VERSION (NO CAMBIAR)

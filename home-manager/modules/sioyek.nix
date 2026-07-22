@@ -18,7 +18,8 @@ let
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram $out/bin/sioyek \
-        --set QT_QPA_PLATFORM xcb
+        --set QT_QPA_PLATFORM xcb \
+        --prefix XDG_DATA_DIRS : "${pkgs.gtk3}/share/gsettings-schemas/gtk+3-${pkgs.gtk3.version}"
     '';
   };
 in {

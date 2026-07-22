@@ -204,9 +204,31 @@ enabled = false
 timeout = 660.0
 
 [theme.templates.user.nvim-base16]
+# Template que genera ~/.config/nvim/lua/noctalia.lua con colores extraídos del wallpaper vía
+# Material You (Material Design 3 → base16). El post_hook envía SIGUSR1 a nvim; init.lua tiene
+# un handler (vim.uv.new_signal) que hace dofile del archivo y llama a setup() para recargar
+# el colorscheme en caliente. Usamos ruta absoluta (no $HOME ni $XDG_CONFIG_HOME) porque
+# Noctalia no expande variables de entorno en output_path.
 input_path = "templates/nvim-base16.lua"
-output_path = "$XDG_CONFIG_HOME/nvim/lua/noctalia.lua"
+output_path = "/home/necro/.config/nvim/lua/noctalia.lua"
 post_hook = "pkill -SIGUSR1 nvim"
 
 [hooks]
-wallpaper_changed = "ln -sf \"$NOCTALIA_WALLPAPER_PATH\" /home/necro/.cache/current-stylix-wallpaper; noctalia msg templates-apply; kill -SIGUSR1 $(pidof kitty 2>/dev/null); pkill -SIGUSR1 nvim; niri msg action load-config-file"
+# Hook que se ejecuta tras cada cambio de wallpaper. Pipeline completo:
+#   1. ln -sf: actualiza el symlink current-stylix-wallpaper (legado de Stylix).
+#   2. noctalia msg templates-apply: regenera TODOS los templates (builtin + user).
+#      Es asíncrono — retorna "ok" al instante, procesa en background en 2 tandas:
+#        Tanda 1 (~1s): kitty, gtk3, gtk4  (archivos de configuración rápidos)
+#        Tanda 2 (~31s): niri, starship, nvim  (output_path_dynamic + user templates)
+#   3. sleep 2: espera a que Tanda 1 termine antes de recargar kitty. Necesario porque
+#      el builtin template de kitty tiene un apply.sh que ejecuta "kitty +kitten themes",
+#      el cual hace una consulta DNS a codeload.github.com (para cachear temas) y se cuelga
+#      sin TTY. Con kitty.conf como symlink read-only (ver shared/default.nix), apply.sh
+#      toma la rama fallback "kitty +runpy reload_conf_in_all_kitties()" que funciona.
+#   4. kill -SIGUSR1 $(pidof kitty): recarga kitty.conf (incluye themes/noctalia.conf).
+#   5. pkill -SIGUSR1 nvim: recarga noctalia.lua en nvim vía signal handler.
+#      El post_hook del user template (Tanda 2) también envía SIGUSR1 a nvim, así que
+#      este es redundante pero inofensivo (recarga 2 veces: colores viejos + nuevos).
+#   6. niri msg action load-config-file: recarga niri (incluye noctalia.kdl).
+#      El post_hook del builtin template de niri (Tanda 2) también lo hace.
+wallpaper_changed = "ln -sf \"$NOCTALIA_WALLPAPER_PATH\" /home/necro/.cache/current-stylix-wallpaper; noctalia msg templates-apply; sleep 2; kill -SIGUSR1 $(pidof kitty 2>/dev/null); pkill -SIGUSR1 nvim; niri msg action load-config-file"

@@ -4,7 +4,6 @@
 set adjust-open "best-fit"
 set pages-per-row 1
 set scroll-page-aware true
-set smooth-scroll true
 
 # ── UI ───────────────────────────────────────────
 set guioptions sb
