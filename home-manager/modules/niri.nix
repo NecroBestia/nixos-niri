@@ -54,28 +54,18 @@ in {
       ".config/niri/startup.kdl"  = { source = ../config/niri/startup.kdl;  force = true; };
     };
 
-    # Reemplaza symlinks del nix store por archivos escribibles,
-    # para que Noctalia pueda escribir noctalia.kdl y modificar config.kdl.
+    # Noctalia modifica estos archivos en caliente (noctalia.kdl, config.kdl).
+    # HM los despliega como symlinks read-only; el activation block asegura
+    # que sean archivos escribibles después de cada regeneración.
     home.activation.ensureWritableNiriConfig = config.lib.dag.entryAfter ["linkGeneration"] ''
       niri_dir="${config.home.homeDirectory}/.config/niri"
-      if [ -h "$niri_dir" ]; then
-        # Caso legacy: ~/.config/niri era symlink al directorio completo
-        echo "niri: replacing store symlink with writable directory"
-        store_path="$(readlink -f "$niri_dir")"
-        rm -f "$niri_dir"
-        cp -r "$store_path" "$niri_dir"
-        chmod -R u+w "$niri_dir"
-      elif [ -d "$niri_dir" ]; then
-        # Caso actual: archivos individuales, reemplazar symlinks
-        for f in "$niri_dir"/*.kdl; do
-          if [ -f "$f" ] && [ ! -h "$f" ]; then continue; fi
-          store_path="$(readlink -f "$f" 2>/dev/null)"
-          if [ -n "$store_path" ] && [ -f "$store_path" ]; then
-            cp "$store_path" "$f"
-            chmod u+w "$f"
-            echo "niri: replaced symlink $(basename "$f") with writable copy"
+      if [ -d "$niri_dir" ]; then
+        find "$niri_dir" -type l -name "*.kdl" -exec sh -c '
+          target=$(readlink -f "$1" 2>/dev/null || true)
+          if [ -n "$target" ] && [ -f "$target" ]; then
+            rm -f "$1" && cp "$target" "$1" && chmod u+w "$1"
           fi
-        done
+        ' _ {} \;
       fi
     '';
 

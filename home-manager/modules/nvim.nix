@@ -52,7 +52,9 @@ in {
     # Archivos individuales en vez de .config/nvim completo para evitar
     # colisiones en checkLinkTargets cuando el directorio ya existe.
     ".config/nvim/init.lua"            = { source = ../config/neovim/init.lua;            force = true; };
-    ".config/nvim/nvim-pack-lock.json" = { source = ../config/neovim/nvim-pack-lock.json; force = true; };
+    # nvim-pack-lock.json NO se despliega vía HM — vim.pack lo crea y
+    # gestiona como archivo escribible en caliente. Si HM lo desplegara
+    # sería un symlink read-only → EROFS al escribir.
     ".config/nvim/lua/matugen.lua"     = { source = ../config/neovim/lua/matugen.lua;     force = true; };
     ".config/nvim/lua/core/keymaps.lua"     = { source = ../config/neovim/lua/core/keymaps.lua;     force = true; };
     ".config/nvim/lua/core/lsp.lua"         = { source = ../config/neovim/lua/core/lsp.lua;         force = true; };
@@ -72,82 +74,5 @@ in {
     vimdiff = "nvim -d";
   };
 
-  #-----------------------------------------------------------------
-  # FIX: El directorio .config/nvim es un symlink read-only del Nix store.
-  #      vim.pack (Neovim 0.12+) necesita escribir nvim-pack-lock.json
-  #      para sincronizar el lock data → falla con EROFS.
-  #
-  #      Solución: después de que HM cree los symlinks, reemplazamos
-  #      nvim-pack-lock.json con una copia escribible.
-  #-----------------------------------------------------------------
-  # Reemplaza symlinks del store por copias escribibles recursivamente.
-  # vim.pack necesita escribir nvim-pack-lock.json y Noctalia genera
-  # noctalia.lua en caliente.
-  home.activation.ensureWritableNvimConfig = config.lib.dag.entryAfter ["linkGeneration"] ''
-    nvim_dir="${config.home.homeDirectory}/.config/nvim"
-    lock="$nvim_dir/nvim-pack-lock.json"
 
-    # Limpia backups viejos que HM deja al regenerar
-    old_backup="${config.home.homeDirectory}/.config/nvim.backup"
-    if [ -e "$old_backup" ]; then
-      rm -rf "$old_backup"
-    fi
-
-    # Caso legacy: ~/.config/nvim era symlink al directorio completo
-    if [ -h "$nvim_dir" ]; then
-      echo "nvim: replacing store symlink with writable directory"
-      store_path="$(readlink -f "$nvim_dir")"
-      existing_lock=""
-      existing_noctalia=""
-      if [ -f "$lock" ]; then
-        existing_lock=$(cat "$lock" 2>/dev/null)
-      fi
-      if [ -f "$nvim_dir/lua/noctalia.lua" ]; then
-        existing_noctalia=$(cat "$nvim_dir/lua/noctalia.lua" 2>/dev/null)
-      fi
-      rm -f "$nvim_dir"
-      cp -r "$store_path" "$nvim_dir"
-      chmod -R u+w "$nvim_dir"
-      if [ -n "$existing_lock" ]; then
-        echo "$existing_lock" > "$lock"
-        echo "nvim: preserved existing lock data"
-      fi
-      if [ -n "$existing_noctalia" ]; then
-        echo "$existing_noctalia" > "$nvim_dir/lua/noctalia.lua"
-        echo "nvim: preserved noctalia-rendered theme"
-      fi
-    fi
-
-    # Caso actual: archivos individuales, reemplazar symlinks
-    find "$nvim_dir" -type l 2>/dev/null | while read -r link; do
-      echo "nvim: found symlink $link"
-      target="$(readlink -f "$link" 2>/dev/null || true)"
-      if [ -n "$target" ] && [ -f "$target" ]; then
-        rm -f "$link"
-        if cp "$target" "$link"; then
-          chmod u+w "$link"
-          echo "nvim: replaced symlink $(basename "$link")"
-        else
-          echo "nvim: failed to copy $target → $link"
-        fi
-      fi
-    done
-
-    # Asegurar que el directorio base sea escribible
-    if [ -d "$nvim_dir" ] && [ ! -w "$nvim_dir" ]; then
-      chmod u+w "$nvim_dir"
-    fi
-
-    # Garantizar lock file escribible
-    if [ ! -f "$lock" ] || [ ! -w "$lock" ]; then
-      echo '{"plugins":{}}' >"$lock"
-      chmod u+w "$lock"
-      echo "nvim-pack-lock.json: created writable lock file"
-    fi
-
-    # Dar permisos a noctalia.lua si existe
-    if [ -f "$nvim_dir/lua/noctalia.lua" ] && [ ! -w "$nvim_dir/lua/noctalia.lua" ]; then
-      chmod u+w "$nvim_dir/lua/noctalia.lua"
-    fi
-  '';
 }
