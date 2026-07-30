@@ -122,6 +122,7 @@ in {
     find "$nvim_dir" -type l 2>/dev/null | while read -r link; do
       target="$(readlink -f "$link" 2>/dev/null || true)"
       if [ -n "$target" ] && [ -f "$target" ]; then
+        rm -f "$link"          # Evita "same file" de cp cuando link→store
         cp "$target" "$link"
         chmod u+w "$link"
       fi
