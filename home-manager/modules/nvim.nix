@@ -120,11 +120,16 @@ in {
 
     # Caso actual: archivos individuales, reemplazar symlinks
     find "$nvim_dir" -type l 2>/dev/null | while read -r link; do
+      echo "nvim: found symlink $link"
       target="$(readlink -f "$link" 2>/dev/null || true)"
       if [ -n "$target" ] && [ -f "$target" ]; then
-        rm -f "$link"          # Evita "same file" de cp cuando link→store
-        cp "$target" "$link"
-        chmod u+w "$link"
+        rm -f "$link"
+        if cp "$target" "$link"; then
+          chmod u+w "$link"
+          echo "nvim: replaced symlink $(basename "$link")"
+        else
+          echo "nvim: failed to copy $target → $link"
+        fi
       fi
     done
 
