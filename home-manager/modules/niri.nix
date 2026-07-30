@@ -36,36 +36,46 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    xdg.configFile."niri/" = {
-      source = ../config/niri;
-      force = true;
-    };
-
     programs = {
       swaylock.enable = true;
     };
 
-    # Elimina el directorio ~/.config/niri ANTES de que linkGeneration
-    # intente crear el symlink. Así evitamos el error "Existing file
-    # '/home/necro/.config/niri' would be clobbered".
-    home.activation.cleanNiriDirBeforeLink = config.lib.dag.entryBefore ["linkGeneration"] ''
-      niri_dir="${config.home.homeDirectory}/.config/niri"
-      if [ -d "$niri_dir" ] && [ ! -h "$niri_dir" ]; then
-        echo "niri: removing writable directory before linkGeneration"
-        rm -rf "$niri_dir"
-      fi
-    '';
+    # Archivos individuales en vez de xdg.configFile."niri/" (directorio completo).
+    # Con directorio, HM choca contra ~/.config/niri existente en checkLinkTargets
+    # incluso con force = true. Archivos individuales evitan la colisión.
+    home.file = {
+      ".config/niri/binds.kdl".source    = ../config/niri/binds.kdl;
+      ".config/niri/config.kdl".source   = ../config/niri/config.kdl;
+      ".config/niri/input.kdl".source    = ../config/niri/input.kdl;
+      ".config/niri/layout.kdl".source   = ../config/niri/layout.kdl;
+      ".config/niri/noctalia.kdl".source = ../config/niri/noctalia.kdl;
+      ".config/niri/outputs.kdl".source  = ../config/niri/outputs.kdl;
+      ".config/niri/rules.kdl".source    = ../config/niri/rules.kdl;
+      ".config/niri/startup.kdl".source  = ../config/niri/startup.kdl;
+    };
 
-    # Reemplaza el symlink del nix store por un directorio escribible,
+    # Reemplaza symlinks del nix store por archivos escribibles,
     # para que Noctalia pueda escribir noctalia.kdl y modificar config.kdl.
     home.activation.ensureWritableNiriConfig = config.lib.dag.entryAfter ["linkGeneration"] ''
       niri_dir="${config.home.homeDirectory}/.config/niri"
       if [ -h "$niri_dir" ]; then
+        # Caso legacy: ~/.config/niri era symlink al directorio completo
         echo "niri: replacing store symlink with writable directory"
         store_path="$(readlink -f "$niri_dir")"
         rm -f "$niri_dir"
         cp -r "$store_path" "$niri_dir"
         chmod -R u+w "$niri_dir"
+      elif [ -d "$niri_dir" ]; then
+        # Caso actual: archivos individuales, reemplazar symlinks
+        for f in "$niri_dir"/*.kdl; do
+          if [ -f "$f" ] && [ ! -h "$f" ]; then continue; fi
+          store_path="$(readlink -f "$f" 2>/dev/null)"
+          if [ -n "$store_path" ] && [ -f "$store_path" ]; then
+            cp "$store_path" "$f"
+            chmod u+w "$f"
+            echo "niri: replaced symlink $(basename "$f") with writable copy"
+          fi
+        done
       fi
     '';
 
