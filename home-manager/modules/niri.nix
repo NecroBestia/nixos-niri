@@ -44,14 +44,14 @@ in {
     # Con directorio, HM choca contra ~/.config/niri existente en checkLinkTargets
     # incluso con force = true. Archivos individuales evitan la colisión.
     home.file = {
-      ".config/niri/binds.kdl".source    = ../config/niri/binds.kdl;
-      ".config/niri/config.kdl".source   = ../config/niri/config.kdl;
-      ".config/niri/input.kdl".source    = ../config/niri/input.kdl;
-      ".config/niri/layout.kdl".source   = ../config/niri/layout.kdl;
-      ".config/niri/noctalia.kdl".source = ../config/niri/noctalia.kdl;
-      ".config/niri/outputs.kdl".source  = ../config/niri/outputs.kdl;
-      ".config/niri/rules.kdl".source    = ../config/niri/rules.kdl;
-      ".config/niri/startup.kdl".source  = ../config/niri/startup.kdl;
+      ".config/niri/binds.kdl"    = { source = ../config/niri/binds.kdl;    force = true; };
+      ".config/niri/config.kdl"   = { source = ../config/niri/config.kdl;   force = true; };
+      ".config/niri/input.kdl"    = { source = ../config/niri/input.kdl;    force = true; };
+      ".config/niri/layout.kdl"   = { source = ../config/niri/layout.kdl;   force = true; };
+      ".config/niri/noctalia.kdl" = { source = ../config/niri/noctalia.kdl; force = true; };
+      ".config/niri/outputs.kdl"  = { source = ../config/niri/outputs.kdl;  force = true; };
+      ".config/niri/rules.kdl"    = { source = ../config/niri/rules.kdl;    force = true; };
+      ".config/niri/startup.kdl"  = { source = ../config/niri/startup.kdl;  force = true; };
     };
 
     # Reemplaza symlinks del nix store por archivos escribibles,
