@@ -48,9 +48,22 @@ in {
     custom-neovim
   ];
 
-  home.file.".config/nvim" = {
-    source = ../config/neovim;
-    force = true;
+  home.file = {
+    # Archivos individuales en vez de .config/nvim completo para evitar
+    # colisiones en checkLinkTargets cuando el directorio ya existe.
+    ".config/nvim/init.lua"            = { source = ../config/neovim/init.lua;            force = true; };
+    ".config/nvim/nvim-pack-lock.json" = { source = ../config/neovim/nvim-pack-lock.json; force = true; };
+    ".config/nvim/lua/matugen.lua"     = { source = ../config/neovim/lua/matugen.lua;     force = true; };
+    ".config/nvim/lua/core/keymaps.lua"     = { source = ../config/neovim/lua/core/keymaps.lua;     force = true; };
+    ".config/nvim/lua/core/lsp.lua"         = { source = ../config/neovim/lua/core/lsp.lua;         force = true; };
+    ".config/nvim/lua/core/options.lua"     = { source = ../config/neovim/lua/core/options.lua;     force = true; };
+    ".config/nvim/lua/core/treesitter.lua"  = { source = ../config/neovim/lua/core/treesitter.lua; force = true; };
+    ".config/nvim/lua/pack/commands.lua"    = { source = ../config/neovim/lua/pack/commands.lua;    force = true; };
+    ".config/nvim/lua/pack/init.lua"        = { source = ../config/neovim/lua/pack/init.lua;        force = true; };
+    ".config/nvim/lua/pack/mini.lua"        = { source = ../config/neovim/lua/pack/mini.lua;        force = true; };
+    ".config/nvim/lua/pack/plugins.lua"     = { source = ../config/neovim/lua/pack/plugins.lua;     force = true; };
+    ".config/nvim/lua/pack/sources.lua"     = { source = ../config/neovim/lua/pack/sources.lua;     force = true; };
+    ".config/nvim/lua/pack/vimtex.lua"      = { source = ../config/neovim/lua/pack/vimtex.lua;      force = true; };
   };
 
   home.shellAliases = {
@@ -67,17 +80,20 @@ in {
   #      Solución: después de que HM cree los symlinks, reemplazamos
   #      nvim-pack-lock.json con una copia escribible.
   #-----------------------------------------------------------------
-  home.activation.ensureWritableNvimPackLock = config.lib.dag.entryAfter ["linkGeneration"] ''
+  # Reemplaza symlinks del store por copias escribibles recursivamente.
+  # vim.pack necesita escribir nvim-pack-lock.json y Noctalia genera
+  # noctalia.lua en caliente.
+  home.activation.ensureWritableNvimConfig = config.lib.dag.entryAfter ["linkGeneration"] ''
     nvim_dir="${config.home.homeDirectory}/.config/nvim"
     lock="$nvim_dir/nvim-pack-lock.json"
 
-    # Limpia backups viejos que HM deja al regenerar el symlink
+    # Limpia backups viejos que HM deja al regenerar
     old_backup="${config.home.homeDirectory}/.config/nvim.backup"
     if [ -e "$old_backup" ]; then
       rm -rf "$old_backup"
     fi
 
-    # Si el directorio es un symlink, reemplazarlo con copia escribible
+    # Caso legacy: ~/.config/nvim era symlink al directorio completo
     if [ -h "$nvim_dir" ]; then
       echo "nvim: replacing store symlink with writable directory"
       store_path="$(readlink -f "$nvim_dir")"
@@ -98,25 +114,34 @@ in {
       fi
       if [ -n "$existing_noctalia" ]; then
         echo "$existing_noctalia" > "$nvim_dir/lua/noctalia.lua"
-        chmod u+w "$nvim_dir/lua/noctalia.lua"
         echo "nvim: preserved noctalia-rendered theme"
       fi
     fi
 
-    # Asegurar que todo el arbol sea escribible (maneja casos donde HM regenera subdirs readonly)
+    # Caso actual: archivos individuales, reemplazar symlinks
+    find "$nvim_dir" -type l 2>/dev/null | while read -r link; do
+      target="$(readlink -f "$link" 2>/dev/null || true)"
+      if [ -n "$target" ] && [ -f "$target" ]; then
+        cp "$target" "$link"
+        chmod u+w "$link"
+      fi
+    done
+
+    # Asegurar que el directorio base sea escribible
     if [ -d "$nvim_dir" ] && [ ! -w "$nvim_dir" ]; then
-      echo "nvim: fixing read-only directory"
-      chmod -R u+w "$nvim_dir"
-    fi
-    if [ -d "$nvim_dir/lua" ] && [ ! -w "$nvim_dir/lua" ]; then
-      echo "nvim: fixing read-only lua directory"
-      chmod -R u+w "$nvim_dir/lua"
+      chmod u+w "$nvim_dir"
     fi
 
+    # Garantizar lock file escribible
     if [ ! -f "$lock" ] || [ ! -w "$lock" ]; then
       echo '{"plugins":{}}' >"$lock"
       chmod u+w "$lock"
       echo "nvim-pack-lock.json: created writable lock file"
+    fi
+
+    # Dar permisos a noctalia.lua si existe
+    if [ -f "$nvim_dir/lua/noctalia.lua" ] && [ ! -w "$nvim_dir/lua/noctalia.lua" ]; then
+      chmod u+w "$nvim_dir/lua/noctalia.lua"
     fi
   '';
 }
