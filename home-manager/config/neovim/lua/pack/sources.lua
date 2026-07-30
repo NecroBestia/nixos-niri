@@ -20,7 +20,9 @@ vim.pack.add({
 
     -- Herramientas para la Universidad y Matemáticas
         -- El motor definitivo para LaTeX. Compila a PDF, sincroniza visores y entiende sintaxis matemática.
-    "https://github.com/lervag/vimtex",
+    { src = "https://github.com/lervag/vimtex", start = true },
+        -- Previsualización inline de ecuaciones LaTeX en ventana flotante.
+    { src = "https://github.com/jbyuki/nabla.nvim", start = true },
         -- Embellece archivos Markdown. Oculta asteriscos/numerales y renderiza fórmulas y tablas en tiempo real.
     { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim", branch = "main" }, 
 

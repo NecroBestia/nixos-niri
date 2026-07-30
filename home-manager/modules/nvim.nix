@@ -28,7 +28,7 @@ let
     gcc gnumake unzip curl git ripgrep fd               # wget removido: curl ya cubre descargas.
     wl-clipboard                                           # xclip removido: no útil en Wayland.
     clang-tools nil pyright rust-analyzer pkgs-unstable.tree-sitter # nodejs removido: no necesario para LSPs.
-    lua-language-server texlab texlive.combined.scheme-full # Elección: scheme completo (independiente del peso)
+    lua-language-server texlab zathura texlive.combined.scheme-full # zathura: visor PDF para vimtex (forward/backward search)
   ];
 
   custom-neovim = pkgs.symlinkJoin {
@@ -67,6 +67,14 @@ in {
   #      Solución: después de que HM cree los symlinks, reemplazamos
   #      nvim-pack-lock.json con una copia escribible.
   #-----------------------------------------------------------------
+  home.activation.cleanNvimDirBeforeLink = config.lib.dag.entryBefore ["linkGeneration"] ''
+    nvim_dir="${config.home.homeDirectory}/.config/nvim"
+    if [ -d "$nvim_dir" ] && [ ! -h "$nvim_dir" ]; then
+      echo "nvim: removing writable directory before linkGeneration"
+      rm -rf "$nvim_dir"
+    fi
+  '';
+
   home.activation.ensureWritableNvimPackLock = config.lib.dag.entryAfter ["linkGeneration"] ''
     nvim_dir="${config.home.homeDirectory}/.config/nvim"
     lock="$nvim_dir/nvim-pack-lock.json"

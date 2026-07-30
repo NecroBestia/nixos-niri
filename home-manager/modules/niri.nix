@@ -45,6 +45,17 @@ in {
       swaylock.enable = true;
     };
 
+    # Elimina el directorio ~/.config/niri ANTES de que linkGeneration
+    # intente crear el symlink. Así evitamos el error "Existing file
+    # '/home/necro/.config/niri' would be clobbered".
+    home.activation.cleanNiriDirBeforeLink = config.lib.dag.entryBefore ["linkGeneration"] ''
+      niri_dir="${config.home.homeDirectory}/.config/niri"
+      if [ -d "$niri_dir" ] && [ ! -h "$niri_dir" ]; then
+        echo "niri: removing writable directory before linkGeneration"
+        rm -rf "$niri_dir"
+      fi
+    '';
+
     # Reemplaza el symlink del nix store por un directorio escribible,
     # para que Noctalia pueda escribir noctalia.kdl y modificar config.kdl.
     home.activation.ensureWritableNiriConfig = config.lib.dag.entryAfter ["linkGeneration"] ''

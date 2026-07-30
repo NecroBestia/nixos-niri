@@ -41,3 +41,14 @@ vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Buffer siguiente" })
 vim.keymap.set("n", "<S-w>", "<cmd>bdelete<CR>", { desc = "Cerrar buffer/pestaña" })
 
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", {desc = "Salir modo terminal"})
+
+-- LaTeX
+vim.keymap.set("n", "<leader>lc", "<cmd>VimtexCompile<CR>", { desc = "Compilar LaTeX" })
+vim.keymap.set("n", "<leader>lv", "<cmd>VimtexCompile<CR>", { desc = "Compilar y abrir visor (callback=1 abre PDF al terminar)" })
+vim.keymap.set("n", "<leader>le", "<cmd>VimtexErrors<CR>", { desc = "Mostrar errores LaTeX" })
+vim.keymap.set("n", "<leader>me", function()
+  local ok, err = pcall(function() require("nabla").popup() end)
+  if not ok then
+    vim.notify("nabla: " .. tostring(err), vim.log.levels.ERROR)
+  end
+end, { desc = "Previsualizar ecuación LaTeX" })

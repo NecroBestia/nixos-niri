@@ -65,12 +65,12 @@ window-rule {
 // Tiled unfocused: 80% opacidad (20% transparente)
 window-rule {
     match is-floating=false is-focused=false
-    opacity 0.80
+    opacity 0.88
 }
 // Tiled focused: 90% opacidad (10% transparente)
 window-rule {
     match is-floating=false is-focused=true
-    opacity 0.95
+    opacity 0.98
 }
 // Floating sin foco: 98% transparente, sin blur
 window-rule {
