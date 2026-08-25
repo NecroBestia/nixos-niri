@@ -101,6 +101,7 @@ in {
       pkgs-unstable.opensnitch-ui # Firewall interactivo (GUI)
       pkgs-unstable.osu-lazer  # osu lazer para nixos
       pkgs-unstable.librewolf   # fork de firefox 
+      pkgs-unstable.spotify
       pkgs-unstable.gromit-mpx
       # Scripts locales
       myScripts.spotify-startup # Lanzador condicional (Flatpak/nativo).

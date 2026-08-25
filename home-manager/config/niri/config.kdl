@@ -5,6 +5,7 @@ include "startup.kdl"
 include "rules.kdl"
 include "binds.kdl"
 include "noctalia.kdl" 
+include "zoom.kdl" 
 hotkey-overlay {
 }
 animations {
