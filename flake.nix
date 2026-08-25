@@ -27,7 +27,7 @@
   inputs = {
     # Rama ESTABLE de NixOS (usada como base del sistema).
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
-
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix"; 
     # Rama UNSTABLE para paquetes que necesitan versión reciente
     # (niri, neovim, krita, obsidian, vscodium, opencode, etc.).
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";

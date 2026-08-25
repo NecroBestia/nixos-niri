@@ -10,6 +10,7 @@
 { pkgs, pkgs-unstable, ... }: {
   imports = [
     ../../shared/default.nix
+    ../../modules/spicetify.nix 
   ];
 
   home = {
