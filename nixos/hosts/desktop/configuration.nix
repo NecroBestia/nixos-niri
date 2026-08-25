@@ -33,7 +33,11 @@ in
     ../shared/default.nix
     ../../modules/nvidia.nix
     ../../modules/steam.nix
+    ../../modules/zoom.nix # Cámara virtual OBS→Zoom (share pantalla).
   ];
+
+  # Cámara virtual solo en este equipo (flag del módulo zoom).
+  programs.zoom.virtualCamera.enable = true;
 
   #-----------------------------------------------------------------
   # PAQUETES EXTRA (Solo Desktop)

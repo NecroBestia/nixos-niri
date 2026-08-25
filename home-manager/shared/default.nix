@@ -330,6 +330,8 @@ in {
     ../modules/stylix.nix    # Stylix: Firefox theme + GRUB/console (GTK a cargo de Noctalia).
     ../modules/sioyek.nix    # Sioyek: PDF reader con Qt/XCB (fix NVIDIA Wayland).
     ../modules/kdenlive.nix  # kdenlive: GSettings schemas para GLib.
+    ../modules/zoom.nix      # Zoom: screen share nativo Wayland (portal GNOME).
+    ../modules/dsh.nix       # dsh (DeepSeek Harness): wrapper sin node global.
 
   ];
 }
