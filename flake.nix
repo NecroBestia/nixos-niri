@@ -148,6 +148,13 @@
       };
     in {
       #-----------------------------------------------------------------
+      # PAQUETES DEL FLAKE
+      #-----------------------------------------------------------------
+      packages.x86_64-linux = {
+        opentabletdriver-master = pkgs.callPackage ./pkgs/opentabletdriver-master.nix { };
+      };
+
+      #-----------------------------------------------------------------
       # CONFIGURACIONES NixOS
       #-----------------------------------------------------------------
       # Cada entrada importa un archivo host + hardware + shared.

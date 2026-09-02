@@ -66,6 +66,22 @@
   ];
 
   #-----------------------------------------------------------------
+  # TABLETA GRÁFICA
+  #-----------------------------------------------------------------
+  # OTD master (nightly) con fix del kernel >= 6.11 (hidraw multi-report
+  # descriptor). nixpkgs solo tiene 0.6.7, incompatible con el kernel 7.1.
+  # El paquete se define en ~/nixFlake/pkgs/opentabletdriver-master.nix.
+  nixpkgs.overlays = [
+    (final: prev: {
+      opentabletdriver-master = final.callPackage ../../../pkgs/opentabletdriver-master.nix { };
+    })
+  ];
+  hardware.opentabletdriver = {
+    enable = true;
+    package = pkgs.opentabletdriver-master;
+  };
+
+  #-----------------------------------------------------------------
   # SYNCTHING
   #-----------------------------------------------------------------
   # dataDir apunta al escritorio (disco interno siempre montado).
