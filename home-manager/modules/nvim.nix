@@ -28,7 +28,7 @@ let
     gcc gnumake unzip curl git ripgrep fd               # wget removido: curl ya cubre descargas.
     wl-clipboard                                           # xclip removido: no útil en Wayland.
     clang-tools nil pyright rust-analyzer pkgs-unstable.tree-sitter # nodejs removido: no necesario para LSPs.
-    lua-language-server texlab texlive.combined.scheme-full # Elección: scheme completo (independiente del peso)
+    lua-language-server texlab zathura texlive.combined.scheme-full # zathura: visor PDF para vimtex (forward/backward search)
   ];
 
   custom-neovim = pkgs.symlinkJoin {
@@ -48,9 +48,24 @@ in {
     custom-neovim
   ];
 
-  home.file.".config/nvim" = {
-    source = ../config/neovim;
-    force = true;
+  home.file = {
+    # Archivos individuales en vez de .config/nvim completo para evitar
+    # colisiones en checkLinkTargets cuando el directorio ya existe.
+    ".config/nvim/init.lua"            = { source = ../config/neovim/init.lua;            force = true; };
+    # nvim-pack-lock.json NO se despliega vía HM — vim.pack lo crea y
+    # gestiona como archivo escribible en caliente. Si HM lo desplegara
+    # sería un symlink read-only → EROFS al escribir.
+    ".config/nvim/lua/matugen.lua"     = { source = ../config/neovim/lua/matugen.lua;     force = true; };
+    ".config/nvim/lua/core/keymaps.lua"     = { source = ../config/neovim/lua/core/keymaps.lua;     force = true; };
+    ".config/nvim/lua/core/lsp.lua"         = { source = ../config/neovim/lua/core/lsp.lua;         force = true; };
+    ".config/nvim/lua/core/options.lua"     = { source = ../config/neovim/lua/core/options.lua;     force = true; };
+    ".config/nvim/lua/core/treesitter.lua"  = { source = ../config/neovim/lua/core/treesitter.lua; force = true; };
+    ".config/nvim/lua/pack/commands.lua"    = { source = ../config/neovim/lua/pack/commands.lua;    force = true; };
+    ".config/nvim/lua/pack/init.lua"        = { source = ../config/neovim/lua/pack/init.lua;        force = true; };
+    ".config/nvim/lua/pack/mini.lua"        = { source = ../config/neovim/lua/pack/mini.lua;        force = true; };
+    ".config/nvim/lua/pack/plugins.lua"     = { source = ../config/neovim/lua/pack/plugins.lua;     force = true; };
+    ".config/nvim/lua/pack/sources.lua"     = { source = ../config/neovim/lua/pack/sources.lua;     force = true; };
+    ".config/nvim/lua/pack/vimtex.lua"      = { source = ../config/neovim/lua/pack/vimtex.lua;      force = true; };
   };
 
   home.shellAliases = {
@@ -59,64 +74,5 @@ in {
     vimdiff = "nvim -d";
   };
 
-  #-----------------------------------------------------------------
-  # FIX: El directorio .config/nvim es un symlink read-only del Nix store.
-  #      vim.pack (Neovim 0.12+) necesita escribir nvim-pack-lock.json
-  #      para sincronizar el lock data → falla con EROFS.
-  #
-  #      Solución: después de que HM cree los symlinks, reemplazamos
-  #      nvim-pack-lock.json con una copia escribible.
-  #-----------------------------------------------------------------
-  home.activation.ensureWritableNvimPackLock = config.lib.dag.entryAfter ["linkGeneration"] ''
-    nvim_dir="${config.home.homeDirectory}/.config/nvim"
-    lock="$nvim_dir/nvim-pack-lock.json"
 
-    # Limpia backups viejos que HM deja al regenerar el symlink
-    old_backup="${config.home.homeDirectory}/.config/nvim.backup"
-    if [ -e "$old_backup" ]; then
-      rm -rf "$old_backup"
-    fi
-
-    # Si el directorio es un symlink, reemplazarlo con copia escribible
-    if [ -h "$nvim_dir" ]; then
-      echo "nvim: replacing store symlink with writable directory"
-      store_path="$(readlink -f "$nvim_dir")"
-      existing_lock=""
-      existing_noctalia=""
-      if [ -f "$lock" ]; then
-        existing_lock=$(cat "$lock" 2>/dev/null)
-      fi
-      if [ -f "$nvim_dir/lua/noctalia.lua" ]; then
-        existing_noctalia=$(cat "$nvim_dir/lua/noctalia.lua" 2>/dev/null)
-      fi
-      rm -f "$nvim_dir"
-      cp -r "$store_path" "$nvim_dir"
-      chmod -R u+w "$nvim_dir"
-      if [ -n "$existing_lock" ]; then
-        echo "$existing_lock" > "$lock"
-        echo "nvim: preserved existing lock data"
-      fi
-      if [ -n "$existing_noctalia" ]; then
-        echo "$existing_noctalia" > "$nvim_dir/lua/noctalia.lua"
-        chmod u+w "$nvim_dir/lua/noctalia.lua"
-        echo "nvim: preserved noctalia-rendered theme"
-      fi
-    fi
-
-    # Asegurar que todo el arbol sea escribible (maneja casos donde HM regenera subdirs readonly)
-    if [ -d "$nvim_dir" ] && [ ! -w "$nvim_dir" ]; then
-      echo "nvim: fixing read-only directory"
-      chmod -R u+w "$nvim_dir"
-    fi
-    if [ -d "$nvim_dir/lua" ] && [ ! -w "$nvim_dir/lua" ]; then
-      echo "nvim: fixing read-only lua directory"
-      chmod -R u+w "$nvim_dir/lua"
-    fi
-
-    if [ ! -f "$lock" ] || [ ! -w "$lock" ]; then
-      echo '{"plugins":{}}' >"$lock"
-      chmod u+w "$lock"
-      echo "nvim-pack-lock.json: created writable lock file"
-    fi
-  '';
 }

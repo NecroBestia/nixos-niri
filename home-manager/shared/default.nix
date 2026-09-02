@@ -64,6 +64,7 @@ in {
       XCURSOR_THEME = cursorName;
       XCURSOR_SIZE = toString cursorSize;
       TERMINAL = MyTerminal;
+      GSETTINGS_SCHEMA_DIR = "${pkgs-unstable.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs-unstable.gsettings-desktop-schemas.pname}-${pkgs-unstable.gsettings-desktop-schemas.version}/glib-2.0/schemas";
 
       # Redireccion XDG para dotfiles de historial
       HISTFILE = "$XDG_STATE_HOME/bash/history";
@@ -98,7 +99,10 @@ in {
       pkgs-unstable.vscodium   # VS Code sin telemetría.
       pkgs-unstable.xournalpp  # Anotaciones en PDF.
       pkgs-unstable.opensnitch-ui # Firewall interactivo (GUI)
-
+      pkgs-unstable.osu-lazer  # osu lazer para nixos
+      pkgs-unstable.librewolf   # fork de firefox 
+      pkgs-unstable.spotify
+      pkgs-unstable.gromit-mpx
       # Scripts locales
       myScripts.spotify-startup # Lanzador condicional (Flatpak/nativo).
       myScripts.niri-symlinks   # Creador de enlaces simbólicos.
@@ -257,6 +261,12 @@ in {
       vim  = { name = "Vim";  exec = "vim";  noDisplay = true; };
       gvim = { name = "GVim"; exec = "gvim"; noDisplay = true; };
     };
+
+    # xdg-user-dirs: nombres de carpetas en inglés (Downloads, Documents, etc.)
+    userDirs = {
+      enable = true;
+      createDirectories = true;
+    };
   };
 
   #-----------------------------------------------------------------
@@ -320,6 +330,9 @@ in {
     ../modules/noctalia.nix  # Noctalia: recortes, wallpaper y helpers.
     ../modules/stylix.nix    # Stylix: Firefox theme + GRUB/console (GTK a cargo de Noctalia).
     ../modules/sioyek.nix    # Sioyek: PDF reader con Qt/XCB (fix NVIDIA Wayland).
+    ../modules/kdenlive.nix  # kdenlive: GSettings schemas para GLib.
+    ../modules/zoom.nix      # Zoom: screen share nativo Wayland (portal GNOME).
+    ../modules/dsh.nix       # dsh (DeepSeek Harness): wrapper sin node global.
 
   ];
 }

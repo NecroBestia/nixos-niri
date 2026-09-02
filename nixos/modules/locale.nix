@@ -12,6 +12,7 @@
     LC_ADDRESS = "es_CL.UTF-8";
     LC_IDENTIFICATION = "es_CL.UTF-8";
     LC_MEASUREMENT = "es_CL.UTF-8";
+    LC_MESSAGES = "en_US.UTF-8";
     LC_MONETARY = "es_CL.UTF-8";
     LC_NAME = "es_CL.UTF-8";
     LC_NUMERIC = "es_CL.UTF-8";
@@ -19,4 +20,5 @@
     LC_TELEPHONE = "es_CL.UTF-8";
     LC_TIME = "es_CL.UTF-8";
   };
+  # LC_MESSAGES en_US para que xdg-user-dirs cree carpetas en inglés
 }

@@ -86,6 +86,7 @@
   #-----------------------------------------------------------------
   # GSETTINGS — Schemas para GLib (necesario para thumbnails, íconos)
   #-----------------------------------------------------------------
+  programs.dconf.enable = true;  # Compila schemas de GSettings (requerido por GLib/GIO).
   environment.pathsToLink = [ "/share/gsettings-schemas" ];
 
   #-----------------------------------------------------------------

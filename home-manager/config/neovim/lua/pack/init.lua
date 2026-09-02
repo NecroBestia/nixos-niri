@@ -2,4 +2,5 @@
 require("pack.commands")
 require("pack.sources")
 require("pack.mini")
+require("pack.vimtex")
 require("pack.plugins")

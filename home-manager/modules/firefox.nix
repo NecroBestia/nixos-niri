@@ -25,6 +25,24 @@
         "middlemouse.paste" = false;
         # Desactivar la advertencia de cierre de múltiples pestañas.
         "browser.tabs.warnOnClose" = false;
+
+        # Zoom SSO: permitir que los deep links zoommtg:// etc. se
+        # abran directo en el cliente (sin diálogo de Firefox).
+        # Sin esto el clic en "Launch Zoom" post-Google-OAuth no hace nada.
+        "network.protocol-handler.external.zoommtg" = true;
+        "network.protocol-handler.warn-external.zoommtg" = false;
+        "network.protocol-handler.external.zoomus" = true;
+        "network.protocol-handler.warn-external.zoomus" = false;
+        "network.protocol-handler.external.tel" = true;
+        "network.protocol-handler.warn-external.tel" = false;
+        "network.protocol-handler.external.callto" = true;
+        "network.protocol-handler.warn-external.callto" = false;
+        "network.protocol-handler.external.zoomphonecall" = true;
+        "network.protocol-handler.warn-external.zoomphonecall" = false;
+        "network.protocol-handler.external.zoomphonesms" = true;
+        "network.protocol-handler.warn-external.zoomphonesms" = false;
+        "network.protocol-handler.external.zoomcontactcentercall" = true;
+        "network.protocol-handler.warn-external.zoomcontactcentercall" = false;
       };
     };
   };
