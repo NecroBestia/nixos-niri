@@ -145,23 +145,36 @@ starter.setup({
 -- Volver al Inicio (Guardar, Limpiar y Desconectar Sesión)
 -- =========================================================
 vim.keymap.set("n", "<leader>h", function()
-  -- 1. Guardar y desconectar la sesión actual
+  -- 1. Guardar y desconectar la sesión
   if vim.v.this_session ~= "" then
-    require("mini.sessions").write()     -- Guarda la estructura actual
-    vim.v.this_session = ""              -- Rompe el enlace para que no se sobreescriba más
+    require("mini.sessions").write()
+    vim.v.this_session = ""
   end
 
-  -- 2. Cerrar todos los buffers (archivos) abiertos para dejar el área limpia
-  -- Usamos un escudo de seguridad: si no has guardado algo, abortará la limpieza
-  local ok, _ = pcall(function() vim.cmd("%bd") end)
-  if not ok then
-    vim.notify("¡Alto! Tienes archivos sin guardar. Ejecuta :wa primero.", vim.log.levels.WARN)
-    return
+  -- 2. Cerrar y matar todas las terminales de toggleterm
+  local ok, terms = pcall(require, "toggleterm.terminal")
+  if ok then
+    for _, term in ipairs(terms.get_all(true)) do
+      -- Matar el proceso (shutdown) y eliminar el buffer asociado
+      pcall(function()
+        term:shutdown()                         -- Termina el job del shell
+        vim.api.nvim_buf_delete(term.bufnr, { force = true })
+      end)
+    end
   end
 
-  -- 3. Invocamos la pantalla de inicio sobre el editor limpio
+  -- 3. Cerrar todos los buffers restantes (archivos normales)
+  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_valid(bufnr) then
+      pcall(vim.api.nvim_buf_delete, bufnr, { force = true })
+    end
+  end
+
+  -- 4. Abrir mini.starter
   require("mini.starter").open()
 end, { desc = "Ir al inicio y cerrar sesión" })
+
+
 -- =========================================================
 -- Integración Git (mini.diff y mini.git)
 -- =========================================================
