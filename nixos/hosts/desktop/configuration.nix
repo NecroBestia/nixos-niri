@@ -34,6 +34,7 @@ in
     ../../modules/nvidia.nix
     ../../modules/steam.nix
     ../../modules/zoom.nix # Cámara virtual OBS→Zoom (share pantalla).
+    ../../modules/freecad.nix # Wrapper schemas GSettings (fix crash FileChooser).
   ];
 
   # Cámara virtual solo en este equipo (flag del módulo zoom).

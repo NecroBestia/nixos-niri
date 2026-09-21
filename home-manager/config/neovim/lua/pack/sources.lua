@@ -8,7 +8,8 @@ vim.pack.add({
     "https://github.com/rebelot/kanagawa.nvim", 
     -- Tema muy oscuro con alto contraste, excelente para concentrarse.
     { src = "https://github.com/bluz71/vim-moonfly-colors", name = "moonfly" }, 
-    -- Base16 colorscheme (usado por matugen para aplicar colores del wallpaper).
+    -- Base16 colorscheme (lo usa noctalia.lua, generado por la plantilla
+    -- Noctalia nvim-base16.lua con los colores del wallpaper).
     "https://github.com/RRethy/base16-nvim", 
 
     -- ==========================================
@@ -16,15 +17,17 @@ vim.pack.add({
     -- ==========================================
     -- Terminal y Ejecución
       -- Terminal flotante rápida. Ideal para ejecutar scripts o compilar sin salir del código.
-    { src = "https://github.com/akinsho/toggleterm.nvim", version = "main", config = true },
+    { src = "https://github.com/akinsho/toggleterm.nvim", version = "main" },
 
     -- Herramientas para la Universidad y Matemáticas
         -- El motor definitivo para LaTeX. Compila a PDF, sincroniza visores y entiende sintaxis matemática.
-    { src = "https://github.com/lervag/vimtex", start = true },
+        -- Se carga con :packadd en lua/pack/vimtex.lua (vim.pack solo acepta src/name/version en el spec).
+    "https://github.com/lervag/vimtex",
         -- Previsualización inline de ecuaciones LaTeX en ventana flotante.
-    { src = "https://github.com/jbyuki/nabla.nvim", start = true },
+        -- Se carga por require() bajo demanda.
+    "https://github.com/jbyuki/nabla.nvim",
         -- Embellece archivos Markdown. Oculta asteriscos/numerales y renderiza fórmulas y tablas en tiempo real.
-    { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim", branch = "main" }, 
+    { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim", version = "main" }, 
 
     -- Ecosistema Core y Utilidades
         -- Tu navaja suiza. Maneja el explorador de archivos, buscador global, barra inferior, pantalla de inicio y sesiones.
@@ -38,7 +41,7 @@ vim.pack.add({
     "https://github.com/folke/twilight.nvim",
     -- Inteligencia y Análisis de Código
         -- El "cerebro" semántico. Lee la estructura de tu código para dar colores perfectos y permitir el plegado (folding).
-    { src = "https://github.com/nvim-treesitter/nvim-treesitter", branch = "main" },     
+    { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },     
         -- El puente para los "Language Servers". Te da autocompletado inteligente y subraya errores de sintaxis mientras escribes.
     "https://github.com/neovim/nvim-lspconfig",                           
     -- Control de Versiones

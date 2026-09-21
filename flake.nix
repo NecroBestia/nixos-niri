@@ -27,7 +27,6 @@
   inputs = {
     # Rama ESTABLE de NixOS (usada como base del sistema).
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
-    spicetify-nix.url = "github:Gerg-L/spicetify-nix"; 
     # Rama UNSTABLE para paquetes que necesitan versión reciente
     # (niri, neovim, krita, obsidian, vscodium, opencode, etc.).
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -48,7 +47,6 @@
     noctalia = {
       url = "github:noctalia-dev/noctalia/cachix";
     };
-
     #===================================================================
     # INPUTS DE SKILLS IA
     #===================================================================
@@ -115,22 +113,17 @@
       url = "github:composio-community/opencode-skills";
       flake = false;
     };
-
-    # Stylix — Theming dinámico desde wallpaper. Usamos nix-community/stylix porque danth/stylix
-    # fue transferido a nix-community (el antiguo URL quedó obsoleto).
-    stylix = {
-      url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Graphify — Knowledge graph para codebases (skill + CLI).
-    graphify = {
-      url = "github:Graphify-Labs/graphify";
-      flake = false;
-    };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-kernel, home-manager, ... } @ inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixpkgs-unstable,
+      nixpkgs-kernel,
+      home-manager,
+      ...
+    }@inputs:
     let
       # Arquitectura objetivo (x86_64).
       system = "x86_64-linux";
@@ -146,7 +139,8 @@
         inherit system;
         config.allowUnfree = true;
       };
-    in {
+    in
+    {
       #-----------------------------------------------------------------
       # CONFIGURACIONES NixOS
       #-----------------------------------------------------------------

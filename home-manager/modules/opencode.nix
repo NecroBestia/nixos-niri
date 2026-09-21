@@ -64,7 +64,6 @@ in
       composio-cli = skill "${inputs.composio-skills}/skills/composio-cli";
 
       # Graphify — Knowledge graph interactivo
-      graphify = skill "${inputs.graphify}/graphify/skill-opencode.md";
     };
 
     #-----------------------------------------------------------------

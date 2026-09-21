@@ -9,7 +9,11 @@
 # DEPENDENCIAS INCLUIDAS:
 #   - Compilación: gcc, gnumake, unzip
 #   - LSPs: clangd (C/C++), nil (Nix), pyright (Python),
-#     rust-analyzer (Rust), lua_ls (Lua), texlab (LaTeX), tree-sitter
+#     rust-analyzer (Rust), lua_ls (Lua), texlab (LaTeX), tree-sitter,
+#     ruff (Python lint/formato), sqls (SQL), prolog_ls (Prolog vía SWI),
+#     hls (Haskell)
+#   - Formatters: clang-format (en clang-tools), rustfmt (Rust),
+#     sqlfluff (SQL, CLI), ormolu (Haskell, usado por HLS)
 #   - Utilidades: ripgrep, fd (búsqueda), curl, git
 #   - Portapapeles: wl-clipboard, xclip
 #
@@ -29,6 +33,14 @@ let
     wl-clipboard                                           # xclip removido: no útil en Wayland.
     clang-tools nil pyright rust-analyzer pkgs-unstable.tree-sitter # nodejs removido: no necesario para LSPs.
     lua-language-server texlab zathura texlive.combined.scheme-full # zathura: visor PDF para vimtex (forward/backward search)
+    # LSPs y formatters adicionales (unstable, ver decisión de rama en shared):
+    pkgs-unstable.ruff                   # Python: LSP nativo (lint + formato)
+    pkgs-unstable.rustfmt                # Rust: formatter requerido por rust-analyzer
+    pkgs-unstable.sqls                   # SQL: LSP (compleción/navegación)
+    pkgs-unstable.sqlfluff               # SQL: formatter CLI (fallback de <leader>f)
+    pkgs-unstable.swi-prolog             # Prolog: LSP via prolog_ls (library(lsp_server))
+    pkgs-unstable.haskell-language-server # Haskell: LSP (hls)
+    pkgs-unstable.ormolu                 # Haskell: formatter usado por HLS
   ];
 
   custom-neovim = pkgs.symlinkJoin {
@@ -55,7 +67,8 @@ in {
     # nvim-pack-lock.json NO se despliega vía HM — vim.pack lo crea y
     # gestiona como archivo escribible en caliente. Si HM lo desplegara
     # sería un symlink read-only → EROFS al escribir.
-    ".config/nvim/lua/matugen.lua"     = { source = ../config/neovim/lua/matugen.lua;     force = true; };
+    # lua/noctalia.lua tampoco se despliega: lo genera la plantilla de
+    # Noctalia (config/noctalia/templates/nvim-base16.lua) en caliente.
     ".config/nvim/lua/core/keymaps.lua"     = { source = ../config/neovim/lua/core/keymaps.lua;     force = true; };
     ".config/nvim/lua/core/lsp.lua"         = { source = ../config/neovim/lua/core/lsp.lua;         force = true; };
     ".config/nvim/lua/core/options.lua"     = { source = ../config/neovim/lua/core/options.lua;     force = true; };

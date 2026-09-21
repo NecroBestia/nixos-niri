@@ -8,7 +8,7 @@
 # Nota: Si se necesita integración con tridactyl-native,
 # descomentar el bloque anterior y ajustar package.
 #===================================================================
-{ pkgs, pkgs-unstable, ... }: {
+{pkgs-unstable, ... }: {
   programs.firefox = {
     enable = true;
     package = pkgs-unstable.firefox;

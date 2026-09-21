@@ -47,19 +47,26 @@ require("mini.cmdline").setup({ autocorrect = { enable = false } })
 require("mini.surround").setup()
 
 -- =========================================================
--- Buscador (Reemplazo de Telescope)
+-- Buscador (mini.pick + mini.extra) — archivos, grep, help
 -- =========================================================
 local MiniPick = require("mini.pick")
-local MiniExtra = require("mini.extra")
+require("mini.extra").setup()
 MiniPick.setup()
-MiniExtra.setup()
 
--- Manteniendo tus atajos clásicos de Telescope
-vim.keymap.set("n", "<leader>ff", function() 
-    require("mini.pick").builtin.files({}, { source = { cwd = vim.fn.expand("~") } }) 
-end, { desc = "Global search" })
-vim.keymap.set("n", "<leader>fg", function() MiniPick.builtin.grep({ pattern = vim.fn.expand("<cword>") }) end, { desc = "Live Grep Word" })
-vim.keymap.set("n", "<leader>vh", function() MiniPick.builtin.help() end, { desc = "Help Tags" })
+-- Atajos de archivos (mini.pick): un cwd por picker.
+--   <leader>ff → disco principal (home ~)
+--   <leader>fm → /mnt/not_to_lose (montaje de datos)
+vim.keymap.set("n", "<leader>ff", function()
+  require("mini.pick").builtin.files({}, { source = { cwd = vim.fn.expand("~") } })
+end, { desc = "Buscar archivos en ~ (disco principal)" })
+vim.keymap.set("n", "<leader>fm", function()
+  require("mini.pick").builtin.files({}, { source = { cwd = "/mnt/not_to_lose" } })
+end, { desc = "Buscar archivos en /mnt/not_to_lose" })
+
+vim.keymap.set("n", "<leader>fg", function() MiniPick.builtin.grep({ pattern = vim.fn.expand("<cword>") }) end,
+  { desc = "Live Grep Word (mini.pick)" })
+vim.keymap.set("n", "<leader>vh", function() MiniPick.builtin.help() end, { desc = "Help Tags (mini.pick)" })
+
 -- =========================================================
 -- Autocompletado y Snippets
 -- =========================================================
@@ -69,26 +76,26 @@ local MiniSnippets = require("mini.snippets")
 
 -- Atajos Matemáticos (Listos para Series Numéricas y Polares)
 local math_snippets = {
-    tex = {
-        serie = { body = "\\sum_{n=${1:1}}^{\\infty} ${2:a_n}" },
-        intimp = { body = "\\int_{${1:a}}^{\\infty} ${2:f(x)}\\, dx" },
-        polar = { body = "x = r \\cos(\\theta) \\\\\ny = r \\sin(\\theta)" },
-    }
+  tex = {
+    serie = { body = "\\sum_{n=${1:1}}^{\\infty} ${2:a_n}" },
+    intimp = { body = "\\int_{${1:a}}^{\\infty} ${2:f(x)}\\, dx" },
+    polar = { body = "x = r \\cos(\\theta) \\\\\ny = r \\sin(\\theta)" },
+  }
 }
 
 MiniSnippets.setup({
-    snippets = {
-        MiniSnippets.gen_loader.from_lang(), 
-        function(context)
-            local lang = vim.bo[context.buf_id].filetype
-            local snips = math_snippets[lang] or {}
-            local res = {}
-            for k, v in pairs(snips) do
-                table.insert(res, { prefix = k, body = v.body })
-            end
-            return res
-        end,
-    },
+  snippets = {
+    MiniSnippets.gen_loader.from_lang(),
+    function(context)
+      local lang = vim.bo[context.buf_id].filetype
+      local snips = math_snippets[lang] or {}
+      local res = {}
+      for k, v in pairs(snips) do
+        table.insert(res, { prefix = k, body = v.body })
+      end
+      return res
+    end,
+  },
 })
 MiniSnippets.start_lsp_server({ match = false })
 
@@ -97,8 +104,8 @@ MiniSnippets.start_lsp_server({ match = false })
 -- =========================================================
 local statusline = require("mini.statusline")
 statusline.setup({
-    use_icons = true,         -- Muestra los iconos de los lenguajes
-    set_vim_settings = false, -- Evita conflictos con tus opciones globales
+  use_icons = true,           -- Muestra los iconos de los lenguajes
+  set_vim_settings = false,   -- Evita conflictos con tus opciones globales
 })
 
 -- =========================================================
@@ -106,8 +113,8 @@ statusline.setup({
 -- =========================================================
 local sessions = require("mini.sessions")
 sessions.setup({
-    autowrite = true, -- Guarda automáticamente la sesión actual antes de salir
-    autoread = false, -- Evita cargar la última sesión de forma automática al abrir
+  autowrite = true,   -- Guarda automáticamente la sesión actual antes de salir
+  autoread = false,   -- Evita cargar la última sesión de forma automática al abrir
 })
 
 -- =========================================================
@@ -115,45 +122,45 @@ sessions.setup({
 -- =========================================================
 local starter = require("mini.starter")
 starter.setup({
-    evaluate_single = true, -- Si el filtro deja una sola opción, la abre de inmediato
-    
-    items = {
-        -- Conexión automática: Muestra tus últimas 5 sesiones guardadas
-        starter.sections.sessions(5, true), 
-        
-        starter.sections.builtin_actions(),
-        starter.sections.recent_files(5, false), -- Últimos 5 archivos globales
-        starter.sections.recent_files(5, true),  -- Últimos 5 archivos en el directorio actual
-        
-        -- Acción rápida personalizada para iniciar limpio
-        { name = 'Nuevo documento LaTeX', action = 'enew | set filetype=tex', section = 'Acciones Rápidas' },
-    },
-    
-    content_hooks = {
-        starter.gen_hook.adding_bullet("» "),
-        starter.gen_hook.aligning('center', 'center'), -- Centra el menú en la pantalla
-    },
+  evaluate_single = true,   -- Si el filtro deja una sola opción, la abre de inmediato
+
+  items = {
+    -- Conexión automática: Muestra tus últimas 5 sesiones guardadas
+    starter.sections.sessions(5, true),
+
+    starter.sections.builtin_actions(),
+    starter.sections.recent_files(5, false),     -- Últimos 5 archivos globales
+    starter.sections.recent_files(5, true),      -- Últimos 5 archivos en el directorio actual
+
+    -- Acción rápida personalizada para iniciar limpio
+    { name = 'Nuevo documento LaTeX', action = 'enew | set filetype=tex', section = 'Acciones Rápidas' },
+  },
+
+  content_hooks = {
+    starter.gen_hook.adding_bullet("» "),
+    starter.gen_hook.aligning('center', 'center'),     -- Centra el menú en la pantalla
+  },
 })
 -- =========================================================
 -- Volver al Inicio (Guardar, Limpiar y Desconectar Sesión)
 -- =========================================================
 vim.keymap.set("n", "<leader>h", function()
-    -- 1. Guardar y desconectar la sesión actual
-    if vim.v.this_session ~= "" then
-        require("mini.sessions").write() -- Guarda la estructura actual
-        vim.v.this_session = ""          -- Rompe el enlace para que no se sobreescriba más
-    end
+  -- 1. Guardar y desconectar la sesión actual
+  if vim.v.this_session ~= "" then
+    require("mini.sessions").write()     -- Guarda la estructura actual
+    vim.v.this_session = ""              -- Rompe el enlace para que no se sobreescriba más
+  end
 
-    -- 2. Cerrar todos los buffers (archivos) abiertos para dejar el área limpia
-    -- Usamos un escudo de seguridad: si no has guardado algo, abortará la limpieza
-    local ok, _ = pcall(function() vim.cmd("%bd") end)
-    if not ok then
-        vim.notify("¡Alto! Tienes archivos sin guardar. Ejecuta :wa primero.", vim.log.levels.WARN)
-        return
-    end
+  -- 2. Cerrar todos los buffers (archivos) abiertos para dejar el área limpia
+  -- Usamos un escudo de seguridad: si no has guardado algo, abortará la limpieza
+  local ok, _ = pcall(function() vim.cmd("%bd") end)
+  if not ok then
+    vim.notify("¡Alto! Tienes archivos sin guardar. Ejecuta :wa primero.", vim.log.levels.WARN)
+    return
+  end
 
-    -- 3. Invocamos la pantalla de inicio sobre el editor limpio
-    require("mini.starter").open()
+  -- 3. Invocamos la pantalla de inicio sobre el editor limpio
+  require("mini.starter").open()
 end, { desc = "Ir al inicio y cerrar sesión" })
 -- =========================================================
 -- Integración Git (mini.diff y mini.git)

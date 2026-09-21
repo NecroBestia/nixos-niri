@@ -6,7 +6,9 @@ local ensure_installed = {
     -- Web y shell
     "bash", "lua", "vim", "vimdoc",
     -- Documentación
-    "latex", "markdown"
+    "latex", "markdown",
+    -- Bases de datos y lenguajes lógicos/funcionales
+    "sql", "scheme", "prolog", "haskell"
 }
 
 treesitter.install(ensure_installed)
