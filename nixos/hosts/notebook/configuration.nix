@@ -7,8 +7,21 @@
 #   - Sin virtualización (vm.libvirtd = false).
 #   - Sin opensnitch (services.opensnitch.enable = false).
 #===================================================================
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
+let
+  #-----------------------------------------------------------------
+  # Kernel pinneado (nixpkgs-kernel)
+  #-----------------------------------------------------------------
+  # MOTIVO: el kernel zen 7.1.2 de nixpkgs 26.05 provocaba un oops del
+  # kernel (execmem_free/load_module) en el primer hotplug USB, dejando
+  # al GameSir-K1 sin permisos en /dev/input. Se usa el mismo kernel
+  # pinneado (6.18.13 zen, rev d756e13) que el desktop.
+  pkgs-kernel = import inputs.nixpkgs-kernel {
+    inherit (pkgs.stdenv.hostPlatform) system;
+    config.allowUnfree = true;
+  };
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -66,6 +79,14 @@
   ];
 
   #-----------------------------------------------------------------
+  # TABLETA GRÁFICA
+  #-----------------------------------------------------------------
+  # Paquete stock de nixpkgs (igual que en desktop).
+  # NOTA: el override a OTD master (pkgs/opentabletdriver-master.nix)
+  # era por el kernel 7.1; si la tablet fallara con 6.18.13, volver a él.
+  hardware.opentabletdriver.enable = true;
+
+  #-----------------------------------------------------------------
   # SYNCTHING
   #-----------------------------------------------------------------
   # dataDir apunta al escritorio (disco interno siempre montado).
@@ -75,8 +96,14 @@
   #-----------------------------------------------------------------
   # KERNEL
   #-----------------------------------------------------------------
-  # Usamos el kernel por defecto de nixpkgs (zen optimizado).
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  # Kernel pinneado de nixpkgs-kernel (6.18.13 zen), igual que el desktop.
+  boot.kernelPackages = pkgs.linuxPackagesFor pkgs-kernel.linuxPackages_zen.kernel;
+
+  # Fallback: si un worker de udev vuelve a morir procesando el GameSir,
+  # esta regla asegura dueño/grupo/permisos correctos en sus nodos input.
+  services.udev.extraRules = ''
+    SUBSYSTEM=="input", ATTRS{idVendor}=="3537", ATTRS{idProduct}=="1012", GROUP="input", MODE="0660"
+  '';
 
   #-----------------------------------------------------------------
   # MÓDULOS DESACTIVADOS PARA ESTE HOST
