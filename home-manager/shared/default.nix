@@ -86,7 +86,6 @@ in {
 
       # Entorno Gráfico Wayland
       playerctl wl-clipboard                            # swayidle removido: redundante.
-      gsimplecal
 
       # Multimedia y Edición
       pavucontrol nomacs vlc zathura mupdf qalculate-qt
@@ -101,8 +100,8 @@ in {
       pkgs-unstable.opensnitch-ui # Firewall interactivo (GUI)
       pkgs-unstable.osu-lazer  # osu lazer para nixos
       pkgs-unstable.librewolf   # fork de firefox 
-      pkgs-unstable.spotify
-      pkgs-unstable.gromit-mpx
+      #pkgs-unstable.spotify
+      pkgs-unstable.spotatui
       # Scripts locales
       myScripts.spotify-startup # Lanzador condicional (Flatpak/nativo).
       myScripts.niri-symlinks   # Creador de enlaces simbólicos.
@@ -328,11 +327,11 @@ in {
     ../modules/nvim.nix      # Neovim aislado con LSPs.
     ../modules/opencode.nix  # opencode (skills, plugins, MCPs).
     ../modules/noctalia.nix  # Noctalia: recortes, wallpaper y helpers.
-    ../modules/stylix.nix    # Stylix: Firefox theme + GRUB/console (GTK a cargo de Noctalia).
     ../modules/sioyek.nix    # Sioyek: PDF reader con Qt/XCB (fix NVIDIA Wayland).
     ../modules/kdenlive.nix  # kdenlive: GSettings schemas para GLib.
     ../modules/zoom.nix      # Zoom: screen share nativo Wayland (portal GNOME).
     ../modules/dsh.nix       # dsh (DeepSeek Harness): wrapper sin node global.
+    ../modules/spotifyd.nix
 
   ];
 }
