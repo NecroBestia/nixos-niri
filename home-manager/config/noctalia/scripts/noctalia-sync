@@ -1,0 +1,229 @@
+#!/usr/bin/env python3
+# ─────────────────────────────────────────────────────────────────────
+# noctalia-sync — espeja los ajustes hechos en la GUI de Noctalia en el
+# TOML del flake (home-manager/config/noctalia/config*.toml).
+#
+# POR QUÉ EXISTE
+#   `programs.noctalia.settings` despliega el TOML del flake en
+#   ~/.config/noctalia/config.toml, pero la GUI NO reescribe ese archivo:
+#   guarda lo que tocas en ~/.local/state/noctalia/settings.toml (overlay
+#   final, que gana sobre config.toml; ver src/config/config_service.cpp en
+#   Noctalia). Sin este puente, cada ajuste hecho en Ajustes vive solo en el
+#   state dir: se pierde al limpiar la máquina o al saltar a otro host.
+#
+# CÓMO
+#   1. `noctalia config export merged` = unión normalizada de config.toml +
+#      settings.toml (config del usuario, sin defaults, sin config_version).
+#   2. Se descartan las tablas de ESTADO (no de configuración): el wallpaper
+#      actual por monitor y el último usado; si no, cada rotación de wallpaper
+#      ensuciaría el repo.
+#   3. Se fusiona dentro del TOML del flake con tomlkit, que preserva
+#      comentarios y orden de las claves existentes. Solo agrega/actualiza
+#      claves: nunca borra (una clave que quites de la GUI se queda en el
+#      flake con su último valor).
+#   4. Se valida el resultado (`noctalia config validate`) y recién ahí se
+#      escribe, de forma atómica y conservando permisos/dueño. Si el texto
+#      final es idéntico al original, no toca el archivo.
+#
+# INVOCACIÓN
+#   systemd: noctalia-sync.path vigila settings.toml (ver modules/noctalia.nix)
+#            y en cada activación de Home Manager.
+#   manual:  noctalia-sync --dry-run   (muestra qué claves cambiarían)
+# ─────────────────────────────────────────────────────────────────────
+"""Sincroniza ~/.local/state/noctalia/settings.toml hacia el TOML del flake."""
+
+from __future__ import annotations
+
+import argparse
+import fcntl
+import os
+import shutil
+import stat
+import subprocess
+import sys
+import tempfile
+from collections.abc import Mapping, Sequence
+from pathlib import Path
+
+import tomlkit
+
+# Tablas de estado de la sesión (no configuración): nunca van al flake.
+EXCLUDE: tuple[tuple[str, ...], ...] = (
+    ("wallpaper", "last"),
+    ("wallpaper", "monitors"),
+)
+
+# Los floats del export vienen con ruido binario (0.59999999999999998).
+FLOAT_PRECISION = 6
+
+PROG = "noctalia-sync"
+
+
+def fail(message: str, code: int = 1) -> None:
+    print(f"{PROG}: {message}", file=sys.stderr)
+    raise SystemExit(code)
+
+
+def is_table(value) -> bool:
+    return isinstance(value, Mapping)
+
+
+def is_array(value) -> bool:
+    return isinstance(value, Sequence) and not isinstance(value, (str, bytes))
+
+
+def to_plain(node):
+    """Convierte items de tomlkit a tipos Python puros (y redondea floats)."""
+    if is_table(node):
+        return {key: to_plain(value) for key, value in node.items()}
+    if is_array(node):
+        return [to_plain(value) for value in node]
+    value = getattr(node, "value", node)
+    if isinstance(value, float):
+        return round(value, FLOAT_PRECISION)
+    return value
+
+
+def prune(doc, paths=EXCLUDE) -> None:
+    """Elimina del documento las tablas de estado."""
+    for path in paths:
+        node = doc
+        for key in path[:-1]:
+            node = node.get(key) if hasattr(node, "get") else None
+            if node is None:
+                break
+        if node is not None and path[-1] in node:
+            del node[path[-1]]
+
+
+def merge(doc, source, prefix: tuple[str, ...] = (), changed: list[str] | None = None) -> list[str]:
+    """Fusiona `source` (dict plano) dentro de `doc` (documento tomlkit)."""
+    if changed is None:
+        changed = []
+    for key, value in source.items():
+        path = prefix + (str(key),)
+        dotted = ".".join(path)
+        if key in doc:
+            current = doc[key]
+            if is_table(value) and is_table(current):
+                merge(current, value, path, changed)
+                continue
+            if to_plain(current) != value:
+                doc[key] = value
+                changed.append(dotted)
+        else:
+            doc[key] = value
+            changed.append(f"{dotted} (nueva)")
+    return changed
+
+
+def acquire_lock(key: str):
+    """Lock no bloqueante para que systemd y una corrida manual no se pisen."""
+    base = os.environ.get("XDG_RUNTIME_DIR") or tempfile.gettempdir()
+    digest = abs(hash(key)) % 10**8
+    handle = open(Path(base) / f"{PROG}-{digest}.lock", "w", encoding="utf-8")
+    try:
+        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        handle.close()
+        return None
+    return handle
+
+
+def export_merged(noctalia: str) -> str:
+    proc = subprocess.run(
+        [noctalia, "config", "export", "merged"],
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0 or not proc.stdout.strip():
+        fail(
+            "`noctalia config export merged` falló "
+            f"(exit {proc.returncode}): {(proc.stderr or proc.stdout).strip()}"
+        )
+    return proc.stdout
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        prog=PROG,
+        description="Espeja los ajustes de la GUI de Noctalia en el TOML del flake.",
+    )
+    parser.add_argument(
+        "--flake-config",
+        required=True,
+        help="TOML del flake que se mantiene espejado (lo pasa el wrapper de Nix).",
+    )
+    parser.add_argument("--dry-run", action="store_true", help="Solo mostrar qué cambiaría.")
+    parser.add_argument("--quiet", action="store_true", help="Silencio si no hay cambios.")
+    args = parser.parse_args(argv)
+
+    target = Path(args.flake_config)
+    if not target.is_file():
+        fail(f"no existe el TOML del flake: {target}")
+    target = target.resolve()
+    if str(target).startswith("/nix/store/"):
+        fail(f"el TOML del flake llegó como store path (solo lectura): {target}")
+
+    noctalia = shutil.which("noctalia")
+    if noctalia is None:
+        fail("no encuentro el CLI `noctalia` en PATH")
+
+    lock = acquire_lock(str(target))
+    if lock is None:
+        if not args.quiet:
+            print(f"{PROG}: ya hay otra corrida en curso, nada que hacer")
+        return 0
+
+    source_doc = tomlkit.parse(export_merged(noctalia))
+    prune(source_doc)
+
+    original = target.read_text(encoding="utf-8")
+    doc = tomlkit.parse(original)
+    changed = merge(doc, to_plain(source_doc))
+    new_text = tomlkit.dumps(doc)
+
+    if new_text == original:
+        if not args.quiet:
+            print(f"{PROG}: sin cambios ({target})")
+        return 0
+
+    if args.dry_run:
+        print(f"{PROG}: --dry-run · {len(changed)} claves cambiarían en {target}")
+        for item in sorted(changed):
+            print(f"  · {item}")
+        return 0
+
+    # Validación antes de tocar el archivo real.
+    tmp = target.with_name(f"{target.name}.{PROG}.tmp")
+    tmp.write_text(new_text, encoding="utf-8")
+    try:
+        info = target.stat()
+        os.chmod(tmp, stat.S_IMODE(info.st_mode))
+        try:
+            os.chown(tmp, info.st_uid, info.st_gid)
+        except OSError:
+            pass
+        proc = subprocess.run(
+            [noctalia, "config", "validate", str(tmp)],
+            capture_output=True,
+            text=True,
+        )
+        if proc.returncode != 0:
+            fail(
+                "el TOML resultante no valida, no se escribió nada:\n"
+                + (proc.stdout + proc.stderr).strip()
+            )
+        os.replace(tmp, target)
+    finally:
+        tmp.unlink(missing_ok=True)
+
+    print(f"{PROG}: {len(changed)} claves espejadas en {target.name}: {', '.join(sorted(changed))}")
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        raise SystemExit(main())
+    except KeyboardInterrupt:
+        raise SystemExit(130)
