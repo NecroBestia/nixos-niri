@@ -67,13 +67,16 @@ let
     // Opcional agresivo (rompe logins embebidos); probar antes de dejarlo:
     // lockPref("network.http.referer.XOriginPolicy", 2); // 2 = sólo si coincide el host
 
-    // ===== Higiene al cerrar =====
-    // cookiesAndStorage=true te desloguea de todo al cerrar Firefox.
-    // Con Bitwarden + contenedores es asumible; si molesta, ponlo en false.
+    // ===== Higiene al cerrar (cookies y sesiones SE CONSERVAN) =====
+    // cookiesAndStorage=false: no se borran cookies ni almacenamiento de sitios,
+    // así que sigues logueado tras cerrar Firefox. Se sigue limpiando caché y
+    // datos de formularios. Bajo TCP (cookieBehavior=5) las cookies de terceros
+    // y de trackers siguen rechazadas o aisladas por sitio, así que conservarlas
+    // no reintroduce rastreo cross-site.
     lockPref("privacy.sanitize.sanitizeOnShutdown", true);
     lockPref("privacy.clearOnShutdown_v2.cache", true);
     lockPref("privacy.clearOnShutdown_v2.formdata", true);
-    lockPref("privacy.clearOnShutdown_v2.cookiesAndStorage", true);
+    lockPref("privacy.clearOnShutdown_v2.cookiesAndStorage", false);
     lockPref("privacy.clearOnShutdown_v2.historyFormDataAndDownloads", false);
     lockPref("privacy.clearOnShutdown_v2.browsingHistoryAndDownloads", false);
 

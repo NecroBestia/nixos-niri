@@ -273,6 +273,21 @@ in {
   #-----------------------------------------------------------------
   # Conectan los archivos de configuración (en config/) con sus
   # ubicaciones esperadas (~/.config/).
+  #-----------------------------------------------------------------
+  # SIOYEK + NOCTALIA — Por qué el `source` va declarado acá
+  #-----------------------------------------------------------------
+  # El community template "sioyek" de Noctalia genera el tema en
+  # ~/.config/sioyek/themes/noctalia.config y después intenta cargarlo con:
+  #   grep -Eq '^source .*sioyek/themes/noctalia.config$' prefs_user.config \
+  #     || printf '\nsource %s\n' "$file" >> prefs_user.config
+  # Como prefs_user.config es un symlink read-only al store, ese append
+  # fallaba con "Permission denied" en el post_hook y el tema nunca se
+  # aplicaba. Solución (la que documenta Noctalia para configs declarativos):
+  # declarar la línea `source` en config/sioyek/prefs_user.config, al final
+  # del archivo — así el grep la encuentra, no hay append, y el tema
+  # sobreescribe los colores previos porque en Sioyek gana la última
+  # asignación. Al deshabilitar la plantilla, quitar esa línea a mano.
+  #-----------------------------------------------------------------
   home.file = {
     ".config/kitty/kitty.conf".source   = ../config/kitty/kitty.conf;
     ".config/zathura/zathurarc".source  = ../config/zathura/zathurarc;

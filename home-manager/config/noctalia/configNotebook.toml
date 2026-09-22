@@ -1,3 +1,16 @@
+#===================================================================
+# NOCTALIA (notebook) — config declarativa del flake.
+#===================================================================
+# Igual que config.toml del desktop, adaptado al ThinkPad: reloj 24 h, barra
+# más fina con launcher y batería, sin ddcutil ni auto_locate, sin negro puro.
+#
+# `noctalia-sync` espeja acá los ajustes de la GUI: el target por host sale de
+# programs.noctalia.settings (ver home-manager/modules/noctalia.nix).
+#
+# Idle: ÚNICO gestor es swayidle (modules/niri.nix), igual que en desktop. No
+# agregar [idle.behavior.*] acá.
+#===================================================================
+
 [accessibility]
 ui_scale = 1.0
 high_contrast = false
@@ -36,7 +49,7 @@ pure_black_dark = false
 enable_builtin_templates = true
 builtin_ids = ["gtk3", "gtk4", "niri", "kitty", "qt", "starship"]
 enable_community_templates = true
-community_ids = ["neovim", "obsidian", "vscode", "opencode", "papirus-icons", "zathura"]
+community_ids = ["neovim", "obsidian", "vscode", "opencode", "papirus-icons", "zathura", "sioyek"]
 
 [wallpaper]
 enabled = true
@@ -139,8 +152,13 @@ sunset = "22:00"
 warning_threshold = 10
 
 [theme.templates.user.nvim-base16]
+# output_path ABSOLUTO obligatorio: Noctalia no expande $HOME ni
+# $XDG_CONFIG_HOME en este campo. Con "$HOME/..." el archivo caía en
+# ~/.config/noctalia/$HOME/.config/nvim/lua/noctalia.lua y el colorscheme del
+# notebook nunca se actualizaba (bug corregido 2026-09-21; el desktop ya usaba
+# ruta absoluta y por eso funcionaba).
 input_path = "templates/nvim-base16.lua"
-output_path = "$HOME/.config/nvim/lua/noctalia.lua"
+output_path = "/home/necro/.config/nvim/lua/noctalia.lua"
 post_hook = "pkill -SIGUSR1 nvim"
 
 [hooks]

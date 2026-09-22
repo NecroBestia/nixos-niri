@@ -15,11 +15,13 @@ set statusbar-v-padding 4
 # ── Clipboard ────────────────────────────────────
 set selection-clipboard clipboard
 
-# ── Recolor (gruvbox dark) ────────────────────────
+# ── Recolor (colores desde Noctalia) ────────────────────────
 set recolor true
 set recolor-keephue true
-set recolor-lightcolor "#282828"
-set recolor-darkcolor "#ebdbb2"
+# Los colores los define el tema de Noctalia (include al final del archivo).
+# Valores previos de gruvbox por si se quiere volver atrás:
+# set recolor-lightcolor "#282828"
+# set recolor-darkcolor "#ebdbb2"
 
 # ── Zoom ─────────────────────────────────────────
 set zoom-min 10
@@ -43,3 +45,11 @@ map 0 zoom default
 
 # ── Índice/TOC (muy útil en libros técnicos) ──────
 map <Tab> toggle_index
+
+# ── Tema Noctalia (community template zathura) ────────────────────
+# Noctalia regenera ~/.config/zathura/noctaliarc en cada cambio de paleta y su
+# apply.sh manda `ExecuteCommand string:"source"` por D-Bus a las instancias
+# abiertas, que releen este archivo (y con él el include) en caliente.
+# Va AL FINAL: en zathura gana la última opción leída, así el tema sobreescribe
+# los colores de arriba. Si deshabilitás la plantilla, quitá esta línea.
+include noctaliarc

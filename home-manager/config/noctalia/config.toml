@@ -1,3 +1,23 @@
+#===================================================================
+# NOCTALIA (desktop) — config declarativa del flake.
+#===================================================================
+# `noctalia-sync` (home-manager/modules/noctalia.nix) copia acá, cada vez que
+# la GUI escribe ~/.local/state/noctalia/settings.toml, los ajustes que toques
+# en Ajustes. Preserva comentarios y orden de las claves existentes y solo
+# agrega/actualiza: nunca borra. Se excluyen las tablas de ESTADO
+# (wallpaper.last / wallpaper.monitors) para no ensuciar el repo en cada
+# rotación de wallpaper.
+#
+# Flujo inverso: NO es automático. Mientras una clave siga en settings.toml,
+# ese overlay gana sobre este archivo. Si editaste algo acá a mano y no se
+# aplica, sacá la clave del overlay (o cambiala desde la GUI) y corré
+# `noctalia-sync`.
+#
+# Idle: ÚNICO gestor es swayidle (modules/niri.nix: lock 600 s, DPMS off
+# 660 s, suspensión 1200 s). No agregar [idle.behavior.*] acá: sería un
+# segundo gestor de idle en paralelo (bug detectado 2026-09-21).
+#===================================================================
+
 [accessibility]
 ui_scale = 1.0
 high_contrast = false
@@ -12,6 +32,10 @@ clipboard_history_max_entries = 100
 polkit_agent = true
 shared_gl_context = true
 niri_overview_type_to_launch_enabled = true
+avatar_path = "/home/necro/Pictures/Wallpapers/wallpaper14.jpg"
+clipboard_confirm_clear_history = false
+lang = "es"
+screen_time_enabled = true
 
 [shell.panel]
 transparency_mode = "glass"
@@ -37,16 +61,29 @@ source = "wallpaper"
 wallpaper_scheme = "faithful"
 pure_black_dark = true
 
+# Plantillas: builtin (gtk/niri/kitty/qt/starship) + community. `community_ids`
+# lo reescribe noctalia-sync con lo que tengas habilitado en Ajustes >
+# Plantillas. Dos plantillas necesitan una mano del lado de la app:
+#   sioyek  -> escribe ~/.config/sioyek/themes/noctalia.config; el `source`
+#              que lo carga está en config/sioyek/prefs_user.config (read-only:
+#              la plantilla no puede agregarlo sola).
+#   zathura -> escribe ~/.config/zathura/noctaliarc; zathurarc lo incluye al
+#              final del archivo y su apply.sh recarga instancias por D-Bus.
+builtin = "Ayu"
+community_palette = "ADW"
+custom_palette = "magick-wallpaper"
+shell_mode = "dark"
+
 [theme.templates]
 enable_builtin_templates = true
 builtin_ids = ["gtk3", "gtk4", "niri", "kitty", "qt", "starship"]
 enable_community_templates = true
-community_ids = ["obsidian", "vscode", "opencode", "papirus-icons", "zathura"]
+community_ids = ["opencode", "discord", "neovim", "obsidian", "vscode", "sioyek", "zathura", "papirus-icons"]
 
 [wallpaper]
 enabled = true
 fill_mode = "crop"
-transition = ["fade"]
+transition = ["zoom"]
 transition_duration = 1500
 edge_smoothness = 0.3
 transition_on_startup = false
@@ -54,10 +91,36 @@ directory = "~/Pictures/Wallpapers"
 
 [wallpaper.automation]
 enabled = true
-interval_seconds = 1800
+interval_seconds = 3600
 order = "random"
 recursive = true
 
+[wallpaper.default]
+    path = "/home/necro/Pictures/Wallpapers/wallpaper2.jpg"
+
+[[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/necro/Pictures/Wallpapers/wallpaper7.jpg"
+    theme_mode = "dark"
+    wallpaper_scheme = "vibrant"
+
+[[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/necro/Pictures/Wallpapers/wallpaper15.jpg"
+    theme_mode = "dark"
+    wallpaper_scheme = "vibrant"
+
+[[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/necro/Pictures/Wallpapers/wallpaper14.jpg"
+    theme_mode = "dark"
+    wallpaper_scheme = "muted"
+
+[[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/necro/Pictures/Wallpapers/wallpaper11.jpg"
+    theme_mode = "dark"
+    wallpaper_scheme = "faithful"
 [bar.main]
 position = "top"
 thickness = 34
@@ -117,11 +180,71 @@ tint_intensity = 0.3
 
 [lockscreen_widgets]
 enabled = true
+schema_version = 2
+widget_order = ["lockscreen-login-box@DP-1", "lockscreen-login-box@HDMI-A-1"]
 
+[lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+visible = true
+
+[lockscreen_widgets.widget."lockscreen-login-box@DP-1"]
+    box_height = 196.0
+    box_width = 720.0
+    cx = 960.0
+    cy = 961.0
+    output = "DP-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "login_box"
+
+[lockscreen_widgets.widget."lockscreen-login-box@DP-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+show_caps_lock = true
+show_keyboard_layout = true
+show_login_button = true
+show_media = true
+show_session_buttons = true
+show_unlock_hint = true
+show_weather = true
+
+[lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
+    box_height = 196.0
+    box_width = 720.0
+    cx = 759.0
+    cy = 734.0
+    output = "HDMI-A-1"
+    placement_height = 768.0
+    placement_width = 1366.0
+    rotation = 0.0
+    type = "login_box"
+
+[lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+show_caps_lock = true
+show_keyboard_layout = true
+show_login_button = true
+show_media = true
+show_session_buttons = true
+show_unlock_hint = true
+show_weather = true
 [backdrop]
 enabled = true
 blur_intensity = 0.4
-tint_intensity = 0.2
+tint_intensity = 0.1
 
 [system.monitor]
 enabled = true
@@ -134,7 +257,7 @@ network_poll_seconds = 3.0
 enabled = true
 
 [audio]
-enable_overdrive = false
+enable_overdrive = true
 enable_sounds = false
 
 [brightness]
@@ -166,6 +289,7 @@ hidden_tabs = ["power"]
 
 [control_center.calendar]
 show_events_card = false
+show_week_numbers = true
 
 [[control_center.shortcuts]]
 type = "wifi"
@@ -185,23 +309,9 @@ type = "notification"
 [[control_center.shortcuts]]
 type = "clipboard"
 
-[idle]
-behavior_order = ["lock", "screen-off", "lock-and-suspend"]
-
-[idle.behavior.lock]
-action = "lock"
-enabled = false
-timeout = 600.0
-
-[idle.behavior.lock-and-suspend]
-action = "lock_and_suspend"
-enabled = true
-timeout = 900.0
-
-[idle.behavior.screen-off]
-action = "screen_off"
-enabled = false
-timeout = 660.0
+# [idle] a propósito NO se define: con la tabla vacía Noctalia deja sus
+# comportamientos builtin deshabilitados, así el único gestor de idle es
+# swayidle (modules/niri.nix). Antes convivían los dos y se pisaban.
 
 [theme.templates.user.nvim-base16]
 # Template que genera ~/.config/nvim/lua/noctalia.lua con colores extraídos del wallpaper vía
@@ -231,3 +341,23 @@ post_hook = "pkill -SIGUSR1 nvim"
 #   5. niri msg action load-config-file: recarga niri (incluye noctalia.kdl).
 #      El post_hook del builtin template de niri (Tanda 2) también lo hace.
 wallpaper_changed = "noctalia msg templates-apply; sleep 2; kill -SIGUSR1 $(pidof kitty 2>/dev/null); pkill -SIGUSR1 nvim; niri msg action load-config-file"
+
+[calendar]
+enabled = true
+
+[desktop_widgets]
+schema_version = 2
+widget_order = []
+
+[desktop_widgets.grid]
+    cell_size = 8
+    major_interval = 4
+visible = true
+
+[desktop_widgets.widget]
+
+[dock]
+launcher_position = "end"
+
+[plugins]
+enabled = ["blackbartblues/audio-switcher"]

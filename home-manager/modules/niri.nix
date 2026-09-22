@@ -73,9 +73,19 @@ in {
       swayidle = {
         enable = true;
         systemdTargets = [ "graphical-session.target" ];
+        # ÚNICO gestor de idle del sistema: Noctalia no define
+        # [idle.behavior.*] en config.toml / configNotebook.toml (con la tabla
+        # vacía sus comportamientos builtin quedan deshabilitados). Antes
+        # convivían los dos y se pisaban: swayidle bloqueaba a los 600 s y
+        # Noctalia suspendía a los 900 s.
+        #   -w                    espera al comando (necesario para
+        #                         before-sleep y lock).
+        #   power-off/on-monitors acciones DPMS de niri.
         extraArgs = [
           "-w"
           "timeout" "600" "noctalia msg session lock"
+          "timeout" "660" "niri msg action power-off-monitors"
+          "resume" "niri msg action power-on-monitors"
           "timeout" "1200" "loginctl suspend"
           "before-sleep" "noctalia msg session lock"
           "lock" "noctalia msg session lock"

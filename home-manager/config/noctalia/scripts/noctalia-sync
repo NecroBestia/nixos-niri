@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import argparse
 import fcntl
+import hashlib
 import os
 import shutil
 import stat
@@ -117,17 +118,32 @@ def merge(doc, source, prefix: tuple[str, ...] = (), changed: list[str] | None =
     return changed
 
 
-def acquire_lock(key: str):
-    """Lock no bloqueante para que systemd y una corrida manual no se pisen."""
-    base = os.environ.get("XDG_RUNTIME_DIR") or tempfile.gettempdir()
-    digest = abs(hash(key)) % 10**8
-    handle = open(Path(base) / f"{PROG}-{digest}.lock", "w", encoding="utf-8")
-    try:
-        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    except OSError:
-        handle.close()
-        return None
-    return handle
+def acquire_lock(key: str) -> tuple[object | None, bool]:
+    """Lock no bloqueante para que systemd y una corrida manual no se pisen.
+
+    Devuelve (handle, seguir):
+      (handle, True)  lock tomado
+      (None, False)   otra corrida en curso → no hacer nada
+      (None, True)    no se pudo crear el lock (p.ej. XDG_RUNTIME_DIR sin
+                      permiso): se sigue igual, sin lock, avisando.
+    El nombre del lock usa sha1 porque hash() de Python cambia por proceso.
+    """
+    digest = hashlib.sha1(key.encode("utf-8")).hexdigest()[:12]
+    for base in (os.environ.get("XDG_RUNTIME_DIR"), tempfile.gettempdir()):
+        if not base:
+            continue
+        try:
+            handle = open(Path(base) / f"{PROG}-{digest}.lock", "w", encoding="utf-8")
+        except OSError:
+            continue
+        try:
+            fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            handle.close()
+            return None, False
+        return handle, True
+    print(f"{PROG}: aviso: no pude crear el archivo de lock, sigo sin lock", file=sys.stderr)
+    return None, True
 
 
 def export_merged(noctalia: str) -> str:
@@ -169,8 +185,8 @@ def main(argv: list[str] | None = None) -> int:
     if noctalia is None:
         fail("no encuentro el CLI `noctalia` en PATH")
 
-    lock = acquire_lock(str(target))
-    if lock is None:
+    lock, proceed = acquire_lock(str(target))
+    if not proceed:
         if not args.quiet:
             print(f"{PROG}: ya hay otra corrida en curso, nada que hacer")
         return 0
