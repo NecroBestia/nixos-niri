@@ -48,10 +48,15 @@ from pathlib import Path
 
 import tomlkit
 
-# Tablas de estado de la sesión (no configuración): nunca van al flake.
+# Tablas de ESTADO de la sesión (no configuración): nunca van al flake.
+# El aplicador de wallpaper reescribe las tres en cada cambio o rotación
+# (src/config/config_overrides.cpp escribe monitors.<out>, default y last).
+# Si se copiaran, cada rotación ensuciaría el repo y el siguiente hm-switch
+# reiniciaría Noctalia por un "cambio de config" que no es tal.
 EXCLUDE: tuple[tuple[str, ...], ...] = (
     ("wallpaper", "last"),
     ("wallpaper", "monitors"),
+    ("wallpaper", "default"),
 )
 
 # Los floats del export vienen con ruido binario (0.59999999999999998).

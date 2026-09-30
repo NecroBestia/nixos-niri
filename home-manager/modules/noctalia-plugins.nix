@@ -63,7 +63,7 @@ let
   # import-from-derivation sobre un fixed-output: se construye una vez (queda en
   # el store) y después la evaluación lo lee sin red.
   manifests = lib.mapAttrs (
-    id: _: builtins.fromTOML (builtins.readFile "${fetched.${id}}/plugin.toml")
+    id: pin: builtins.fromTOML (builtins.readFile "${fetched.${id}}/${subdirOf id pin}/plugin.toml")
   ) cfg.pins;
 
   pinnedIds = builtins.attrNames cfg.pins;
@@ -655,7 +655,6 @@ in
 
     pathPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      readOnly = true;
       internal = true;
       default = [ ];
       description = ''

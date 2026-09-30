@@ -46,6 +46,36 @@
 let
   cfg = config.programs.noctalia;
 
+  # ── Wrapper de dependencias de plugins ───────────────────────────────
+  # Un plugin no es un ejecutable que se pueda envolver: corre dentro de
+  # Noctalia (Luau) e invoca comandos externos que heredan el PATH del proceso
+  # `noctalia`. modules/noctalia-plugins.nix resuelve esos paquetes desde el
+  # `dependencies` de cada manifiesto; acá se anteponen al PATH del binario, así
+  # los ven el servicio systemd y las instancias lanzadas a mano, sin tocar el
+  # PATH global. Con la lista vacía se usa el paquete base sin envolver.
+  noctaliaBase = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  noctaliaWrapperArgs =
+    lib.optionals (config.noctaliaPlugins.pathPackages != [ ]) [
+      "--prefix"
+      "PATH"
+      ":"
+      (lib.makeBinPath config.noctaliaPlugins.pathPackages)
+    ]
+    ++ config.noctaliaPlugins.extraWrapperArgs;
+  noctaliaPackage =
+    if noctaliaWrapperArgs == [ ] then
+      noctaliaBase
+    else
+      pkgs.symlinkJoin {
+        name = "${lib.getName noctaliaBase}-plugins";
+        paths = [ noctaliaBase ];
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/noctalia ${lib.escapeShellArgs noctaliaWrapperArgs}
+        '';
+        meta.mainProgram = "noctalia";
+      };
+
   # config.programs.noctalia.settings apunta a la COPIA EN EL STORE del flake
   # (Nix copia el árbol —sucio incluido— a /nix/store/<hash>-source y evalúa
   # desde ahí), y el store es read-only: escribir el TOML del flake a través
@@ -67,6 +97,7 @@ let
     name = "noctalia-sync";
     runtimeInputs = [
       (pkgs.python3.withPackages (ps: [ ps.tomlkit ]))
+      pkgs.fzf
       cfg.package
     ];
     text = ''
@@ -95,7 +126,7 @@ in
   config = {
     programs.noctalia = {
       enable = true;
-      package = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      package = noctaliaPackage;
 
       systemd.enable = true;
 

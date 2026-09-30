@@ -58,7 +58,7 @@ alpha = 0.55
 [theme]
 mode = "dark"
 source = "wallpaper"
-wallpaper_scheme = "faithful"
+wallpaper_scheme = "vibrant"
 pure_black_dark = true
 
 # Plantillas: builtin (gtk/niri/kitty/qt/starship) + community. `community_ids`
@@ -94,9 +94,6 @@ enabled = true
 interval_seconds = 3600
 order = "random"
 recursive = true
-
-[wallpaper.default]
-    path = "/home/necro/Pictures/Wallpapers/wallpaper2.jpg"
 
 [[wallpaper.favorite]]
     palette_source = "wallpaper"
@@ -138,6 +135,7 @@ capsule = false
 
 start = ["workspaces", "spacer_2", "tray"]
 end = ["media", "spacer_2", "group:g1", "spacer_2", "control-center", "session"]
+enabled = true
 
 [[bar.main.capsule_group]]
 enabled = true
@@ -181,7 +179,7 @@ tint_intensity = 0.3
 [lockscreen_widgets]
 enabled = true
 schema_version = 2
-widget_order = ["lockscreen-login-box@DP-1", "lockscreen-login-box@HDMI-A-1"]
+widget_order = ["lockscreen-widget-0000000000000001", "lockscreen-login-box@DP-1", "lockscreen-login-box@HDMI-A-1"]
 
 [lockscreen_widgets.grid]
     cell_size = 16
@@ -190,9 +188,9 @@ visible = true
 
 [lockscreen_widgets.widget."lockscreen-login-box@DP-1"]
     box_height = 196.0
-    box_width = 720.0
+    box_width = 810.0
     cx = 960.0
-    cy = 961.0
+    cy = 554.0
     output = "DP-1"
     placement_height = 1080.0
     placement_width = 1920.0
@@ -202,10 +200,10 @@ visible = true
 [lockscreen_widgets.widget."lockscreen-login-box@DP-1".settings]
         background_color = "surface_variant"
         background_opacity = 0.88
-        background_radius = 12.0
+        background_radius = 0.0
 center_password_text = false
         input_opacity = 1.0
-        input_radius = 6.0
+        input_radius = 0.0
         layout = "regular"
 show_caps_lock = true
 show_keyboard_layout = true
@@ -241,6 +239,22 @@ show_media = true
 show_session_buttons = true
 show_unlock_hint = true
 show_weather = true
+
+[lockscreen_widgets.widget.lockscreen-widget-0000000000000001]
+    box_height = 480.0
+    box_width = 912.0
+    cx = 952.0
+    cy = 540.0
+    output = "DP-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "audio_visualizer"
+
+[lockscreen_widgets.widget.lockscreen-widget-0000000000000001.settings]
+background = false
+        bands = 32
+show_when_idle = true
 [backdrop]
 enabled = true
 blur_intensity = 0.4
@@ -360,4 +374,15 @@ visible = true
 launcher_position = "end"
 
 [plugins]
-enabled = ["blackbartblues/audio-switcher"]
+# Plugins ACTIVOS (ids canónicos). El código de estos ids lo fija Nix:
+# modules/noctalia-plugins.nix + hosts/desktop/default.nix, desplegado como la
+# fuente "local" de Noctalia (mayor precedencia sobre official/community).
+# OJO: si la GUI escribe [plugins] en ~/.local/state/noctalia/settings.toml,
+# ese overlay ANULA esta lista (deepMerge reemplaza arrays completos).
+enabled = ["nightwatch75/file-search"]
+
+[plugin_settings."nightwatch75/file-search"]
+search_folder = "/home/necro"
+panel_placement = "floating"
+panel_layer = "overlay"
+panel_position = "center"

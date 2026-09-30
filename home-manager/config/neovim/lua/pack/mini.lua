@@ -151,26 +151,21 @@ vim.keymap.set("n", "<leader>h", function()
     vim.v.this_session = ""
   end
 
-  -- 2. Cerrar y matar todas las terminales de toggleterm
-  local ok, terms = pcall(require, "toggleterm.terminal")
+  -- 2. Cerrar todas las terminales de toggleterm de forma nativa
+  local ok, toggleterm = pcall(require, "toggleterm")
   if ok then
-    for _, term in ipairs(terms.get_all(true)) do
-      -- Matar el proceso (shutdown) y eliminar el buffer asociado
-      pcall(function()
-        term:shutdown()                         -- Termina el job del shell
-        vim.api.nvim_buf_delete(term.bufnr, { force = true })
-      end)
-    end
+    toggleterm.toggle_all(true) -- El 'true' fuerza el cierre
   end
 
-  -- 3. Cerrar todos los buffers restantes (archivos normales)
+  -- 3. Cerrar todos los buffers sin el chequeo de modificados
+  -- 'force = true' evita el error E37 y el falso positivo del pcall
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_valid(bufnr) then
-      pcall(vim.api.nvim_buf_delete, bufnr, { force = true })
+      vim.api.nvim_buf_delete(bufnr, { force = true })
     end
   end
 
-  -- 4. Abrir mini.starter
+  -- 4. Abrir la pantalla de inicio
   require("mini.starter").open()
 end, { desc = "Ir al inicio y cerrar sesión" })
 

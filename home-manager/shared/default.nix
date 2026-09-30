@@ -342,6 +342,7 @@ in {
     ../modules/nvim.nix      # Neovim aislado con LSPs.
     ../modules/opencode.nix  # opencode (skills, plugins, MCPs).
     ../modules/noctalia.nix  # Noctalia: recortes, wallpaper y helpers.
+    ../modules/noctalia-plugins.nix  # Plugins de Noctalia fijados por Nix (declarativo).
     ../modules/sioyek.nix    # Sioyek: PDF reader con Qt/XCB (fix NVIDIA Wayland).
     ../modules/kdenlive.nix  # kdenlive: GSettings schemas para GLib.
     ../modules/zoom.nix      # Zoom: screen share nativo Wayland (portal GNOME).

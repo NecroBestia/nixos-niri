@@ -40,7 +40,10 @@
       gvfs.enable = true;
       udisks2.enable = true;
     };
-
+    programs.nautilus-open-any-terminal = {
+      enable = true; 
+      terminal = "kitty"; 
+    };
     services.udisks2.settings = {
       "mount_options.conf" = {
         defaults = {
