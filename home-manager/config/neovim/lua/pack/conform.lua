@@ -61,8 +61,24 @@ conform.setup({
   formatters = {
     -- sqlfluff solo formatea (no aplica fixes de lint) y con el
     -- dialecto que ya usábamos antes.
+    -- El builtin exige un root marker (.sqlfluff, pyproject...,
+    -- require_cwd=true); si no hay, usamos el dir del buffer.
     sqlfluff = {
       args = { "format", "--dialect", "postgres", "-" },
+      require_cwd = false,
+      cwd = function(self, ctx)
+        local root = require("conform.util").root_file({
+          ".sqlfluff",
+          "pep8.ini",
+          "pyproject.toml",
+          "setup.cfg",
+          "tox.ini",
+        })(self, ctx)
+        if root then return root end
+        local name = vim.api.nvim_buf_get_name(ctx.buf)
+        local dir = name ~= "" and vim.fs.dirname(name) or nil
+        return (dir and dir ~= "") and dir or vim.fn.getcwd()
+      end,
     },
     -- Wrapper propio sobre sbclPackages.cl-indentify (stdin → stdout).
     ["cl-indentify"] = {

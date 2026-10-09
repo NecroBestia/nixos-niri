@@ -44,6 +44,9 @@ vim.pack.add({
     { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },     
         -- El puente para los "Language Servers". Te da autocompletado inteligente y subraya errores de sintaxis mientras escribes.
     "https://github.com/neovim/nvim-lspconfig",                           
+        -- Formateo con herramientas CLI. Configurado en lua/pack/conform.lua
+        -- (<leader>f): CLI por filetype y fallback a LSP.
+    "https://github.com/stevearc/conform.nvim",
     -- Control de Versiones
         -- Integración absoluta con Git. Te permite hacer commits, push y ver el historial del proyecto sin usar la terminal externa.
     "https://github.com/tpope/vim-fugitive",                              

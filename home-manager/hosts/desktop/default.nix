@@ -24,16 +24,22 @@
   # Añadir/actualizar: ~/Projects/opencodePlans/noctalia-plugins-declarativos/README.md
   noctaliaPlugins = {
     enable = true;
+    # Paquetes que proveen los comandos que invocan los plugins fijados; cada
+    # plugin.toml los declara en `dependencies` y el build falla si falta uno.
+    #   file-search → fzf find lsblk gdbus mktemp mv wc head rm date xdg-open du
+    packages = with pkgs; [
+      fzf
+      findutils
+      util-linux
+      glib
+      xdg-utils
+      coreutils
+    ];
     pins = {
       "nightwatch75/file-search" = {
         url = "https://github.com/noctalia-dev/community-plugins";
         rev = "a4645e83b0340fa9d259729231c94702272e4978";
         hash = "sha256-XPvrTzGeH/kBt4TLYWjVeD6czbya+WX9ZDTE4Lvru18=";
-      };
-      "blackbartblues/audio-switcher" = {
-        url = "https://github.com/noctalia-dev/community-plugins";
-        rev = "a4645e83b0340fa9d259729231c94702272e4978";
-        hash = "sha256-2hV78KkbobxHafIY4jfW7xLrW1DU+w697lpOHgb/y18=";
       };
     };
   };

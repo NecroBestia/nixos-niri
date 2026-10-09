@@ -82,8 +82,8 @@ in
   # TABLETA GRÁFICA
   #-----------------------------------------------------------------
   # Paquete stock de nixpkgs (igual que en desktop).
-  # NOTA: el override a OTD master (pkgs/opentabletdriver-master.nix)
-  # era por el kernel 7.1; si la tablet fallara con 6.18.13, volver a él.
+  # NOTA: el override a OTD master (antes en pkgs/) era por el kernel
+  # 7.1; si la tablet fallara con 6.18.13, recuperarlo del historial git.
   hardware.opentabletdriver.enable = true;
 
   #-----------------------------------------------------------------

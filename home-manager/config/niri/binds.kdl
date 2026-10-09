@@ -12,10 +12,10 @@ binds {
     XF86AudioMicMute     { spawn-sh "noctalia msg volume-mic-mute"; }
     
     // -- Configuraciones de audio (playerctl)
-    XF86AudioPlay { spawn-sh "playerctl play-pause"; }
-    XF86AudioStop { spawn-sh "playerctl stop"; }
-    XF86AudioPrev { spawn-sh "playerctl previous"; }
-    XF86AudioNext { spawn-sh "playerctl next"; }
+    XF86AudioPlay { spawn-sh "playerctl --player=spotify,%any play-pause"; }
+    XF86AudioStop { spawn-sh "playerctl --player=spotify,%any stop"; }
+    XF86AudioPrev { spawn-sh "playerctl --player=spotify,%any previous"; }
+    XF86AudioNext { spawn-sh "playerctl --player=spotify,%any next"; }
     
     XF86MonBrightnessUp { spawn-sh "noctalia msg brightness-up"; }
     XF86MonBrightnessDown { spawn-sh "noctalia msg brightness-down"; }
