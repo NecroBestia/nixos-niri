@@ -5,8 +5,24 @@ local MiniFiles = require("mini.files")
 MiniFiles.setup({ mappings = { go_in = "<CR>", go_in_plus = "L", go_out = "_", go_out_plus = "H" } })
 vim.keymap.set("n", "-", function()
   local path = vim.api.nvim_buf_get_name(0)
-  if path ~= "" then MiniFiles.open(path) else MiniFiles.open() end
-end, { desc = "Toggle mini file explorer (current file dir)" })
+  if path == "" then return MiniFiles.open() end
+
+  local function check_path(p)
+    if not p or p == "" or p == "/" then
+      return vim.schedule(function() MiniFiles.open() end)
+    end
+
+    vim.uv.fs_stat(p, function(err, stat)
+      if not err and stat then
+        vim.schedule(function() MiniFiles.open(p) end)
+      else
+        check_path(vim.fs.dirname(p))
+      end
+    end)
+  end
+
+  check_path(path)
+end, { desc = "Toggle mini file explorer (async safe)" })
 
 -- Superpoderes para MiniFiles: Abrir en Pantalla Dividida
 local map_split = function(buf_id, lhs, direction)
@@ -104,8 +120,8 @@ MiniSnippets.start_lsp_server({ match = false })
 -- =========================================================
 local statusline = require("mini.statusline")
 statusline.setup({
-  use_icons = true,           -- Muestra los iconos de los lenguajes
-  set_vim_settings = false,   -- Evita conflictos con tus opciones globales
+  use_icons = true,         -- Muestra los iconos de los lenguajes
+  set_vim_settings = false, -- Evita conflictos con tus opciones globales
 })
 
 -- =========================================================
@@ -113,8 +129,8 @@ statusline.setup({
 -- =========================================================
 local sessions = require("mini.sessions")
 sessions.setup({
-  autowrite = true,   -- Guarda automáticamente la sesión actual antes de salir
-  autoread = false,   -- Evita cargar la última sesión de forma automática al abrir
+  autowrite = true, -- Guarda automáticamente la sesión actual antes de salir
+  autoread = false, -- Evita cargar la última sesión de forma automática al abrir
 })
 
 -- =========================================================
@@ -122,15 +138,15 @@ sessions.setup({
 -- =========================================================
 local starter = require("mini.starter")
 starter.setup({
-  evaluate_single = true,   -- Si el filtro deja una sola opción, la abre de inmediato
+  evaluate_single = true, -- Si el filtro deja una sola opción, la abre de inmediato
 
   items = {
     -- Conexión automática: Muestra tus últimas 5 sesiones guardadas
     starter.sections.sessions(5, true),
 
     starter.sections.builtin_actions(),
-    starter.sections.recent_files(5, false),     -- Últimos 5 archivos globales
-    starter.sections.recent_files(5, true),      -- Últimos 5 archivos en el directorio actual
+    starter.sections.recent_files(5, false), -- Últimos 5 archivos globales
+    starter.sections.recent_files(5, true),  -- Últimos 5 archivos en el directorio actual
 
     -- Acción rápida personalizada para iniciar limpio
     { name = 'Nuevo documento LaTeX', action = 'enew | set filetype=tex', section = 'Acciones Rápidas' },
@@ -138,7 +154,7 @@ starter.setup({
 
   content_hooks = {
     starter.gen_hook.adding_bullet("» "),
-    starter.gen_hook.aligning('center', 'center'),     -- Centra el menú en la pantalla
+    starter.gen_hook.aligning('center', 'center'), -- Centra el menú en la pantalla
   },
 })
 -- =========================================================

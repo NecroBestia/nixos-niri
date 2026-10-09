@@ -54,14 +54,15 @@ let
   # los ven el servicio systemd y las instancias lanzadas a mano, sin tocar el
   # PATH global. Con la lista vacía se usa el paquete base sin envolver.
   noctaliaBase = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
-  noctaliaWrapperArgs =
-    lib.optionals (config.noctaliaPlugins.pathPackages != [ ]) [
+  noctaliaWrapperArgs = lib.optionals config.noctaliaPlugins.enable (
+    lib.optionals (config.noctaliaPlugins.packages != [ ]) [
       "--prefix"
       "PATH"
       ":"
-      (lib.makeBinPath config.noctaliaPlugins.pathPackages)
+      (lib.makeBinPath config.noctaliaPlugins.packages)
     ]
-    ++ config.noctaliaPlugins.extraWrapperArgs;
+    ++ config.noctaliaPlugins.extraWrapperArgs
+  );
   noctaliaPackage =
     if noctaliaWrapperArgs == [ ] then
       noctaliaBase

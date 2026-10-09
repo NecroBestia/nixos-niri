@@ -58,7 +58,7 @@ alpha = 0.55
 [theme]
 mode = "dark"
 source = "wallpaper"
-wallpaper_scheme = "vibrant"
+wallpaper_scheme = "faithful"
 pure_black_dark = true
 
 # Plantillas: builtin (gtk/niri/kitty/qt/starship) + community. `community_ids`
@@ -379,10 +379,15 @@ launcher_position = "end"
 # fuente "local" de Noctalia (mayor precedencia sobre official/community).
 # OJO: si la GUI escribe [plugins] en ~/.local/state/noctalia/settings.toml,
 # ese overlay ANULA esta lista (deepMerge reemplaza arrays completos).
-enabled = ["nightwatch75/file-search"]
+enabled = ["nightwatch75/file-search", "raycursive/niri-displays"]
 
 [plugin_settings."nightwatch75/file-search"]
 search_folder = "/home/necro"
 panel_placement = "floating"
 panel_layer = "overlay"
+panel_position = "center"
+
+[plugin_settings."raycursive/niri-displays"]
+panel_placement = "floating"
+panel_open_near_click = false
 panel_position = "center"
