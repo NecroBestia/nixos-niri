@@ -172,7 +172,10 @@
       homeConfigurations = {
         "necro@desktop" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit inputs pkgs-unstable; };
+          extraSpecialArgs = {
+            inherit inputs pkgs-unstable;
+            hostname = "desktop";
+          };
           modules = [
             ./home-manager/hosts/desktop/default.nix
           ];
@@ -180,7 +183,10 @@
 
         "necro@notebook" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit inputs pkgs-unstable; };
+          extraSpecialArgs = {
+            inherit inputs pkgs-unstable;
+            hostname = "notebook";
+          };
           modules = [
             ./home-manager/hosts/notebook/default.nix
           ];
