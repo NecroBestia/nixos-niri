@@ -27,6 +27,11 @@
       settings = {
         General = {
           InputMethod = "";
+          # Prueba mínima (2026-10-13): el greeter Qt6 aborta cuando RHI no
+          # puede inicializar OpenGL antes de que el driver NVIDIA esté
+          # listo (race). Render por software SOLO para el greeter; la
+          # sesión no se ve afectada.
+          GreeterEnvironment = "QT_QUICK_BACKEND=software";
         };
       };
       extraPackages = with pkgs; [

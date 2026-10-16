@@ -32,10 +32,12 @@ clipboard_history_max_entries = 100
 polkit_agent = true
 shared_gl_context = true
 niri_overview_type_to_launch_enabled = true
-avatar_path = "/home/necro/Pictures/Wallpapers/wallpaper14.jpg"
+avatar_path = "/home/necro/Pictures/Wallpapers/wallpaper13.jpg"
 clipboard_confirm_clear_history = false
 lang = "es"
 screen_time_enabled = true
+external_ip_enabled = true
+show_close_buttons = false
 
 [shell.panel]
 transparency_mode = "glass"
@@ -45,11 +47,12 @@ control_center_placement = "attached"
 
 [shell.animation]
 enabled = true
-speed = 1.0
+speed = 1.5
 
 [shell.launcher]
 categories = false
 compact = true
+    layout = "simple"
 
 [shell.shadow]
 direction = "down"
@@ -103,15 +106,9 @@ recursive = true
 
 [[wallpaper.favorite]]
     palette_source = "wallpaper"
-    path = "/home/necro/Pictures/Wallpapers/wallpaper15.jpg"
-    theme_mode = "dark"
-    wallpaper_scheme = "vibrant"
-
-[[wallpaper.favorite]]
-    palette_source = "wallpaper"
     path = "/home/necro/Pictures/Wallpapers/wallpaper14.jpg"
     theme_mode = "dark"
-    wallpaper_scheme = "muted"
+    wallpaper_scheme = "vibrant"
 
 [[wallpaper.favorite]]
     palette_source = "wallpaper"
@@ -216,8 +213,8 @@ show_weather = true
 [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
     box_height = 196.0
     box_width = 720.0
-    cx = 759.0
-    cy = 734.0
+    cx = 758.999939
+    cy = 734.000061
     output = "HDMI-A-1"
     placement_height = 768.0
     placement_width = 1366.0
@@ -379,7 +376,8 @@ launcher_position = "end"
 # fuente "local" de Noctalia (mayor precedencia sobre official/community).
 # OJO: si la GUI escribe [plugins] en ~/.local/state/noctalia/settings.toml,
 # ese overlay ANULA esta lista (deepMerge reemplaza arrays completos).
-enabled = ["nightwatch75/file-search", "raycursive/niri-displays"]
+enabled = ["nightwatch75/file-search"]
+auto_update = "official"
 
 [plugin_settings."nightwatch75/file-search"]
 search_folder = "/home/necro"
