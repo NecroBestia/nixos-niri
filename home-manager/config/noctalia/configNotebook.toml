@@ -24,6 +24,9 @@ clipboard_enabled = true
 clipboard_history_max_entries = 100
 polkit_agent = true
 shared_gl_context = true
+avatar_path = "/home/necro/Pictures/Wallpapers/wallpaper13.jpg"
+screen_time_enabled = true
+niri_overview_type_to_launch_enabled = true
 
 [shell.panel]
 transparency_mode = "glass"
@@ -39,17 +42,67 @@ speed = 1.0
 direction = "down"
 alpha = 0.55
 
+[shell.launcher]
+categories = false
+compact = true
+    layout = "simple"
+app_grid = false
+
+[[shell.session.actions]]
+    action = "lock"
+    countdown_seconds = 0.0
+enabled = true
+    shortcut = "1"
+    variant = "default"
+
+[[shell.session.actions]]
+    action = "logout"
+    countdown_seconds = 0.0
+enabled = true
+    shortcut = "2"
+    variant = "default"
+
+[[shell.session.actions]]
+    action = "lock_and_suspend"
+    countdown_seconds = 0.0
+enabled = true
+    shortcut = "3"
+    variant = "default"
+
+[[shell.session.actions]]
+    action = "command"
+    command = "noctalia msg session lock && sleep 1 && systemctl hibernate"
+    countdown_seconds = 0.0
+enabled = true
+    glyph = "hibernate"
+    label = "hibernate"
+    shortcut = "6"
+    variant = "default"
+
+[[shell.session.actions]]
+    action = "reboot"
+    countdown_seconds = 0.0
+enabled = true
+    shortcut = "4"
+    variant = "default"
+
+[[shell.session.actions]]
+    action = "shutdown"
+    countdown_seconds = 0.0
+enabled = true
+    shortcut = "5"
+    variant = "destructive"
 [theme]
 mode = "dark"
 source = "wallpaper"
-wallpaper_scheme = "faithful"
-pure_black_dark = false
+wallpaper_scheme = "vibrant"
+pure_black_dark = true
 
 [theme.templates]
 enable_builtin_templates = true
 builtin_ids = ["gtk3", "gtk4", "niri", "kitty", "qt", "starship"]
 enable_community_templates = true
-community_ids = ["neovim", "obsidian", "vscode", "opencode", "papirus-icons", "zathura", "sioyek"]
+community_ids = ["opencode", "neovim", "obsidian", "vscode", "zathura", "papirus-icons"]
 
 [wallpaper]
 enabled = true
@@ -66,13 +119,36 @@ interval_seconds = 1800
 order = "random"
 recursive = true
 
+[[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/necro/Pictures/Wallpapers/wallpaper13.jpg"
+    theme_mode = "dark"
+    wallpaper_scheme = "vibrant"
+
+[[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/necro/Pictures/Wallpapers/wallpaper14.jpg"
+    theme_mode = "dark"
+    wallpaper_scheme = "vibrant"
+
+[[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/necro/Pictures/Wallpapers/wallpaper.jpg"
+    theme_mode = "dark"
+    wallpaper_scheme = "m3-content"
+
+[[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/necro/Pictures/Wallpapers/wallpaper12.jpg"
+    theme_mode = "dark"
+    wallpaper_scheme = "vibrant"
 [bar.main]
 position = "top"
 thickness = 28
 background_opacity = 0.6
 radius = 0
 margin_ends = 25
-margin_edge = 6
+margin_edge = 2
 padding = 14
 widget_spacing = 6
 scale = 1.0
@@ -81,10 +157,19 @@ auto_hide = false
 reserve_space = true
 capsule = false
 
-start = ["launcher", "workspaces"]
+start = ["launcher", "spacer_2", "workspaces", "spacer_2", "tray"]
 center = ["clock"]
-end = ["tray", "battery", "volume", "notifications", "control-center", "session"]
+end = ["battery", "volume", "group:g1", "control-center", "session"]
+margin_opposite_edge = 6
+panel_overlap = 2
 
+[[bar.main.capsule_group]]
+enabled = true
+    fill = "surface_variant"
+    id = "g1"
+members = ["notifications", "wallpaper"]
+    opacity = 1.0
+    padding = 6.0
 [notification]
 enable_daemon = true
 show_app_name = true
@@ -128,7 +213,7 @@ memory_poll_seconds = 2.0
 network_poll_seconds = 3.0
 
 [weather]
-enabled = false
+enabled = true
 
 [audio]
 enable_overdrive = false
@@ -143,7 +228,7 @@ temperature_day = 6500
 temperature_night = 3500
 
 [location]
-auto_locate = false
+auto_locate = true
 custom_schedule = true
 sunrise = "07:00"
 sunset = "22:00"
@@ -163,3 +248,107 @@ post_hook = "pkill -SIGUSR1 nvim"
 
 [hooks]
 wallpaper_changed = "noctalia msg templates-apply; sleep 2; kill -SIGUSR1 $(pidof kitty 2>/dev/null); pkill -SIGUSR1 nvim; niri msg action load-config-file" # sleep 2: apply.sh de kitty cuelga (dns a github), esperamos a que Tanda 1 (~1s) termine antes de recargar
+session_unlocked = "noctalia msg bluetooth-disable"
+started = "noctalia msg bluetooth-disable"
+
+[calendar]
+enabled = true
+
+[calendar.account.personal_google]
+    color = "primary"
+    name = "Calendario"
+    type = "google"
+
+[idle]
+behavior_order = ["lock", "screen-off", "lock-and-suspend"]
+
+[idle.behavior.lock]
+    action = "lock"
+enabled = false
+    timeout = 600.0
+
+[idle.behavior.lock-and-suspend]
+    action = "lock_and_suspend"
+enabled = true
+    timeout = 900.0
+
+[idle.behavior.screen-off]
+    action = "screen_off"
+enabled = false
+    timeout = 660.0
+
+[lockscreen_widgets]
+enabled = true
+schema_version = 2
+widget_order = ["lockscreen-login-box@HDMI-A-2", "lockscreen-login-box@eDP-1"]
+
+[lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+visible = true
+
+[lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-2"]
+    box_height = 196.0
+    box_width = 720.0
+    cx = 960.0
+    cy = 768.0
+    output = "HDMI-A-2"
+    placement_height = 768.0
+    placement_width = 1360.0
+    rotation = 0.0
+    type = "login_box"
+
+[lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-2".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+show_caps_lock = true
+show_keyboard_layout = true
+show_login_button = true
+show_media = true
+show_session_buttons = true
+show_unlock_hint = true
+show_weather = true
+
+[lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+    box_height = 196.0
+    box_width = 720.0
+    cx = 683.0
+    cy = 384.0
+    output = "eDP-1"
+    placement_height = 768.0
+    placement_width = 1366.0
+    rotation = 0.0
+    type = "login_box"
+
+[lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+show_caps_lock = true
+show_keyboard_layout = true
+show_login_button = true
+show_media = true
+show_session_buttons = true
+show_unlock_hint = true
+show_weather = true
+
+[plugins]
+enabled = ["ashur-d/nvim-projects"]
+
+[widget.spacer_2]
+type = "spacer"
+
+[control_center.calendar]
+show_events_card = false
+
+[dock]
+icon_size = 20

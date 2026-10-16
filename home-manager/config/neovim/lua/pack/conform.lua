@@ -16,6 +16,7 @@
 --   - sqlfluff: dialecto postgres por defecto; un .sqlfluff por
 --     proyecto lo sobreescribe.
 -- =========================================================
+vim.cmd.packadd("conform.nvim")
 local conform = require("conform")
 
 conform.setup({
