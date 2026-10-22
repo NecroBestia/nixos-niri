@@ -10,19 +10,21 @@
 #   - Compilación: gcc, gnumake, unzip
 #   - LSPs: clangd (C/C++), nil (Nix), pyright (Python),
 #     rust-analyzer (Rust), lua_ls (Lua), texlab (LaTeX), tree-sitter,
-#     ruff (Python lint/formato), sqls (SQL), prolog_ls (Prolog vía SWI),
+#     ruff (Python lint/formato), sqls (SQL),
+#     prolog_ls (Prolog, pack lsp_server VENDADO más abajo),
 #     hls (Haskell)
 #   - Formatters: clang-format (en clang-tools), rustfmt (Rust),
 #     sqlfluff (SQL, CLI), ormolu (Haskell, usado por HLS),
 #     y los CLI de conform.nvim: nixfmt-rfc-style, stylua, tex-fmt,
 #     shfmt, gofmt (pkg go), google-java-format, taplo, prettier,
-#     racket (raco fmt) y cl-indentify (wrapper propio, pkgs/).
+#     racket (raco fmt) y wrappers propios de pkgs: cl-indentify
+#     (Common Lisp) y prolog-formatter (Prolog stdout, definidos abajo).
 #   - Utilidades: ripgrep, fd (búsqueda), curl, git
 #   - Portapapeles: wl-clipboard, xclip
 #
-# gestión de plugins: vim.pack (nativo de Neovim 0.11+).
-# Los plugins se definen en lua/pack/sources.lua y se cachean
-# en nvim-pack-lock.json.
+# Configuración: home-manager/config/nvim/ (init.lua + lua/core/ +
+# lua/plugins/). La lista fuente vive en config/nvim/lua/plugins.lua
+# y vim.pack cachea en nvim-pack-lock.json (gestionado en caliente).
 #
 # NOTA: La ruta es relativa al flake. Editar los archivos en
 # config/neovim/ requiere ejecutar home-manager switch para
@@ -87,6 +89,43 @@ let
     };
   };
 
+  # Pack lsp_server vendado (jamesnvc/lsp_server) — LSP y formatter de
+  # Prolog. No viene con el swi-prolog de nixpkgs y no se usa
+  # `swipl pack install` por ser impuro (escribe el home). Se hace
+  # symlink read-only bajo share/swi-prolog/pack; SWI resuelve
+  # library(lsp_server) vía XDG_DATA_DIRS, que se inyecta solo en el
+  # wrapper de nvim (fuera de nvim el sistema queda intacto).
+  lsp-server-src = pkgs.fetchFromGitHub {
+    owner = "jamesnvc";
+    repo = "lsp_server";
+    rev = "d5f30d69c151494c24feef6bff06e60a4f919fc7";
+    hash = "sha256-5oe0JmhPhsOFirTGXa8jOBgbBWvgTDvTtUeI8uDzeX8=";
+  };
+
+  lsp-server-pack = pkgs.runCommand "swipl-pack-lsp_server" { } ''
+    install -d $out/share/swi-prolog/pack
+    ln -s ${lsp-server-src} $out/share/swi-prolog/pack/lsp_server
+  '';
+
+  # prolog-formatter (stdin→stdout para conform): el app `swipl formatter`
+  # del pack funciona in-place por defecto y su argv no acepta flags
+  # desde el CLI clásico ("Unknown option: -i"). Este wrapper replica
+  # la cláusula stdout de app/formatter.pl: search-path lsp → prolog/
+  # del pack vendado + file_formatted/2 y emit_reified/2 a stdout.
+  # El contenido llega por stdin a un temp file (el camino que conform
+  # usa con stdin=true) y el nombre via env (sin problemas de quoting).
+  prolog-formatter = pkgs.writeShellScriptBin "prolog-formatter" ''
+    tmp=$(mktemp "''${TMPDIR:-/tmp}/prolog-formatter.XXXXXX")
+    trap 'rm -f "$tmp"' EXIT
+    cat > "$tmp"
+    export PROLOG_FMT_FILE="$tmp"
+    exec ${pkgs-unstable.swi-prolog}/bin/swipl -q -t halt \
+      -g "asserta(user:file_search_path(lsp, '${lsp-server-src}/prolog'))" \
+      -g "use_module(lsp(lsp_formatter), [file_formatted/2])" \
+      -g "use_module(lsp(lsp_formatter_parser), [emit_reified/2])" \
+      -g "getenv('PROLOG_FMT_FILE', F), file_formatted(F, FF), emit_reified(user_output, FF)"
+  '';
+
   nvim-dependencies = with pkgs; [
     gcc gnumake unzip curl git ripgrep fd               # wget removido: curl ya cubre descargas.
     wl-clipboard                                           # xclip removido: no útil en Wayland.
@@ -97,7 +136,7 @@ let
     pkgs-unstable.rustfmt                # Rust: formatter requerido por rust-analyzer
     pkgs-unstable.sqls                   # SQL: LSP (compleción/navegación)
     pkgs-unstable.sqlfluff               # SQL: formatter CLI (fallback de <leader>f)
-    pkgs-unstable.swi-prolog             # Prolog: LSP via prolog_ls (library(lsp_server))
+    pkgs-unstable.swi-prolog             # Prolog: LSP via prolog_ls (pack lsp_server vendado)
     pkgs-unstable.haskell-language-server # Haskell: LSP (hls)
     pkgs-unstable.ormolu                 # Haskell: formatter usado por HLS
     # Formatters CLI para conform.nvim (ver lua/pack/conform.lua):
@@ -111,6 +150,7 @@ let
     prettier                             # Markdown/JS/TS/JSON/YAML/CSS/HTML
     racket                               # Racket (raco fmt; requiere `raco pkg install fmt`)
     cl-indentify                         # Common Lisp (definido arriba, ver clSourceRegistry)
+    prolog-formatter                     # Prolog stdout (definido arriba, requiere lsp-server-src)
   ];
 
   custom-neovim = pkgs.symlinkJoin {
@@ -119,7 +159,8 @@ let
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram $out/bin/nvim \
-        --prefix PATH : ${pkgs.lib.makeBinPath nvim-dependencies}
+        --prefix PATH : ${pkgs.lib.makeBinPath nvim-dependencies} \
+        --prefix XDG_DATA_DIRS : ${lsp-server-pack}/share
     '';
   };
 
@@ -133,23 +174,29 @@ in {
   home.file = {
     # Archivos individuales en vez de .config/nvim completo para evitar
     # colisiones en checkLinkTargets cuando el directorio ya existe.
-    ".config/nvim/init.lua"            = { source = ../config/neovim/init.lua;            force = true; };
+    # Config viviendo en config/nvim/ (la carpeta vieja config/neovim/
+    # queda en el repo como respaldo).
+    ".config/nvim/init.lua"                 = { source = ../config/nvim/init.lua;                 force = true; };
     # nvim-pack-lock.json NO se despliega vía HM — vim.pack lo crea y
     # gestiona como archivo escribible en caliente. Si HM lo desplegara
     # sería un symlink read-only → EROFS al escribir.
     # lua/noctalia.lua tampoco se despliega: lo genera la plantilla de
     # Noctalia (config/noctalia/templates/nvim-base16.lua) en caliente.
-    ".config/nvim/lua/core/keymaps.lua"     = { source = ../config/neovim/lua/core/keymaps.lua;     force = true; };
-    ".config/nvim/lua/core/lsp.lua"         = { source = ../config/neovim/lua/core/lsp.lua;         force = true; };
-    ".config/nvim/lua/core/options.lua"     = { source = ../config/neovim/lua/core/options.lua;     force = true; };
-    ".config/nvim/lua/core/treesitter.lua"  = { source = ../config/neovim/lua/core/treesitter.lua; force = true; };
-    ".config/nvim/lua/pack/commands.lua"    = { source = ../config/neovim/lua/pack/commands.lua;    force = true; };
-    ".config/nvim/lua/pack/conform.lua"     = { source = ../config/neovim/lua/pack/conform.lua;     force = true; };
-    ".config/nvim/lua/pack/init.lua"        = { source = ../config/neovim/lua/pack/init.lua;        force = true; };
-    ".config/nvim/lua/pack/mini.lua"        = { source = ../config/neovim/lua/pack/mini.lua;        force = true; };
-    ".config/nvim/lua/pack/plugins.lua"     = { source = ../config/neovim/lua/pack/plugins.lua;     force = true; };
-    ".config/nvim/lua/pack/sources.lua"     = { source = ../config/neovim/lua/pack/sources.lua;     force = true; };
-    ".config/nvim/lua/pack/vimtex.lua"      = { source = ../config/neovim/lua/pack/vimtex.lua;      force = true; };
+    ".config/nvim/lua/core/options.lua"     = { source = ../config/nvim/lua/core/options.lua;     force = true; };
+    ".config/nvim/lua/core/autocmds.lua"    = { source = ../config/nvim/lua/core/autocmds.lua;    force = true; };
+    ".config/nvim/lua/core/keymaps.lua"     = { source = ../config/nvim/lua/core/keymaps.lua;     force = true; };
+    ".config/nvim/lua/core/lsp.lua"         = { source = ../config/nvim/lua/core/lsp.lua;         force = true; };
+    ".config/nvim/lua/core/treesitter.lua"  = { source = ../config/nvim/lua/core/treesitter.lua;  force = true; };
+    ".config/nvim/lua/plugins.lua"          = { source = ../config/nvim/lua/plugins.lua;          force = true; };
+    ".config/nvim/lua/plugins/commands.lua"   = { source = ../config/nvim/lua/plugins/commands.lua;   force = true; };
+    ".config/nvim/lua/plugins/editor.lua"     = { source = ../config/nvim/lua/plugins/editor.lua;     force = true; };
+    ".config/nvim/lua/plugins/ui.lua"         = { source = ../config/nvim/lua/plugins/ui.lua;         force = true; };
+    ".config/nvim/lua/plugins/completion.lua" = { source = ../config/nvim/lua/plugins/completion.lua; force = true; };
+    ".config/nvim/lua/plugins/git.lua"        = { source = ../config/nvim/lua/plugins/git.lua;        force = true; };
+    ".config/nvim/lua/plugins/latex.lua"      = { source = ../config/nvim/lua/plugins/latex.lua;      force = true; };
+    ".config/nvim/lua/plugins/focus.lua"      = { source = ../config/nvim/lua/plugins/focus.lua;      force = true; };
+    ".config/nvim/lua/plugins/markdown.lua"   = { source = ../config/nvim/lua/plugins/markdown.lua;   force = true; };
+    ".config/nvim/lua/plugins/format.lua"     = { source = ../config/nvim/lua/plugins/format.lua;     force = true; };
   };
 
   home.shellAliases = {
