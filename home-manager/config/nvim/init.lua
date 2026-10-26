@@ -2,7 +2,7 @@
 -- Punto de entrada de la configuración.
 --
 -- Orden de carga (el orden importa):
---   1. core.options/autocmds/keymaps: base sin plugins.
+--   1. core.options/filetypes/autocmds/keymaps: base sin plugins.
 --   2. plugins: vim.pack.add (clona) + setup de cada uno.
 --   3. core.treesitter / core.lsp: dependen de plugins ya cargados
 --      (treesitter de nvim-treesitter; lsp de mini.completion).
@@ -21,6 +21,7 @@ pcall(function() require("vim._core.ui2").enable({}) end)
 
 -- 1. Configuración base que no necesita plugins
 require("core.options")
+require("core.filetypes")
 require("core.autocmds")
 require("core.keymaps")
 
