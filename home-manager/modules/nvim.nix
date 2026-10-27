@@ -183,6 +183,7 @@ in {
     # lua/noctalia.lua tampoco se despliega: lo genera la plantilla de
     # Noctalia (config/noctalia/templates/nvim-base16.lua) en caliente.
     ".config/nvim/lua/core/options.lua"     = { source = ../config/nvim/lua/core/options.lua;     force = true; };
+    ".config/nvim/lua/core/filetypes.lua"   = { source = ../config/nvim/lua/core/filetypes.lua;   force = true; };
     ".config/nvim/lua/core/autocmds.lua"    = { source = ../config/nvim/lua/core/autocmds.lua;    force = true; };
     ".config/nvim/lua/core/keymaps.lua"     = { source = ../config/nvim/lua/core/keymaps.lua;     force = true; };
     ".config/nvim/lua/core/lsp.lua"         = { source = ../config/nvim/lua/core/lsp.lua;         force = true; };

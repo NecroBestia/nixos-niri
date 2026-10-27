@@ -97,6 +97,7 @@ mode = "dark"
 source = "wallpaper"
 wallpaper_scheme = "m3-content"
 pure_black_dark = true
+builtin = "Kanagawa"
 
 [theme.templates]
 enable_builtin_templates = true
@@ -126,10 +127,16 @@ recursive = true
     wallpaper_scheme = "m3-content"
 
 [[wallpaper.favorite]]
+    palette_source = "wallpaper"
     path = "/home/necro/Pictures/Wallpapers/wallpaper12.jpg"
+    theme_mode = "dark"
+    wallpaper_scheme = "m3-content"
 
 [[wallpaper.favorite]]
+    palette_source = "wallpaper"
     path = "/home/necro/Pictures/Wallpapers/wallpaper14.jpg"
+    theme_mode = "dark"
+    wallpaper_scheme = "vibrant"
 
 [[wallpaper.favorite]]
     path = "/home/necro/Pictures/Wallpapers/wallpaper16.jpg"
