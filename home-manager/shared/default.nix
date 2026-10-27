@@ -102,6 +102,7 @@ in {
       pkgs-unstable.librewolf   # fork de firefox 
       #pkgs-unstable.spotify
       pkgs-unstable.spotatui
+      pkgs-unstable.codex
       # Scripts locales
       myScripts.spotify-startup # Lanzador condicional (Flatpak/nativo).
       myScripts.niri-symlinks   # Creador de enlaces simbólicos.
