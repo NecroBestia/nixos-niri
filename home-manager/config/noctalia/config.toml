@@ -61,7 +61,7 @@ alpha = 0.55
 [theme]
 mode = "dark"
 source = "wallpaper"
-wallpaper_scheme = "faithful"
+wallpaper_scheme = "vibrant"
 pure_black_dark = true
 
 # Plantillas: builtin (gtk/niri/kitty/qt/starship) + community. `community_ids`
@@ -356,6 +356,8 @@ wallpaper_changed = "noctalia msg templates-apply; sleep 2; kill -SIGUSR1 $(pido
 [calendar]
 enabled = true
 
+[calendar.account.personal_google]
+    type = "google"
 [desktop_widgets]
 schema_version = 2
 widget_order = []
