@@ -13,8 +13,35 @@
 let
   # Atajo para builtins.path (reduce ruido visual).
   skill = path: builtins.path { inherit path; };
+
+  wolframEngine = import ../pkgs/wolfram-engine.nix { inherit pkgs; };
 in
 {
+  home.packages = [ wolframEngine ];
+
+  # El notifier V2 sustituye las alertas nativas para evitar duplicados.
+  # Se conservan los ajustes CLI existentes y se desactiva solo el plugin
+  # integrado de notificaciones.
+  home.file.".config/opencode/cli.json" = {
+    force = true;
+    text = builtins.toJSON {
+      "$schema" = "https://opencode.ai/v2/cli.json";
+      theme = {
+        name = "monokai";
+      };
+      diffs = {
+        wrap = "word";
+      };
+      session = {
+        sidebar = "auto";
+        scrollbar = false;
+        thinking = "show";
+      };
+      animations = true;
+      plugins = [ "*" "-opencode.notifications" ];
+    };
+  };
+
   programs.opencode = {
     enable = true;
     package = pkgs-unstable.opencode;
@@ -70,27 +97,66 @@ in
     # SETTINGS — Plugins y MCPs
     #-----------------------------------------------------------------
     settings = {
-      # WARN: Las versiones deben actualizarse manualmente. Correr
-      # `cat ~/.cache/opencode/packages/<plugin>/package.json` para
-      # ver la versión resuelta después de un `nixos-rebuild`.
-      plugin = [
-        "superpowers@git+https://github.com/obra/superpowers.git#d884ae04edebef577e82ff7c4e143debd0bbec99"
-        "opencode-command-inject@1.3.0"
-        "opencode-worktree@0.4.1"
-        "opencode-agent-memory@0.2.0"
-        "@ramtinj95/opencode-tokenscope@1.8.0"
-        "opencode-deepseek-cache@2.2.0"
+      # OpenCode 2 requiere plugins V2 (default export con id/setup).
+      # Los tres plugins locales reemplazan las implementaciones V1 que
+      # todavía no publican una versión compatible. Sus README describen
+      # explícitamente las diferencias funcionales con los originales.
+      plugins = [
+        "superpowers@git+https://github.com/obra/superpowers.git#22f0b463e7a5e579904dd6211a520321035526f7"
+        "opencode-agent-memory@0.3.1"
+        "opencode-supermemory@2.1.1"
+        "@tarquinen/opencode-dcp@3.2.0"
+        "@mohak34/opencode-notifier@latest"
+        "oh-my-opencode-slim@3.0.6"
+        (toString (builtins.path {
+          path = ../opencode-plugins/command-inject-v2;
+          name = "necro-command-inject-v2";
+        }))
+        (toString (builtins.path {
+          path = ../opencode-plugins/tokenscope-v2;
+          name = "necro-tokenscope-v2";
+        }))
+        (toString (builtins.path {
+          path = ../opencode-plugins/deepseek-cache-v2;
+          name = "necro-deepseek-cache-v2";
+        }))
+      ];
+
+      permissions = [
+        {
+          action = "tool.use";
+          resource = "supermemory_recall";
+          effect = "allow";
+        }
       ];
 
       mcp = {
-        context7 = {
-          type = "local";
-          command = [
-            "npx"
-            "-y"
-            "@upstash/context7-mcp"
-          ];
-          enabled = false; # Bajo demanda para no ralentizar el startup
+        timeout = {
+          startup = 60000;
+          catalog = 60000;
+        };
+
+        servers = {
+          context7 = {
+            type = "local";
+            command = [ "${pkgs.context7-mcp}/bin/context7-mcp" ];
+            disabled = false;
+          };
+
+          wolfram = {
+            type = "local";
+            command = [
+              "${wolframEngine}/bin/wolfram"
+              "-run"
+              "PacletSymbol[\"Wolfram/AgentTools\",\"Wolfram`AgentTools`StartMCPServer\"][]"
+              "-noinit"
+              "-noprompt"
+            ];
+            disabled = false;
+            environment = {
+              MCP_SERVER_NAME = "Wolfram";
+            };
+          };
         };
       };
 
@@ -101,7 +167,7 @@ in
       # (cada subagente arranca sesión nueva, pero el prefix se cachea si
       # el prompt es consistente entre llamadas).
       #-----------------------------------------------------------------
-      agent = {
+      agents = {
         code-reviewer = {
           description = "Revisa código buscando bugs, seguridad y maintainability";
           mode = "subagent";
@@ -115,7 +181,7 @@ in
             - Sé conciso y directo
             - No escribas código nuevo, solo revisá el existente
           '';
-          permission = {
+          permissions = {
             edit = "deny";
             bash."*" = "deny";
           };
@@ -134,7 +200,7 @@ in
             3. Verificá cada hipótesis con comandos o lectura de código
             4. Proponé la solución más simple
           '';
-          permission = {
+          permissions = {
             edit = "deny";
           };
         };
@@ -154,7 +220,7 @@ in
             - Simplificá condicionales complejos
             - No cambiés APIs públicas ni firmas de funciones
           '';
-          permission = {
+          permissions = {
             edit = "allow";
             bash."*" = "deny";
           };

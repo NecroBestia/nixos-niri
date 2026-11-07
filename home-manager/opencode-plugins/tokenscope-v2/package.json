@@ -1,0 +1,9 @@
+{
+  "name": "necro-tokenscope-v2",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./server": "./index.js"
+  }
+}
