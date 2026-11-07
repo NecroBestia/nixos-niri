@@ -103,7 +103,7 @@ builtin = "Kanagawa"
 enable_builtin_templates = true
 builtin_ids = ["gtk3", "gtk4", "niri", "kitty", "qt", "starship"]
 enable_community_templates = true
-community_ids = ["opencode", "neovim", "obsidian", "vscode", "zathura", "papirus-icons"]
+community_ids = ["opencode", "neovim", "obsidian", "vscode", "zathura", "papirus-icons", "starship"]
 
 [wallpaper]
 enabled = true
@@ -157,13 +157,14 @@ capsule = false
 
 start = ["launcher", "spacer_2", "workspaces", "spacer_2", "tray"]
 center = ["clock"]
-end = ["battery", "volume", "group:g1", "control-center", "session"]
+end = ["bar", "battery", "volume", "group:g1", "control-center", "session"]
 margin_opposite_edge = 6
 panel_overlap = 2
+smart_auto_hide = false
 
 [[bar.main.capsule_group]]
 enabled = true
-    fill = "surface_variant"
+    fill = "surface_container"
     id = "g1"
 members = ["notifications", "wallpaper"]
     opacity = 1.0
@@ -297,7 +298,7 @@ visible = true
     type = "login_box"
 
 [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-2".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
 center_password_text = false
@@ -311,6 +312,7 @@ show_media = true
 show_session_buttons = true
 show_unlock_hint = true
 show_weather = true
+show_password_reveal = true
 
 [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
     box_height = 196.0
@@ -324,7 +326,7 @@ show_weather = true
     type = "login_box"
 
 [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
 center_password_text = false
@@ -338,15 +340,23 @@ show_media = true
 show_session_buttons = true
 show_unlock_hint = true
 show_weather = true
+show_password_reveal = true
 
 [plugins]
-enabled = ["ashur-d/nvim-projects"]
+enabled = ["ashur-d/nvim-projects", "raycursive/niri-displays"]
 
 [widget.spacer_2]
 type = "spacer"
 
+[widget.bar]
+type = "raycursive/niri-displays:bar"
+show_resolution = false
+enable_scroll = false
 [control_center.calendar]
-show_events_card = false
+show_events_card = true
 
 [dock]
 icon_size = 20
+
+[plugin_settings."raycursive/niri-displays"]
+scale_presets = ["DP-3"]
